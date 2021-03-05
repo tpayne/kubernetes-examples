@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+   <body>
+      <h1>Welcome to Little Name App...</h1>
+      <ul>
+         <li><label for="name">First Name: </label> <input type="text"
+            id="name" name="first_name"></li>
+         <li><label for="surname">Surname :</label> <input type="text"
+            id="surname" name="last_name"></li>
+         <li class="button">
+            <button onclick="func();">Submit</button>
+         </li>
+      </ul>
+   </body>
+   <script>
+      function func(){
+          var userName  = document.getElementById('name');
+          var userSurname  = document.getElementById('surname');
+          if(userName.value === "") {
+            alert('Opps! Please try again!');
+            return;
+          }
+          window.location.href = "/user/add?name=" + userName.value + "&surName=" + userSurname.value
+      }
+   </script>
+   <style>
+      ul {
+      list-style: none;
+      }
+      label {
+      display: inline-block;
+      width: 100px;
+      text-align: left;
+      }
+      input {
+      width: 400px;
+      }
+      body {
+      margin: 0 auto;
+      width: 500px;
+      height: 300px;
+      padding: 1em;
+      border: 1px solid #CCC;
+      border-radius: 1em;
+      }
+      .button{
+      padding-top: 10px;
+      }
+   </style>
+</html>
