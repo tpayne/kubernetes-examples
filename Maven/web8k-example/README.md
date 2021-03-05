@@ -1,0 +1,3 @@
+# This is a Maven project for building and deploying a small custom spring application...
+
+mvn clean package k8s:build k8s:resource k8s:deploy
