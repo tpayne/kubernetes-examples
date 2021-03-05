@@ -20,4 +20,4 @@ To run this sample do the following...
     kubectl get deployments
     kubectl get services
 
-Where <nonDefaultCR> refers to a registry like -Djkube.docker.registry=gcr.io/${PROJECT}
+Where <nonDefaultCR> refers to a registry like `-Djkube.docker.registry=gcr.io/${PROJECT}`
