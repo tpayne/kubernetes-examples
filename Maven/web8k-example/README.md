@@ -15,7 +15,9 @@ Build Instructions
 To run this sample do the following...
 
     mvn clean package 
-    mvn k8s:build k8s:resource k8s:deploy
+    mvn [-Djkube.docker.registry=<nonDefaultCR>] k8s:build k8s:push k8s:resource k8s:deploy 
     docker images
     kubectl get deployments
     kubectl get services
+
+Where <nonDefaultCR> refers to a registry like -Djkube.docker.registry=gcr.io/${PROJECT}
