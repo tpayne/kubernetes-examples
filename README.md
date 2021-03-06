@@ -24,8 +24,9 @@ The examples contained in this repo run on Maven and Kubernetes. They are based 
 
 Clean Up
 --------
-After you have finished you can clean up your Docker repo with the following...
+After you have finished you can clean up your Docker repo with the following commands...
 
+    docker system df
     docker system prune --all -f
     
 Be sure you want to run this command however as it will reclaim all unused space!
