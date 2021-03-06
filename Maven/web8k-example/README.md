@@ -56,4 +56,5 @@ The following references might be of interest...
 - https://www.eclipse.org/jkube/docs/kubernetes-maven-plugin?fbclid=IwAR215doMPlD91r-l4OKZ0954PuWILNPGY3i7XCWaER1M2mmyVUWWhtMqXUA#registry
 - https://www.eclipse.org/jkube/docs/kubernetes-maven-plugin#enrichers
 - https://spring.io/guides/gs/spring-boot-kubernetes/
+- https://spring.io/why-spring
 - https://rohaan.medium.com/deploy-any-spring-boot-application-into-kubernetes-using-eclipse-jkube-a4167d27ee45
