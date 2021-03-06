@@ -39,7 +39,7 @@ An example might be...
     mvn -Djkube.docker.registry=anazureacr.azurecr.io \
         -Djkube.enricher.jkube-service.type=LoadBalancer \
         -Djkube.enricher.jkube-service.port=80 \
-        package k8s:build k8s:push k8s:resource k8s:deploy
+        clean package k8s:build k8s:push k8s:resource k8s:deploy
     
 Testing the App
 ---------------
