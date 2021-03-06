@@ -15,6 +15,9 @@ Build Instructions
 ------------------
 To run this sample do the following...
 
+    kubectl config get-contexts
+    kubectl config use-context <default>
+    kubectl config current-context
     mvn clean package 
     mvn [-Djkube.docker.registry=<nonDefaultCR>] k8s:build k8s:push k8s:resource k8s:deploy 
     docker images
