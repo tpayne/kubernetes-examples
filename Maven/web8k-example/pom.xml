@@ -48,7 +48,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>        
           <configuration>
-            <mainClass>application.webk8App</mainClass>
+            <mainClass>application.Webk8App</mainClass>
           </configuration>    
           <executions>
             <execution>
