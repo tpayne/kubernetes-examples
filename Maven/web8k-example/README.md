@@ -34,7 +34,7 @@ If you want to expose the service, then add `-Djkube.enricher.jkube-service.type
 
 If you want to expose the service on a different port then add `-Djkube.enricher.jkube-serce.port=80`
 
-An example might be...
+An Azure (ACR repo) example might be...
 
     mvn -Djkube.docker.registry=anazureacr.azurecr.io \
         -Djkube.enricher.jkube-service.type=LoadBalancer \
