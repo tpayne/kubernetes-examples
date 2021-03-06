@@ -25,6 +25,19 @@ To run this sample do the following...
     kubectl get services
 
 Where <nonDefaultCR> refers to a registry like `-Djkube.docker.registry=gcr.io/${PROJECT}`
+
+By default the app will run as an internal ClusterIP endpoint on port 8080.
+
+If you want to expose the service, then add `-Djkube.enricher.jkube-service.type=LoadBalancer`
+
+If you want to expose the service on a different port then add `-Djkube.enricher.jkube-serce.port=80`
+
+An example might be...
+
+    mvn -Djkube.docker.registry=anazureacr.azurecr.io \
+        -Djkube.enricher.jkube-service.type=LoadBalancer \
+        -Djkube.enricher.jkube-serce.port=80 \
+        package k8s:build k8s:push k8s:resource k8s:deploy
     
 Testing the App
 ---------------
@@ -33,3 +46,12 @@ Docker image or run the app directly using...
 
     mvn clean package spring-boot:run
     http://localhost:8080
+
+References
+----------
+The following references might be of interest...
+- https://www.eclipse.org/jkube/docs/kubernetes-maven-plugin
+- https://www.eclipse.org/jkube/docs/kubernetes-maven-plugin?fbclid=IwAR215doMPlD91r-l4OKZ0954PuWILNPGY3i7XCWaER1M2mmyVUWWhtMqXUA#registry
+- https://www.eclipse.org/jkube/docs/kubernetes-maven-plugin#enrichers
+- https://spring.io/guides/gs/spring-boot-kubernetes/
+- https://rohaan.medium.com/deploy-any-spring-boot-application-into-kubernetes-using-eclipse-jkube-a4167d27ee45
