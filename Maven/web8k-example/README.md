@@ -41,6 +41,13 @@ An Azure (ACR repo) example might be...
         -Djkube.enricher.jkube-service.port=80 \
         clean package k8s:build k8s:push k8s:resource k8s:deploy
 
+This will...
+- Build the app from the source
+- Bake a tagged Docker (latest) image for it
+- Push the image to the Azure ACR repo `anazureacr.azurecr.io`
+- Create a Kubernetes deployment from the image
+- Create an external LoadBalancer service for the deployment and expose it on port 80
+ 
 Assuming everything works, you should get output like this...
 
     mac:web8k-example bob$ docker images
