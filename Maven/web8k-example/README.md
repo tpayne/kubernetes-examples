@@ -7,7 +7,7 @@ cluster.
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
-- Installed Maven (mvn)
+- That you have installed Maven (mvn) and - optionally - Kubernetes client (kubectl)
 - Logged into a terminal window that will allow you to do deployments to a valid K8 cluster
 - Have your Kubernetes context set to a system you have permission to deploy to
 
