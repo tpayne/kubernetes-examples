@@ -20,9 +20,11 @@ To run this sample do the following...
     kubectl config current-context
     mvn clean package 
     mvn [-Djkube.docker.registry=<nonDefaultCR>] k8s:build k8s:push k8s:resource k8s:deploy 
+    # Optionally view the deployment details...
     docker images
     kubectl get deployments
     kubectl get services
+    kubectl rollout history deployment
 
 Where <nonDefaultCR> refers to a registry like `-Djkube.docker.registry=gcr.io/${PROJECT}`
 
