@@ -61,7 +61,7 @@ Assuming everything works, you should get output like this...
     NAME            READY   UP-TO-DATE   AVAILABLE   AGE
     web8k-example   1/1     1            1           6m15s
 
-    mac:web8k-example alexgray$ kubectl get services
+    mac:web8k-example bob$ kubectl get services
     NAME            TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)        AGE
     kubernetes      ClusterIP      10.0.0.1      <none>          443/TCP        15d
     web8k-example   LoadBalancer   10.0.95.125   20.77.152.249   80:30623/TCP   6m15s
