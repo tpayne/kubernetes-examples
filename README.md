@@ -11,7 +11,6 @@ Kubernetes Example Status: Ready for use
 Build CI/Testing Status
 -----------------------
 The following indicates the CI and coverage status.
-
 [![Build Status](https://travis-ci.org/tpayne/kubernetes-examples.svg?branch=main)](https://travis-ci.org/tpayne/kubernetes-examples)
 
 Kubernetes Examples
