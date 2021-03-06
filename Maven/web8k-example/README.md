@@ -32,7 +32,7 @@ By default the app will run as an internal ClusterIP endpoint on port 8080.
 
 If you want to expose the service, then add `-Djkube.enricher.jkube-service.type=LoadBalancer`
 
-If you want to expose the service on a different port then add `-Djkube.enricher.jkube-serce.port=80`
+If you want to expose the service on a different port then add `-Djkube.enricher.jkube-service.port=80`
 
 An Azure (ACR repo) example might be...
 
