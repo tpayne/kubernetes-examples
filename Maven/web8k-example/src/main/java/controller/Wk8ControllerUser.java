@@ -34,5 +34,24 @@ public class Wk8ControllerUser {
     @GetMapping("/hello")
     public String helloUser(@RequestParam String name, @RequestParam String surName) {
         return String.format("<h2>Hello - \"%s %s\"!</h2>", name, surName);
-    }    
+    }   
+
+    @GetMapping("/list")
+    public String listUsers() {
+        Map<String, User> resultData = service.getUsers();
+        StringBuilder str = new StringBuilder();
+
+        if (resultData.isEmpty()) {
+            str.append("<p><b>No users are registered!</b>");
+        } else {
+            str.append("<p><b>The following users are registered...</b>");
+            str.append("<br><ol>");
+            resultData.forEach(
+                (k, v) -> str.append("<li>" + v.getName() + " " + v.getSurName() + "</li>")
+            );
+            str.append("<ol>");
+        }
+        str.append("</p>");
+        return str.toString();
+    }   
 }

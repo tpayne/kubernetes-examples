@@ -10,6 +10,7 @@
          <li class="button">
             <button onclick="funcUser();">Submit User</button>
             <button onclick="funcHello();">Hello User</button>
+            <button onclick="funcList();">List Users</button>
          </li>
      </ul>
    </body>
@@ -32,7 +33,9 @@
           }
           window.location.href = "/user/hello?name=" + userName.value + "&surName=" + userSurname.value
       }
-   </script>
+      function funcList(){
+          window.location.href = "/user/list"
+      }   </script>
    <style>
       ul {
         list-style: none;
