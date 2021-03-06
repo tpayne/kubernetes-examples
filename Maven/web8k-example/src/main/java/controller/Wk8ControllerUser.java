@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
-public class Wk8Controller {
+public class Wk8ControllerUser {
     private final Wk8Service service = Wk8Service.getInstance();
 
     @GetMapping("/add")
@@ -26,8 +26,13 @@ public class Wk8Controller {
         Map<String, User> resultData = service.addUser(user);
         Map<String,Object> response = new HashMap<String, Object>();
 
-        response.put("Total Data", resultData);
+        response.put("Submitted Data", resultData);
 
         return response;
     }
+
+    @GetMapping("/hello")
+    public String helloUser(@RequestParam String name, @RequestParam String surName) {
+        return String.format("<h2>Hello - \"%s %s\"!</h2>", name, surName);
+    }    
 }

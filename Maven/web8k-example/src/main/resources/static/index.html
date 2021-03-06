@@ -8,12 +8,13 @@
          <li><label for="surname">Surname :</label> <input type="text"
             id="surname" name="last_name"></li>
          <li class="button">
-            <button onclick="func();">Submit</button>
+            <button onclick="funcUser();">Submit User</button>
+            <button onclick="funcHello();">Hello User</button>
          </li>
-      </ul>
+     </ul>
    </body>
    <script>
-      function func(){
+      function funcUser(){
           var userName  = document.getElementById('name');
           var userSurname  = document.getElementById('surname');
           if(userName.value === "") {
@@ -21,6 +22,15 @@
             return;
           }
           window.location.href = "/user/add?name=" + userName.value + "&surName=" + userSurname.value
+      }
+      function funcHello(){
+          var userName  = document.getElementById('name');
+          var userSurname  = document.getElementById('surname');
+          if(userName.value === "") {
+            alert('Opps! Please try that again!');
+            return;
+          }
+          window.location.href = "/user/hello?name=" + userName.value + "&surName=" + userSurname.value
       }
    </script>
    <style>
