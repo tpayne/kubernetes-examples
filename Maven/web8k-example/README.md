@@ -21,3 +21,11 @@ To run this sample do the following...
     kubectl get services
 
 Where <nonDefaultCR> refers to a registry like `-Djkube.docker.registry=gcr.io/${PROJECT}`
+    
+Testing the App
+---------------
+If you wish to test (or change the app) on your local system, then you can either use the 
+Docker image or run the app directly using...
+
+    mvn clean package spring-boot:run
+    http://localhost:8080
