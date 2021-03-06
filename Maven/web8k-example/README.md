@@ -1,7 +1,8 @@
 Maven Spring Kubernetes Sample
 ==============================
 
-This is a Maven project for building and deploying a small custom spring application...
+This is a Maven project for building and deploying a small custom spring application to a Kubernetes repo and
+cluster.
 
 Dependencies
 ------------
