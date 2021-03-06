@@ -21,3 +21,11 @@ The examples contained in this repo run on Maven and Kubernetes. They are based 
 >| Project | Description | 
 >| ------- | ----------- |
 >| [Maven/web8k-example/](https://github.com/tpayne/kubernetes-examples/tree/main/Maven/web8k-example) | This sample will use Maven and various plugins to build, push a deploy a custom spring app to a specified Kubernetes repo |
+
+Clean Up
+--------
+After you have finished you can clean up your Docker repo with the following...
+
+    docker system prune --all -f
+    
+Be sure you want to run this command however as it will reclaim all unused space!
