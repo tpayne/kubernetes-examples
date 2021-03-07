@@ -17,6 +17,9 @@
   <properties>
     <jkube.version>1.1.1</jkube.version>
     <java.level>8</java.level>
+    <!-- Specify this is you want to hardcode a container registry, e.g. azurecr.azurecr.io
+      <jkube.docker.registry>azurecr.azurecr.io</jkube.docker.registry>
+    -->
   </properties>
 
   <dependencies>
@@ -67,6 +70,18 @@
         <groupId>org.eclipse.jkube</groupId>
         <artifactId>kubernetes-maven-plugin</artifactId>
         <version>1.1.1</version>
+          <!-- Specify this is you want to make the k8 targets default into your lifecycle flow
+          <executions>
+            <execution>
+              <id>default</id>
+              <goals>
+                <goal>build</goal>
+                <goal>resource</goal>
+                <goal>apply</goal>
+              </goals>
+            </execution>
+          </executions>
+          -->
       </plugin>
       <plugin>
         <groupId>org.eclipse.jkube</groupId>
