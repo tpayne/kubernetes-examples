@@ -8,9 +8,10 @@
          <li><label for="surname">Surname :</label> <input type="text"
             id="surname" name="last_name"></li>
          <li class="button">
-            <button onclick="funcUser();">Submit User</button>
+            <button onclick="funcUser();">Register User</button>
             <button onclick="funcHello();">Hello User</button>
             <button onclick="funcList();">List Users</button>
+            <button onclick="funcFind();">Find User</button>
          </li>
      </ul>
    </body>
@@ -32,6 +33,15 @@
             return;
           }
           window.location.href = "/user/hello?name=" + userName.value + "&surName=" + userSurname.value
+      }
+      function funcFind(){
+          var userName  = document.getElementById('name');
+          var userSurname  = document.getElementById('surname');
+          if(userName.value === "") {
+            alert('Opps! Please try that again! I need a user to find');
+            return;
+          }
+          window.location.href = "/user/find?name=" + userName.value
       }
       function funcList(){
           window.location.href = "/user/list"

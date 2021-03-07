@@ -54,4 +54,22 @@ public class Wk8ControllerUser {
         str.append("</p>");
         return str.toString();
     }   
+
+    @GetMapping("/find")
+    public String findUsers(@RequestParam String name) {
+        Map<String, User> resultData = service.getUsers();
+        StringBuilder str = new StringBuilder();
+
+        if (resultData.isEmpty() && !resultData.containsKey(name)) {
+            str.append("<p><b>No users are registered against that name!</b>");
+        } else {
+            str.append("<p><b>The following user is registered...</b>");
+            str.append("<br><ol>");
+            User v = resultData.get(name);
+            str.append("<li>" + v.getName() + " " + v.getSurName() + "</li>");
+            str.append("<ol>");
+        }
+        str.append("</p>");
+        return str.toString();
+    }   
 }
