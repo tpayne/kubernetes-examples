@@ -170,7 +170,6 @@ Cleaning Up
 To clean up the installation, do the following...
 
     kubectl delete all --all -n ingress; kubectl delete namespace ingress;
-        kubectl delete all --all -n logicapp-dev; \
-        kubectl delete namespace logicapp-dev
+    kubectl delete all --all -n logicapp-dev; kubectl delete namespace logicapp-dev
         
 This will delete all the items created in your Kubernetes installation.
