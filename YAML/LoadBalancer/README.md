@@ -47,10 +47,11 @@ If everything has worked, then this will generate output like the following...
     replicaset.apps/logicapp-dev-deployment-5844c94467   2         2         2       49s
 
 To connect and use the solution, use the EXTERNAL-IP shown above and connect to...
-    <sample-ip>:80
-    <sample-ip>:8080
+- `<external-ip>:80`
+- `<external-ip>:8080`
 
 A default NGINX installation is deployed under port 80.
+
 A default JENKINS installation is deployed under port 8080.
 
 Both are accessible from the same IP (application routing is done on the port used).
@@ -74,7 +75,7 @@ Then do the following...
 - From the last command, get the EXTERNAL-IP address, then edit the `load-balancer-solution2.yaml`.
 - Look for the line `- host: frontend.20-49-240-90.nip.io`
 - Edit the line to replace `20-49-240-90` with the EXTERNAL-IP mentioned above
-- Next, replace all the . with -, so you get something like `20-49-246-239` instead of `20.49.240.90`
+- Next, replace all the . with -, so you get something like `20-49-240-90` instead of `20.49.240.90`
 - Save your file
 
 Then run the following commands...
@@ -88,20 +89,20 @@ If everything has worked, then this will generate output like the following...
 
     mac:LoadBalancer bob$ kubectl get all -n logicapp-dev
     NAME                                                   READY   STATUS    RESTARTS   AGE
-    pod/logicapp-dev-deployment-jenkins-74d47c4b98-gthnc   1/1     Running   0          2m40s
-    pod/logicapp-dev-deployment-nginx-8447f6bdd5-4bwb6     1/1     Running   0          2m39s
+    pod/logicapp-dev-deployment-jenkins-74d47c4b98-wb99c   1/1     Running   0          25s
+    pod/logicapp-dev-deployment-nginx-8447f6bdd5-27fpn     1/1     Running   0          24s
 
-    NAME                                   TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
-    service/logicapp-dev-service-jenkins   NodePort   10.0.241.115   <none>        8080:32176/TCP   2m40s
-    service/logicapp-dev-service-nginx     NodePort   10.0.202.210   <none>        80:31660/TCP     2m40s
+    NAME                                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+    service/logicapp-dev-service-jenkins   ClusterIP   10.0.232.48    <none>        8080/TCP   26s
+    service/logicapp-dev-service-nginx     ClusterIP   10.0.143.128   <none>        80/TCP     26s
 
     NAME                                              READY   UP-TO-DATE   AVAILABLE   AGE
-    deployment.apps/logicapp-dev-deployment-jenkins   1/1     1            1           2m40s
-    deployment.apps/logicapp-dev-deployment-nginx     1/1     1            1           2m40s
+    deployment.apps/logicapp-dev-deployment-jenkins   1/1     1            1           26s
+    deployment.apps/logicapp-dev-deployment-nginx     1/1     1            1           26s
 
     NAME                                                         DESIRED   CURRENT   READY   AGE
-    replicaset.apps/logicapp-dev-deployment-jenkins-74d47c4b98   1         1         1       2m40s
-    replicaset.apps/logicapp-dev-deployment-nginx-8447f6bdd5     1         1         1       2m40s
+    replicaset.apps/logicapp-dev-deployment-jenkins-74d47c4b98   1         1         1       26s
+    replicaset.apps/logicapp-dev-deployment-nginx-8447f6bdd5     1         1         1       26s
 
     mac:LoadBalancer bob$ kubectl describe ingress logicapp-dev-ingress -n logicapp-dev
     Name:             logicapp-dev-ingress
@@ -123,9 +124,9 @@ If everything has worked, then this will generate output like the following...
       Normal  Sync    12m (x2 over 13m)  nginx-ingress-controller  Scheduled for sync
 
 To connect and use the solution, use the `frontend.<IPADDRESS>.nip.io` shown above and connect to...
-
-    <frontend.<IPADDRESS>.nip.io>/svrnginx
-    <frontend.<IPADDRESS>.nip.io>/svrjenkins
+- `frontend.<IPADDRESS>.nip.io/svrjenkins`
+- `frontend.<IPADDRESS>.nip.io/svrnginx`
 
 A default NGINX installation is deployed under port 80 using path /svrnginx.
+
 A default JENKINS installation is deployed under port 80 using path /svrjenkins.
