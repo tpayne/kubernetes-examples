@@ -153,7 +153,7 @@ Running Jenkins
 ---------------
 If you want to play with the Jenkins solution, then you will need to go the following to get the default password
 
-For solution 1, run the following commands to get a <podId> and put it into the `<podId>` shown in the second command
+For solution 1, run the following commands to get a pod id and put it into the `<podId>` shown in the second command
 
     kubectl get pods -n logicapp-dev
     kubectl logs <podId> -c jenkins -n logicapp-dev
