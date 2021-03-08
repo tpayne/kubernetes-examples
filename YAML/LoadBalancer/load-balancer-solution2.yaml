@@ -1,0 +1,133 @@
+---
+# Lets first create an application namespace to use...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logicapp-dev
+
+---
+---
+# Now let's create a deployment in that namespace...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: logicapp-dev
+  name: logicapp-dev-deployment-nginx
+spec:
+  selector:
+    matchLabels:
+      app: logicapp-dev-nginx
+  template:
+    metadata:
+      labels:
+        app: logicapp-dev-nginx # the label for the pods and the deployments
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:stable
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80 # the application listens to this port
+        resources:
+          requests: # minimum resources required
+            cpu: 250m
+            memory: 64Mi
+          limits: # maximum resources allocated
+            cpu: 500m
+            memory: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: logicapp-dev
+  name: logicapp-dev-deployment-jenkins
+spec:
+  selector:
+    matchLabels:
+      app: logicapp-dev-jenkins
+  template:
+    metadata:
+      labels:
+        app: logicapp-dev-jenkins # the label for the pods and the deployments
+    spec:
+      containers:
+      # To get the password for Jenkins do the following...
+      # - kubectl get pods -n logicapp-dev (find the jenkins one)
+      # - kubectl logs <podId> -n logicapp-dev
+      - name: jenkins
+        image: jenkins/jenkins:lts
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080 # the application listens to this port
+        volumeMounts:
+          - name: jenkins-home
+            mountPath: /var/jenkins_home
+      volumes:
+          - name: jenkins-home
+            emptyDir: {}
+---
+---
+# Create a service for the deployment
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: logicapp-dev
+  name: logicapp-dev-service-nginx
+spec:
+  selector:
+    app: logicapp-dev-nginx
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: logicapp-dev
+  name: logicapp-dev-service-jenkins
+spec:
+  selector:
+    app: logicapp-dev-jenkins
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+---
+---
+# Create ingress rules to access them...
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: logicapp-dev-ingress
+  namespace: logicapp-dev
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  # This needs to be modified to YOUR ingress frontend 
+  # <see kubectl get services --namespace ingress> use the external IP and replace
+  # frontend.20-49-240-90.nip.io with the IP - using "-" instead of "."
+  - host: frontend.20-49-240-90.nip.io 
+    http:
+      paths:
+      - path: /svrjenkins
+        pathType: Prefix
+        backend:
+          service:
+            name: logicapp-dev-service-jenkins
+            port:
+              number: 8080      
+      - path: /svrnginx
+        pathType: Prefix
+        backend:
+          service:
+            name: logicapp-dev-service-nginx
+            port:
+              number: 80
+

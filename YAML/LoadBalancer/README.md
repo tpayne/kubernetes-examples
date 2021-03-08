@@ -1,0 +1,131 @@
+LoadBalancing Samples
+=====================
+
+This is a couple of example Kubernetes deployment YAML files that show two approaches
+to deploying applications behind a load balancering solution.
+
+The first solution uses the native Kubernetes load balancing service solution.
+
+The second solution uses an external load balancer solution which is installed separately.
+
+Dependencies
+------------
+Before you attempt this example, please ensure you have done the following: -
+- That you have installed Helm (helm) and the Kubernetes client (kubectl)
+- Logged into a terminal window that will allow you to do deployments to a valid K8 cluster
+- Have your Kubernetes context set to a system you have permission to deploy to
+
+Running Solution 1
+------------------
+This solution uses Kubernetes default LoadBalancing endpoint support to provide load balancing
+based on a port mapping solution.
+
+To run this solution please do the following...
+
+    kubectl config get-contexts
+    kubectl config use-context <default>
+    kubectl config current-context
+    kubectl delete all --all -n logicapp-dev; \
+        kubectl delete namespace logicapp-dev; \
+        kubectl create -f load-balancer-solution1.yaml
+    kubectl get all -n logicapp-dev
+
+If everything has worked, then this will generate output like the following...
+
+    mac:LoadBalancer bob$ kubectl get all -n logicapp-dev
+    NAME                                           READY   STATUS    RESTARTS   AGE
+    pod/logicapp-dev-deployment-5844c94467-qb5cn   2/2     Running   0          49s
+    pod/logicapp-dev-deployment-5844c94467-t4r7b   2/2     Running   0          49s
+
+    NAME                                TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)                       AGE
+    service/logicapp-dev-loadbalancer   LoadBalancer   10.0.25.20   <sample-ip>   80:30500/TCP,8080:31840/TCP   49s
+
+    NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
+    deployment.apps/logicapp-dev-deployment   2/2     2            2           49s
+
+    NAME                                                 DESIRED   CURRENT   READY   AGE
+    replicaset.apps/logicapp-dev-deployment-5844c94467   2         2         2       49s
+
+To connect and use the solution, use the EXTERNAL-IP shown above and connect to...
+    <sample-ip>:80
+    <sample-ip>:8080
+
+A default NGINX installation is deployed under port 80.
+A default JENKINS installation is deployed under port 8080.
+
+Both are accessible from the same IP (application routing is done on the port used).
+
+Running Solution 2
+------------------
+This solution uses NGINX's LoadBalancing solution to provide load balancing based on a port 
+mapping and path mapping based solution. It requires more manual configuration, but can provide
+more functionality that the default solution.
+
+To run this solution please do the following...
+
+    kubectl config get-contexts
+    kubectl config use-context <default>
+    kubectl config current-context
+    kubectl delete all --all -n ingress; kubectl delete namespace ingress;
+    ./deploycontroller.sh
+    kubectl get services --namespace ingress
+
+Then do the following...
+- From the last command, get the EXTERNAL-IP address, then edit the `load-balancer-solution2.yaml`.
+- Look for the line `- host: frontend.20-49-240-90.nip.io`
+- Edit the line to replace `20-49-240-90` with the EXTERNAL-IP mentioned above
+- Next, replace all the . with -, so you get something like `20-49-246-239` instead of `20.49.240.90`
+- Save your file
+
+Then run the following commands...
+
+    kubectl delete all --all -n logicapp-dev; \
+        kubectl delete namespace logicapp-dev; \
+        kubectl create -f load-balancer-solution2.yaml
+    kubectl get all -n logicapp-dev
+
+If everything has worked, then this will generate output like the following...
+
+    mac:LoadBalancer bob$ kubectl get all -n logicapp-dev
+    NAME                                                   READY   STATUS    RESTARTS   AGE
+    pod/logicapp-dev-deployment-jenkins-74d47c4b98-gthnc   1/1     Running   0          2m40s
+    pod/logicapp-dev-deployment-nginx-8447f6bdd5-4bwb6     1/1     Running   0          2m39s
+
+    NAME                                   TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+    service/logicapp-dev-service-jenkins   NodePort   10.0.241.115   <none>        8080:32176/TCP   2m40s
+    service/logicapp-dev-service-nginx     NodePort   10.0.202.210   <none>        80:31660/TCP     2m40s
+
+    NAME                                              READY   UP-TO-DATE   AVAILABLE   AGE
+    deployment.apps/logicapp-dev-deployment-jenkins   1/1     1            1           2m40s
+    deployment.apps/logicapp-dev-deployment-nginx     1/1     1            1           2m40s
+
+    NAME                                                         DESIRED   CURRENT   READY   AGE
+    replicaset.apps/logicapp-dev-deployment-jenkins-74d47c4b98   1         1         1       2m40s
+    replicaset.apps/logicapp-dev-deployment-nginx-8447f6bdd5     1         1         1       2m40s
+
+    mac:LoadBalancer bob$ kubectl describe ingress logicapp-dev-ingress -n logicapp-dev
+    Name:             logicapp-dev-ingress
+    Namespace:        logicapp-dev
+    Address:          20.49.240.90
+    Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
+    Rules:
+      Host                           Path  Backends
+      ----                           ----  --------
+      frontend.20-49-240-90.nip.io  
+                                     /svrnginx     logicapp-dev-service-nginx:80 (10.244.0.139:80)
+                                     /svrjenkins   logicapp-dev-service-jenkins:8080 (10.244.0.138:8080)
+    Annotations:                     kubernetes.io/ingress.class: nginx
+                                     nginx.ingress.kubernetes.io/rewrite-target: /
+    Events:
+      Type    Reason  Age                From                      Message
+      ----    ------  ----               ----                      -------
+      Normal  Sync    12m (x2 over 13m)  nginx-ingress-controller  Scheduled for sync
+      Normal  Sync    12m (x2 over 13m)  nginx-ingress-controller  Scheduled for sync
+
+To connect and use the solution, use the `frontend.<IPADDRESS>.nip.io` shown above and connect to...
+
+    <frontend.<IPADDRESS>.nip.io>/svrnginx
+    <frontend.<IPADDRESS>.nip.io>/svrjenkins
+
+A default NGINX installation is deployed under port 80 using path /svrnginx.
+A default JENKINS installation is deployed under port 80 using path /svrjenkins.
