@@ -75,7 +75,7 @@ Then do the following...
 - From the last command, get the EXTERNAL-IP address, then edit the `load-balancer-solution2.yaml`.
 - Look for the line `- host: frontend.20-49-240-90.nip.io`
 - Edit the line to replace `20-49-240-90` with the EXTERNAL-IP mentioned above
-- Next, replace all the . with -, so you get something like `20-49-240-90` instead of `20.49.240.90`
+- Next, replace all the `.` with `-`, so you get something like `20-49-240-90` instead of `20.49.240.90`
 - Save your file
 
 Then run the following commands...
