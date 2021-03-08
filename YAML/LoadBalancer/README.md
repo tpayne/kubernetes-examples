@@ -23,9 +23,14 @@ based on a port mapping solution.
 
 To run this solution please do the following...
 
+You only need to do this first part if you are changing your Kubernetes configuration...
+
     kubectl config get-contexts
     kubectl config use-context <default>
     kubectl config current-context
+    
+Once you have setup the client to point to the desired Kubernetes server, please do the following...
+
     kubectl delete all --all -n logicapp-dev; \
         kubectl delete namespace logicapp-dev; \
         kubectl create -f load-balancer-solution1.yaml
@@ -65,21 +70,27 @@ more functionality that the default solution.
 
 To run this solution please do the following...
 
+You only need to do this first part if you are changing your Kubernetes configuration...
+
     kubectl config get-contexts
     kubectl config use-context <default>
     kubectl config current-context
+    
+Once you have setup the client to point to the desired Kubernetes server, please do the following.
+This will use Helm to install a NGINX ingress controller...
+
     kubectl delete all --all -n ingress; kubectl delete namespace ingress;
     ./deploycontroller.sh
     kubectl get services --namespace ingress
 
-Then do the following...
+Then, once the controller has been installed do the following...
 - From the last command, get the EXTERNAL-IP address, then edit the `load-balancer-solution2.yaml`.
 - Look for the line `- host: frontend.20-49-240-90.nip.io`
 - Edit the line to replace `20-49-240-90` with the EXTERNAL-IP mentioned above
 - Next, replace all the `.` with `-`, so you get something like `20-49-240-90` instead of `20.49.240.90`
 - Save your file
 
-Then run the following commands...
+Then run the following commands to install the infrastructure...
 
     kubectl delete all --all -n logicapp-dev; \
         kubectl delete namespace logicapp-dev; \
