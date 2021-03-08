@@ -13,11 +13,16 @@ Before you attempt this example, please ensure you have done the following: -
 
 Build Instructions
 ------------------
-To run this sample do the following...
+To run this sample do the following.
+
+You only need to do this first part if you need to change your Kubernetes context...
 
     kubectl config get-contexts
     kubectl config use-context <default>
     kubectl config current-context
+    
+The following commands will build and deploy the application...
+
     mvn clean package 
     mvn [-Djkube.docker.registry=<nonDefaultCR>] k8s:build k8s:push k8s:resource k8s:deploy 
     # Optionally view the deployment details...
