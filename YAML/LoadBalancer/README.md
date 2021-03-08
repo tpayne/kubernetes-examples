@@ -56,6 +56,8 @@ To connect and use the solution, use the EXTERNAL-IP shown above and connect to.
 - `<external-ip>:80`
 - `<external-ip>:8080`
 
+You can also use CURL to test the servers are up and running as well.
+
 A default NGINX installation is deployed under port 80.
 
 A default JENKINS installation is deployed under port 8080.
@@ -139,9 +141,13 @@ To connect and use the solution, use the `frontend.<IPADDRESS>.nip.io` shown abo
 - `frontend.<IPADDRESS>.nip.io/svrjenkins`
 - `frontend.<IPADDRESS>.nip.io/svrnginx`
 
-A default NGINX installation is deployed under port 80 using path /svrnginx.
+You can also use CURL to test the servers are up and running as well.
 
-A default JENKINS installation is deployed under port 80 using path /svrjenkins.
+A default NGINX installation is deployed under port 80 using the path /svrnginx.
+
+A default JENKINS installation is deployed under port 80 using the path /svrjenkins.
+
+Both are accessible from the same IP (application routing is done on the path used).
 
 Running Jenkins
 ---------------
