@@ -99,6 +99,17 @@ Then run the following commands to install the infrastructure...
         kubectl create -f load-balancer-solution2.yaml
     kubectl get all -n logicapp-dev
 
+If you do not wish to modify the file `load-balancer-solution2.yaml` directly, you can also use a tool
+like `sed` in the following way...
+
+    kubectl delete all --all -n logicapp-dev; \
+        kubectl delete namespace logicapp-dev; \
+        cat load-balancer-solution2.yaml | sed 's|20-49-240-90|35-239-234-15|g' |\
+        kubectl create -f -
+    kubectl get all -n logicapp-dev
+
+Where `35-239-234-15` is replaced with the EXTERNAL-IP from above.
+
 If everything has worked, then this will generate output like the following...
 
     mac:LoadBalancer bob$ kubectl get all -n logicapp-dev
