@@ -164,7 +164,7 @@ Both are accessible from the same IP (application routing is done on the path us
 
 Running Jenkins
 ---------------
-If you want to play with the Jenkins solution, then you will need to go the following to get the default password
+If you want to play with the Jenkins solution, then you will need to do the following to get the default password
 
 For solution 1, run the following commands to get a pod id and put it into the `<podId>` shown in the second command
 
