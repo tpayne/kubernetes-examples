@@ -18,23 +18,23 @@ Before you attempt this example, please ensure you have done the following: -
 
 Running Solution 1
 ------------------
-This solution uses Kubernetes default LoadBalancing endpoint support to provide load balancing
+This solution uses Kubernete's default LoadBalancing endpoint support to provide load balancing
 based on a port mapping solution.
 
 To run this solution please do the following...
 
 You only need to do this first part if you are changing your Kubernetes configuration...
 
-    kubectl config get-contexts
-    kubectl config use-context <default>
-    kubectl config current-context
+    % kubectl config get-contexts
+    % kubectl config use-context <default>
+    % kubectl config current-context
     
 Once you have setup the client to point to the desired Kubernetes server, please do the following...
 
-    kubectl delete all --all -n logicapp-dev; \
+    % kubectl delete all --all -n logicapp-dev; \
         kubectl delete namespace logicapp-dev; \
         kubectl create -f load-balancer-solution1.yaml
-    kubectl get all -n logicapp-dev
+    % kubectl get all -n logicapp-dev
 
 If everything has worked, then this will generate output like the following...
 
@@ -44,7 +44,7 @@ If everything has worked, then this will generate output like the following...
     pod/logicapp-dev-deployment-5844c94467-t4r7b   2/2     Running   0          49s
 
     NAME                                TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)                       AGE
-    service/logicapp-dev-loadbalancer   LoadBalancer   10.0.25.20   <sample-ip>   80:30500/TCP,8080:31840/TCP   49s
+    service/logicapp-dev-loadbalancer   LoadBalancer   10.0.25.20   <external-ip>   80:30500/TCP,8080:31840/TCP   49s
 
     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
     deployment.apps/logicapp-dev-deployment   2/2     2            2           49s
@@ -74,15 +74,15 @@ To run this solution please do the following...
 
 You only need to do this first part if you are changing your Kubernetes configuration...
 
-    kubectl config get-contexts
-    kubectl config use-context <default>
-    kubectl config current-context
+    % kubectl config get-contexts
+    % kubectl config use-context <default>
+    % kubectl config current-context
     
 Once you have setup the client to point to the desired Kubernetes server, please do the following.
 This will use Helm to install a NGINX ingress controller...
 
-    ./deploycontroller.sh
-    kubectl get services --namespace ingress
+    % ./deploycontroller.sh
+    % kubectl get services --namespace ingress
 
 Notes for `deploycontroller.sh`:
 - If you are using GCP, please specify the option `-p gcp`. GCP will also require some additional configuration. Please see [here](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke) for more details.
@@ -96,19 +96,19 @@ Then, once the controller has been installed do the following...
 
 Then run the following commands to install the infrastructure...
 
-    kubectl delete all --all -n logicapp-dev; \
+    % kubectl delete all --all -n logicapp-dev; \
         kubectl delete namespace logicapp-dev; \
         kubectl create -f load-balancer-solution2.yaml
-    kubectl get all -n logicapp-dev
+    % kubectl get all -n logicapp-dev
 
 If you do not wish to modify the file `load-balancer-solution2.yaml` directly, you can also use a tool
 like `sed` in the following way...
 
-    kubectl delete all --all -n logicapp-dev; \
+    % kubectl delete all --all -n logicapp-dev; \
         kubectl delete namespace logicapp-dev; \
         cat load-balancer-solution2.yaml | sed 's|20-49-240-90|35-239-234-15|g' |\
         kubectl create -f -
-    kubectl get all -n logicapp-dev
+    % kubectl get all -n logicapp-dev
 
 Where `35-239-234-15` is replaced with the EXTERNAL-IP from above.
 
@@ -168,13 +168,13 @@ If you want to play with the Jenkins solution, then you will need to do the foll
 
 For solution 1, run the following commands to get a pod id and put it into the `<podId>` shown in the second command
 
-    kubectl get pods -n logicapp-dev
-    kubectl logs <podId> -c jenkins -n logicapp-dev
+    % kubectl get pods -n logicapp-dev
+    % kubectl logs <podId> -c jenkins -n logicapp-dev
 
 For solution 2, run the following commands to get the pod id with "jenkins" in its name and put it into the `<podId>` shown in the second command
     
-    kubectl get pods -n logicapp-dev 
-    kubectl logs <podId> -n logicapp-dev
+    % kubectl get pods -n logicapp-dev 
+    % kubectl logs <podId> -n logicapp-dev
     
 When you have the password, you can then put this into the Jenkins login screen asking for the key.
 
@@ -182,7 +182,7 @@ Cleaning Up
 -----------
 To clean up the installation, do the following...
 
-    kubectl delete all --all -n ingress; kubectl delete namespace ingress;
-    kubectl delete all --all -n logicapp-dev; kubectl delete namespace logicapp-dev
+    % kubectl delete all --all -n ingress; kubectl delete namespace ingress;
+    % kubectl delete all --all -n logicapp-dev; kubectl delete namespace logicapp-dev
         
 This will delete all the items created in your Kubernetes installation.
