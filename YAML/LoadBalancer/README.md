@@ -14,7 +14,7 @@ Before you attempt this example, please ensure you have done the following: -
 - That you have installed Helm (helm) and the Kubernetes client (kubectl)
 - Logged into a terminal window that will allow you to do deployments to a valid K8 cluster
 - Have your Kubernetes context set to a system you have permission to deploy to
-- This has been tested with Kubernetes server version 1.19.7. Lower versions may require changes for solution 2, depending on the ingress support classes
+- This has been tested with Kubernetes server version 1.19.7. Lower versions may require changes for solution 2, depending on the ingress support classes. A version of this approach is given in solution 2.1
 
 Running Solution 1
 ------------------
@@ -81,9 +81,11 @@ You only need to do this first part if you are changing your Kubernetes configur
 Once you have setup the client to point to the desired Kubernetes server, please do the following.
 This will use Helm to install a NGINX ingress controller...
 
-    kubectl delete all --all -n ingress; kubectl delete namespace ingress;
     ./deploycontroller.sh
     kubectl get services --namespace ingress
+
+Notes for `deploycontroller.sh`:
+- If you are using GCP, please specify the option `-p gcp`. GCP will also require some additional configuration. Please see [here](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke) for more details.
 
 Then, once the controller has been installed do the following...
 - From the last command, get the EXTERNAL-IP address, then edit the `load-balancer-solution2.yaml`.
