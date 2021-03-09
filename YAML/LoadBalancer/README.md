@@ -14,7 +14,7 @@ Before you attempt this example, please ensure you have done the following: -
 - That you have installed Helm (helm) and the Kubernetes client (kubectl)
 - Logged into a terminal window that will allow you to do deployments to a valid K8 cluster
 - Have your Kubernetes context set to a system you have permission to deploy to
-- This has been tested with Kubernetes server version 1.19.7. Lower versions may require changes for solution 2, depending on the ingress support classes. A version of this approach is given in solution 2.1
+- This has only been tested with Kubernetes server version 1.19.7. Lower versions may require changes for solution 2, depending on the ingress support API provided. A version of this approach is given in solution 2.1 - although it has not been validated and may need additional changes for different K8s versions.
 
 Running Solution 1
 ------------------
