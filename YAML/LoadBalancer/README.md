@@ -9,6 +9,9 @@ The first solution uses the native Kubernetes load balancing service and uses po
 The second solution uses an external load balancing solution which is installed separately and
 uses path mapping and rewrites.
 
+(Note: These solutions are primarily intended for Kubernetes server `1.19.7+ only`. They have not been 
+vetted on earlier versions and use later network APIs which might not be available on previous versions).
+
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
