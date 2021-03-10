@@ -16,7 +16,7 @@ Before you attempt this example, please ensure you have done the following: -
 - You have logged into a (Unix) terminal window that will allow you to do deployments to a valid K8s cluster
 - You have your Kubernetes' context set to a system that you have permission to deploy to
 
-Note: These solutions have only been tested with Kubernetes server version 1.19.7. Lower versions may require 
+Note: These solutions have only been tested with Kubernetes server `version 1.19.7`. Lower versions may require 
 changes for solution 2, depending on the type of ingress support API provided. A version of this alternative 
 approach is given in solution 2.1 (`load-balancer-solution2_1.yaml`) - although it has not been validated and 
 may need additional changes for different K8s versions.
