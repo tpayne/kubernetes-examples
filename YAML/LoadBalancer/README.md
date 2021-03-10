@@ -106,7 +106,7 @@ like `sed` in the following way...
 
     % kubectl delete all --all -n logicapp-dev; \
         kubectl delete namespace logicapp-dev; \
-        cat load-balancer-solution2.yaml | sed 's|20-49-240-90|35-239-234-15|g' |\
+        cat load-balancer-solution2.yaml | sed 's|20-49-240-90|35-239-234-15|g' | \
         kubectl create -f -
     % kubectl get all -n logicapp-dev
 
@@ -116,39 +116,63 @@ If everything has worked, then this will generate output like the following...
 
     mac:LoadBalancer bob$ kubectl get all -n logicapp-dev
     NAME                                                   READY   STATUS    RESTARTS   AGE
-    pod/logicapp-dev-deployment-jenkins-74d47c4b98-wb99c   1/1     Running   0          25s
-    pod/logicapp-dev-deployment-nginx-8447f6bdd5-27fpn     1/1     Running   0          24s
+    pod/logicapp-dev-deployment-jenkins-54b9dd46cb-2xdw5   1/1     Running   0          7m52s
+    pod/logicapp-dev-deployment-nginx-8447f6bdd5-jxwrb     1/1     Running   0          7m51s
 
     NAME                                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-    service/logicapp-dev-service-jenkins   ClusterIP   10.0.232.48    <none>        8080/TCP   26s
-    service/logicapp-dev-service-nginx     ClusterIP   10.0.143.128   <none>        80/TCP     26s
+    service/logicapp-dev-service-jenkins   ClusterIP   10.0.179.149   <none>        8080/TCP   7m52s
+    service/logicapp-dev-service-nginx     ClusterIP   10.0.99.160    <none>        80/TCP     7m52s
 
     NAME                                              READY   UP-TO-DATE   AVAILABLE   AGE
-    deployment.apps/logicapp-dev-deployment-jenkins   1/1     1            1           26s
-    deployment.apps/logicapp-dev-deployment-nginx     1/1     1            1           26s
+    deployment.apps/logicapp-dev-deployment-jenkins   1/1     1            1           7m52s
+    deployment.apps/logicapp-dev-deployment-nginx     1/1     1            1           7m52s
 
     NAME                                                         DESIRED   CURRENT   READY   AGE
-    replicaset.apps/logicapp-dev-deployment-jenkins-74d47c4b98   1         1         1       26s
-    replicaset.apps/logicapp-dev-deployment-nginx-8447f6bdd5     1         1         1       26s
+    replicaset.apps/logicapp-dev-deployment-jenkins-54b9dd46cb   1         1         1       7m52s
+    replicaset.apps/logicapp-dev-deployment-nginx-8447f6bdd5     1         1         1       7m52s
 
-    mac:LoadBalancer bob$ kubectl describe ingress logicapp-dev-ingress -n logicapp-dev
-    Name:             logicapp-dev-ingress
+    mac:LoadBalancer bob$ kubectl get ingress  -n logicapp-dev
+    NAME                           CLASS    HOSTS                         ADDRESS       PORTS   AGE
+    logicapp-dev-ingress-jenkins   <none>   frontend.<IPADDRESS>.nip.io   <IPADDRESS>   80      8m57s
+    logicapp-dev-ingress-nginx     <none>   frontend.<IPADDRESS>.nip.io   <IPADDRESS>   80      8m57s
+
+    mac:LoadBalancer bob$ kubectl describe ingress logicapp-dev-ingress-jenkins logicapp-dev-ingress-nginx  \
+                            -n logicapp-dev
+    Name:             logicapp-dev-ingress-jenkins
     Namespace:        logicapp-dev
-    Address:          20.49.240.90
+    Address:          <IPADDRESS>
     Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
     Rules:
-      Host                           Path  Backends
-      ----                           ----  --------
-      frontend.20-49-240-90.nip.io  
-                                     /svrnginx     logicapp-dev-service-nginx:80 (10.244.0.139:80)
-                                     /svrjenkins   logicapp-dev-service-jenkins:8080 (10.244.0.138:8080)
-    Annotations:                     kubernetes.io/ingress.class: nginx
-                                     nginx.ingress.kubernetes.io/rewrite-target: /
+      Host                            Path  Backends
+      ----                            ----  --------
+      frontend.<IPADDRESS>.nip.io  
+                                      /svrjenkins   logicapp-dev-service-jenkins:8080 (10.244.0.100:8080)
+    Annotations:                      kubernetes.io/ingress.class: nginx
+                                      nginx.ingress.kubernetes.io/add-base-url: true
     Events:
       Type    Reason  Age                From                      Message
       ----    ------  ----               ----                      -------
-      Normal  Sync    12m (x2 over 13m)  nginx-ingress-controller  Scheduled for sync
-      Normal  Sync    12m (x2 over 13m)  nginx-ingress-controller  Scheduled for sync
+      Normal  Sync    10m (x2 over 11m)  nginx-ingress-controller  Scheduled for sync
+      Normal  Sync    10m (x2 over 11m)  nginx-ingress-controller  Scheduled for sync
+
+
+    Name:             logicapp-dev-ingress-nginx
+    Namespace:        logicapp-dev
+    Address:          <IPADDRESS>
+    Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
+    Rules:
+      Host                            Path  Backends
+      ----                            ----  --------
+      frontend.<IPADDRESS>.nip.io  
+                                      /svrnginx   logicapp-dev-service-nginx:80 (10.244.0.101:80)
+    Annotations:                      kubernetes.io/ingress.class: nginx
+                                      nginx.ingress.kubernetes.io/rewrite-target: /$1
+                                      nginx.ingress.kubernetes.io/use-regex: true
+    Events:
+      Type    Reason  Age                From                      Message
+      ----    ------  ----               ----                      -------
+      Normal  Sync    10m (x2 over 11m)  nginx-ingress-controller  Scheduled for sync
+      Normal  Sync    10m (x2 over 11m)  nginx-ingress-controller  Scheduled for sync
 
 To connect and use the solution, use the `frontend.<IPADDRESS>.nip.io` shown above and connect to...
 - `frontend.<IPADDRESS>.nip.io/svrjenkins`

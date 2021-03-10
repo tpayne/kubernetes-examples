@@ -59,6 +59,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080 # the application listens to this port
+        env:
+        - name: JENKINS_OPTS
+          value: --prefix=/svrjenkins        
         volumeMounts:
           - name: jenkins-home
             mountPath: /var/jenkins_home
@@ -103,11 +106,11 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: logicapp-dev-ingress
+  name: logicapp-dev-ingress-jenkins
   namespace: logicapp-dev
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/add-base-url: "true"
 spec:
   rules:
   # This needs to be modified to YOUR ingress frontend 
@@ -123,6 +126,24 @@ spec:
             name: logicapp-dev-service-jenkins
             port:
               number: 8080      
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: logicapp-dev-ingress-nginx
+  namespace: logicapp-dev
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  # This needs to be modified to YOUR ingress frontend 
+  # <see kubectl get services --namespace ingress> use the external IP and replace
+  # frontend.20-49-240-90.nip.io with the IP - using "-" instead of "."
+  - host: frontend.20-49-240-90.nip.io 
+    http:
+      paths:
       - path: /svrnginx
         pathType: Prefix
         backend:
@@ -130,4 +151,3 @@ spec:
             name: logicapp-dev-service-nginx
             port:
               number: 80
-
