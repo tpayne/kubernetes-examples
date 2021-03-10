@@ -1,42 +1,47 @@
 LoadBalancing Samples
 =====================
 
-This is a couple of example Kubernetes deployment YAML files that show two approaches
-to deploying applications behind a load balancering solution.
+This repo has a couple of example Kubernetes deployment YAML files that show two approaches
+to deploying applications behind a load balancing solution.
 
-The first solution uses the native Kubernetes load balancing service solution.
+The first solution uses the native Kubernetes load balancing service and uses port remapping.
 
-The second solution uses an external load balancer solution which is installed separately.
+The second solution uses an external load balancing solution which is installed separately and
+uses path mapping and rewrites.
 
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
-- That you have installed Helm (helm) and the Kubernetes client (kubectl)
-- Logged into a terminal window that will allow you to do deployments to a valid K8 cluster
-- Have your Kubernetes context set to a system you have permission to deploy to
-- This has only been tested with Kubernetes server version 1.19.7. Lower versions may require changes for solution 2, depending on the ingress support API provided. A version of this approach is given in solution 2.1 - although it has not been validated and may need additional changes for different K8s versions.
+- You have installed Helm (helm) and the Kubernetes client (kubectl)
+- You have logged into a (Unix) terminal window that will allow you to do deployments to a valid K8s cluster
+- You have your Kubernetes' context set to a system that you have permission to deploy to
+
+Note: These solutions have only been tested with Kubernetes server version 1.19.7. Lower versions may require 
+changes for solution 2, depending on the type of ingress support API provided. A version of this alternative 
+approach is given in solution 2.1 (`load-balancer-solution2_1.yaml`) - although it has not been validated and 
+may need additional changes for different K8s versions.
 
 Running Solution 1
 ------------------
 This solution uses Kubernete's default LoadBalancing endpoint support to provide load balancing
-based on a port mapping solution.
+based on a port mapping support.
 
-To run this solution please do the following...
+To run this solution please do the following steps.
 
-You only need to do this first part if you are changing your Kubernetes configuration...
+You only need to do this first step if you are changing your Kubernetes configuration...
 
     % kubectl config get-contexts
     % kubectl config use-context <default>
     % kubectl config current-context
     
-Once you have setup the client to point to the desired Kubernetes server, please do the following...
+Once you have setup the client to point to the desired Kubernetes server, please run the following...
 
     % kubectl delete all --all -n logicapp-dev; \
         kubectl delete namespace logicapp-dev; \
         kubectl create -f load-balancer-solution1.yaml
     % kubectl get all -n logicapp-dev
 
-If everything has worked, then this will generate output like the following...
+If everything has worked as expected, then this will generate output like the following...
 
     mac:LoadBalancer bob$ kubectl get all -n logicapp-dev
     NAME                                           READY   STATUS    RESTARTS   AGE
@@ -44,7 +49,7 @@ If everything has worked, then this will generate output like the following...
     pod/logicapp-dev-deployment-5844c94467-t4r7b   2/2     Running   0          49s
 
     NAME                                TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)                       AGE
-    service/logicapp-dev-loadbalancer   LoadBalancer   10.0.25.20   <external-ip>   80:30500/TCP,8080:31840/TCP   49s
+    service/logicapp-dev-loadbalancer   LoadBalancer   10.0.25.20   <external-ip> 80:30500/TCP,8080:31840/TCP   49s
 
     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
     deployment.apps/logicapp-dev-deployment   2/2     2            2           49s
@@ -66,35 +71,35 @@ Both are accessible from the same IP (application routing is done on the port us
 
 Running Solution 2
 ------------------
-This solution uses NGINX's LoadBalancing solution to provide load balancing based on a port 
-mapping and path mapping based solution. It requires more manual configuration, but can provide
-more functionality that the default solution.
+This solution uses NGINX's LoadBalancing support to provide load balancing based on port and path
+remapping. It requires more manual configuration, but can provide richer functionality that the 
+first solution given above.
 
-To run this solution please do the following...
+To run this solution please do the following steps.
 
-You only need to do this first part if you are changing your Kubernetes configuration...
+You only need to do this first step if you are changing your Kubernetes configuration...
 
     % kubectl config get-contexts
     % kubectl config use-context <default>
     % kubectl config current-context
     
-Once you have setup the client to point to the desired Kubernetes server, please do the following.
-This will use Helm to install a NGINX ingress controller...
+Once you have setup the client to point to your desired Kubernetes server, please run the following.
+This will use Helm to install a NGINX ingress controller which is required for this solution.
 
     % ./deploycontroller.sh
     % kubectl get services --namespace ingress
 
+Take note of the EXTERNAL-IP as this will be used in the next step.
+
 Notes for `deploycontroller.sh`:
-- If you are using GCP, please specify the option `-p gcp`. GCP will also require some additional configuration. Please see [here](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke) for more details.
+- If you are using GCP, please specify the option `-p gcp`. GCP will also require some additional configuration. Please see [here](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke) for more details. Failure to do so will cause errors to be generated in the next step.
 
-Then, once the controller has been installed do the following...
-
-From the last command, get the EXTERNAL-IP address, then run the following...
+Once the controller has been installed do the following steps using the EXTERNAL-IP noted above...
 
     % ./deployingress.sh -a <EXTERNAL-IP>
     % kubectl get all -n logicapp-dev
 
-If everything has worked, then this will generate output like the following...
+If everything has worked as expected, then this will generate output like the following...
 
     mac:LoadBalancer bob$ kubectl get all -n logicapp-dev
     NAME                                                   READY   STATUS    RESTARTS   AGE
@@ -166,7 +171,8 @@ A default NGINX installation is deployed under port 80 using the path /svrnginx.
 
 A default JENKINS installation is deployed under port 80 using the path /svrjenkins.
 
-Both are accessible from the same IP (application routing is done on the path used).
+Both are accessible from the same IP (application routing is done on the path used). Two separate
+ingress controllers are used as the rewrite requirements are different for Jenkins and NGINX images.
 
 Running Jenkins
 ---------------
@@ -188,7 +194,14 @@ Cleaning Up
 -----------
 To clean up the installation, do the following...
 
-    % kubectl delete all --all -n ingress; kubectl delete namespace ingress;
     % kubectl delete all --all -n logicapp-dev; kubectl delete namespace logicapp-dev
+    % kubectl delete all --all -n ingress; kubectl delete namespace ingress;
         
 This will delete all the items created in your Kubernetes installation.
+
+Notes
+-----
+- These scripts are only for demo purposes and have not been thoroughly vetted for production use
+- These scripts are not setting up Jenkins or NGINX for real use. Not all the requirements to use them have been implemented, so Jenkins for example will not function as expected
+- The configuration has not been setup to save or share session state, so you may find Jenkins will not work as expected
+- The solution `load-balancer-solution2_1.yaml` is provided for info purposes only and may require changes to get it to work for real on older versions of K8s
