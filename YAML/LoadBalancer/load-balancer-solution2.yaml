@@ -28,13 +28,6 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80 # the application listens to this port
-        resources:
-          requests: # minimum resources required
-            cpu: 250m
-            memory: 64Mi
-          limits: # maximum resources allocated
-            cpu: 500m
-            memory: 128Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -59,15 +52,23 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080 # the application listens to this port
+        # For a real installation - these may need tuning better...
+        # resources:
+        #   requests: # minimum resources required
+        #     cpu: 150m
+        #     memory: 250Mi
+        #   limits: # maximum resources allocated
+        #     cpu: 300m
+        #     memory: 500Mi
         env:
         - name: JENKINS_OPTS
           value: --prefix=/svrjenkins        
         volumeMounts:
-          - name: jenkins-home
-            mountPath: /var/jenkins_home
+        - name: jenkins-home
+          mountPath: /var/jenkins_home
       volumes:
-          - name: jenkins-home
-            emptyDir: {}
+      - name: jenkins-home
+        emptyDir: {}
 ---
 ---
 # Create a service for the deployment
@@ -115,8 +116,8 @@ spec:
   rules:
   # This needs to be modified to YOUR ingress frontend 
   # <see kubectl get services --namespace ingress> use the external IP and replace
-  # frontend.20-49-240-90.nip.io with the IP - using "-" instead of "."
-  - host: frontend.20-49-240-90.nip.io 
+  # frontend.INGRESS_IPADDR.nip.io with the IP - using "-" instead of "."
+  - host: frontend.INGRESS_IPADDR.nip.io 
     http:
       paths:
       - path: /svrjenkins
@@ -140,8 +141,8 @@ spec:
   rules:
   # This needs to be modified to YOUR ingress frontend 
   # <see kubectl get services --namespace ingress> use the external IP and replace
-  # frontend.20-49-240-90.nip.io with the IP - using "-" instead of "."
-  - host: frontend.20-49-240-90.nip.io 
+  # frontend.INGRESS_IPADDR.nip.io with the IP - using "-" instead of "."
+  - host: frontend.INGRESS_IPADDR.nip.io 
     http:
       paths:
       - path: /svrnginx

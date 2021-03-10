@@ -88,29 +88,11 @@ Notes for `deploycontroller.sh`:
 - If you are using GCP, please specify the option `-p gcp`. GCP will also require some additional configuration. Please see [here](https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke) for more details.
 
 Then, once the controller has been installed do the following...
-- From the last command, get the EXTERNAL-IP address, then edit the `load-balancer-solution2.yaml`.
-- Look for the line `- host: frontend.20-49-240-90.nip.io`
-- Edit the line to replace `20-49-240-90` with the EXTERNAL-IP mentioned above
-- Next, replace all the `.` with `-`, so you get something like `20-49-240-90` instead of `20.49.240.90`
-- Save your file
 
-Then run the following commands to install the infrastructure...
+From the last command, get the EXTERNAL-IP address, then run the following...
 
-    % kubectl delete all --all -n logicapp-dev; \
-        kubectl delete namespace logicapp-dev; \
-        kubectl create -f load-balancer-solution2.yaml
+    % ./deployingress.sh -a <EXTERNAL-IP>
     % kubectl get all -n logicapp-dev
-
-If you do not wish to modify the file `load-balancer-solution2.yaml` directly, you can also use a tool
-like `sed` in the following way...
-
-    % kubectl delete all --all -n logicapp-dev; \
-        kubectl delete namespace logicapp-dev; \
-        cat load-balancer-solution2.yaml | sed 's|20-49-240-90|35-239-234-15|g' | \
-        kubectl create -f -
-    % kubectl get all -n logicapp-dev
-
-Where `35-239-234-15` is replaced with the EXTERNAL-IP from above.
 
 If everything has worked, then this will generate output like the following...
 

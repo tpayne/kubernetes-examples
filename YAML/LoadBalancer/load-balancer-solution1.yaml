@@ -28,13 +28,6 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80 # the application listens to this port
-        resources:
-          requests: # minimum resources required
-            cpu: 250m
-            memory: 64Mi
-          limits: # maximum resources allocated
-            cpu: 500m
-            memory: 128Mi
       - name: jenkins
         # To get the password for Jenkins do the following...
         # - kubectl get pods -n logicapp-dev
@@ -43,12 +36,20 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080 # the application listens to this port
+        # For a real installation - these may need tuning better...
+        # resources:
+        #   requests: # minimum resources required
+        #     cpu: 150m
+        #     memory: 250Mi
+        #   limits: # maximum resources allocated
+        #     cpu: 300m
+        #     memory: 500Mi
         volumeMounts:
-          - name: jenkins-home
-            mountPath: /var/jenkins_home
+        - name: jenkins-home
+          mountPath: /var/jenkins_home
       volumes:
-          - name: jenkins-home
-            emptyDir: {}
+      - name: jenkins-home
+        emptyDir: {}
 
 ---
 # Create a service for the deployment
