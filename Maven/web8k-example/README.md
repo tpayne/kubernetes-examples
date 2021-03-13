@@ -91,6 +91,25 @@ Docker image or run the app directly using...
     mvn clean package spring-boot:run
     http://localhost:8080
 
+Deploying the App to Azure
+--------------------------
+The `pom.xml` has been extended to to allow deploymentto Azure as an App service. If you want
+to run the deployment process, do the following...
+
+    mvn package azure-webapp:deploy
+    
+This will create an App service in the Azure service you are currently authenticated against using
+`az login`
+
+To modify the name of the app, deployment region and resource group, you can modify the properties 
+section in the `pom.xml` as shown below...
+
+    <properties>
+        ...
+        <azure.resourceGroup>test</azure.resourceGroup>
+        <azure.region>westeurope</azure.region>
+    </properties>
+
 References
 ----------
 The following references might be of interest...
