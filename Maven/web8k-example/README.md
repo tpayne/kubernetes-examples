@@ -93,21 +93,22 @@ Docker image or run the app directly using...
 
 Deploying the App to Azure
 --------------------------
-The `pom.xml` has been extended to to allow deploymentto Azure as an App service. If you want
-to run the deployment process, do the following...
+The `pom.xml` has been extended to to allow deployment to Azure as an App service. If you want
+to run the deployment process, please do the following...
 
     mvn package azure-webapp:deploy
     
-This will create an App service in the Azure service you are currently authenticated against using
-`az login`
+This will create an App service in the Azure Cloud you are currently authenticated against using
+`az login`.
 
-To modify the name of the app, deployment region and resource group, you can modify the properties 
+To modify the name of the deployment region and resource group, you can modify the properties 
 section in the `pom.xml` as shown below...
 
     <properties>
         ...
         <azure.resourceGroup>test</azure.resourceGroup>
         <azure.region>westeurope</azure.region>
+        ...
     </properties>
 
 References
