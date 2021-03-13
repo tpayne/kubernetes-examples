@@ -36,6 +36,11 @@ public class Wk8ControllerUser {
         return String.format("<h2>Hello - \"%s %s\"!</h2>", name, surName);
     }   
 
+    @GetMapping("/version")
+    public String versionApp() {
+        return String.format("<h2>Version 1.0</h2>");
+    } 
+
     @GetMapping("/list")
     public String listUsers() {
         Map<String, User> resultData = service.getUsers();
@@ -64,10 +69,10 @@ public class Wk8ControllerUser {
             str.append("<p><b>No users are registered against that name!</b>");
         } else {
             str.append("<p><b>The following user is registered...</b>");
-            str.append("<br><ol>");
+            str.append("<br><ul>");
             User v = resultData.get(name);
             str.append("<li>" + v.getName() + " " + v.getSurName() + "</li>");
-            str.append("<ol>");
+            str.append("<ul>");
         }
         str.append("</p>");
         return str.toString();

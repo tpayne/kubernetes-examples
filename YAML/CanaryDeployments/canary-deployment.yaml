@@ -1,0 +1,70 @@
+---
+# Lets first create an application namespace to use...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logicapp-prod
+
+---
+# Now let's create a deployment in that namespace that contains 2 versions of the same app...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: logicapp-prod
+  name: logicapp-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: logicapp-deployment
+  template:
+    metadata:
+      labels:
+        app: logicapp-deployment # the label for the pods and the deployments
+        env: prod
+    spec:
+      containers:
+      - name: samplev1
+        image: tpayne666/samples:v1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080 # the application listens to this port
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: logicapp-prod
+  name: logicapp-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logicapp-deployment
+  template:
+    metadata:
+      labels:
+        app: logicapp-deployment # the label for the pods and the deployments
+        env: canary
+    spec:
+      containers:
+      - name: samplev2
+        image: tpayne666/samples:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080 # the application listens to this port
+---
+# Create a service for the deployment
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: logicapp-prod
+  name: logicapp-prod-service
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+  selector:
+    app: logicapp-deployment
