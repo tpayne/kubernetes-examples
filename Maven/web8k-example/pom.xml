@@ -20,6 +20,9 @@
     <!-- Specify this is you want to hardcode a container registry, e.g. azurecr.azurecr.io
       <jkube.docker.registry>azurecr.azurecr.io</jkube.docker.registry>
     -->
+    <azure.resourceGroup>test</azure.resourceGroup>
+    <azure.region>westeurope</azure.region>
+    <azure.appName>${project.artifactId}</azure.appName>
   </properties>
 
   <dependencies>
@@ -101,6 +104,41 @@
               </goals>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>com.microsoft.azure</groupId>
+          <artifactId>azure-webapp-maven-plugin</artifactId>
+          <version>1.8.0</version>
+          <configuration>
+            <schemaVersion>V2</schemaVersion>
+            <resourceGroup>${azure.resourceGroup}</resourceGroup>
+            <appName>${azure.appName}</appName>
+            <region>${azure.region}</region>
+            <pricingTier>P1V2</pricingTier>
+            <runtime>
+              <os>linux</os>
+              <javaVersion>jre8</javaVersion>
+              <webContainer>jre8</webContainer>
+            </runtime>
+            <!-- Begin of App Settings 
+            <appSettings>
+              <property>
+                <name>JAVA_OPTS</name>
+                <value>-Dserver.port=80</value>
+              </property>
+            </appSettings>
+            -->
+            <deployment>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/target</directory>
+                  <includes>
+                    <include>*.jar</include>
+                  </includes>
+                </resource>
+              </resources>
+            </deployment>
+          </configuration>
         </plugin>
     </plugins>    
   </build>
