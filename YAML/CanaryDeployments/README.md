@@ -34,7 +34,7 @@ Once you have setup the client to point to the desired Kubernetes server, please
 
 If everything has worked as expected, then this will generate output like the following...
 
-    mac:LoadBalancer bob$ kubectl get all -n logicapp-dev
+    mac:LoadBalancer bob$ kubectl get all -n logicapp-prod
     NAME                                     READY   STATUS    RESTARTS   AGE
     pod/logicapp-canary-599b57db5f-mqnwj     1/1     Running   0          8m33s
     pod/logicapp-deployment-cdf4b945-ckqxd   1/1     Running   0          8m33s

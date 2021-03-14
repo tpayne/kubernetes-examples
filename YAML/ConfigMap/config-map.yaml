@@ -1,0 +1,83 @@
+---
+# Lets first create an application namespace to use...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logicapp-prod
+---
+# Config types for maps...
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configdemo-data
+  namespace: logicapp-prod
+data:
+  # Key value pairs...
+  key1: "value1"
+  key2: "value2"
+
+  # File properties...
+  app.properties: |
+    appkey.key1=value1
+    appkey.key2=value2
+    dbkey.key1=value1
+  db.properties: |
+    dbkey.key1=value1
+    dbkey.key2=value2
+    dbkey.connect=user/passwd@dbName
+---
+# Create a deployment which uses it...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: logicapp-prod
+  name: configdemo-app
+spec:
+  selector:
+    matchLabels:
+      app: configdemo-app-deployment
+  template:
+    metadata:
+      labels:
+        app: configdemo-app-deployment
+        env: prod
+    spec:
+      containers:
+        - name: configdemo
+          image: busybox:glibc
+          command: ["/bin/sh", "-c"]
+          args:
+            - while [ 1 = 1 ];
+                echo ${KEY1};
+                ls /config_data;
+                cat /config_data/appDemo.properties;
+                do sleep 1;
+              done
+          imagePullPolicy: IfNotPresent
+          env:
+            # Single key
+            - name: KEY1
+              valueFrom:
+                # Get key1 from the config defined...
+                configMapKeyRef:
+                  name: configdemo-data
+                  key: key1
+            # File key
+            - name: APP_PROPERTIES
+              valueFrom:
+                configMapKeyRef:
+                  name: configdemo-data
+                  key: app.properties
+          volumeMounts:
+            - name: configdata
+              mountPath: "/config_data"
+              readOnly: true
+      volumes:
+      - name: configdata
+        configMap:
+          name: configdemo-data
+          items:
+            - key: "app.properties"
+              path: "appDemo.properties"
+            - key: "db.properties"
+              path: "db.properties"
