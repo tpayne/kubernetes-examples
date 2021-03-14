@@ -47,14 +47,41 @@ To show the solution, use the pod id shown above run the following command...
 
     % kubectl logs <podId> -n logicapp-pro
     value1
-    appDemo.properties
-    db.properties
-    appkey.key1=value1
-    appkey.key2=value2
-    dbkey.key1=value1
-    value1
-    appDemo.properties
-    db.properties
+    system
+    /secrets:
+    total 4
+    drwxrwxrwt    3 root     root           100 Mar 14 19:36 .
+    drwxr-xr-x    1 root     root          4096 Mar 14 19:36 ..
+    drwxr-xr-x    3 root     root            60 Mar 14 19:36 ..2021_03_14_19_36_03.331067580
+    lrwxrwxrwx    1 root     root            31 Mar 14 19:36 ..data -> ..2021_03_14_19_36_03.331067580
+    lrwxrwxrwx    1 root     root            13 Mar 14 19:36 dbdata -> ..data/dbdata
+
+    /secrets/..2021_03_14_19_36_03.331067580:
+    total 0
+    drwxr-xr-x    3 root     root            60 Mar 14 19:36 .
+    drwxrwxrwt    3 root     root           100 Mar 14 19:36 ..
+    drwxr-xr-x    2 root     root            60 Mar 14 19:36 dbdata
+
+    /secrets/..2021_03_14_19_36_03.331067580/dbdata:
+    total 4
+    drwxr-xr-x    2 root     root            60 Mar 14 19:36 .
+    drwxr-xr-x    3 root     root            60 Mar 14 19:36 ..
+    -rw-r--r--    1 root     root             6 Mar 14 19:36 condb
+    system/config_data:
+    total 12
+    drwxrwxrwx    3 root     root          4096 Mar 14 19:36 .
+    drwxr-xr-x    1 root     root          4096 Mar 14 19:36 ..
+    drwxr-xr-x    2 root     root          4096 Mar 14 19:36 ..2021_03_14_19_36_02.658687121
+    lrwxrwxrwx    1 root     root            31 Mar 14 19:36 ..data -> ..2021_03_14_19_36_02.658687121
+    lrwxrwxrwx    1 root     root            25 Mar 14 19:36 appDemo.properties -> ..data/appDemo.properties
+    lrwxrwxrwx    1 root     root            20 Mar 14 19:36 db.properties -> ..data/db.properties
+
+    /config_data/..2021_03_14_19_36_02.658687121:
+    total 16
+    drwxr-xr-x    2 root     root          4096 Mar 14 19:36 .
+    drwxrwxrwx    3 root     root          4096 Mar 14 19:36 ..
+    -rw-r--r--    1 root     root            56 Mar 14 19:36 appDemo.properties
+    -rw-r--r--    1 root     root            69 Mar 14 19:36 db.properties
     appkey.key1=value1
     appkey.key2=value2
     dbkey.key1=value1

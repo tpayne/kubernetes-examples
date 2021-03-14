@@ -5,6 +5,17 @@ kind: Namespace
 metadata:
   name: logicapp-prod
 ---
+# Lets create a very simple secret...
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dbname-secret
+  namespace: logicapp-prod
+type: kubernetes.io/basic-auth
+stringData:
+  username: system
+  password: manager
+---
 # Config types for maps...
 apiVersion: v1
 kind: ConfigMap
@@ -49,7 +60,10 @@ spec:
           args:
             - while [ 1 = 1 ];
                 echo ${KEY1};
-                ls /config_data;
+                echo ${CONDBSECRET};
+                ls -laR /secrets;
+                cat /secrets/dbdata/condb;
+                ls -laR /config_data;
                 cat /config_data/appDemo.properties;
                 do sleep 1;
               done
@@ -62,6 +76,11 @@ spec:
                 configMapKeyRef:
                   name: configdemo-data
                   key: key1
+            - name: CONDBSECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dbname-secret
+                  key: username
             # File key
             - name: APP_PROPERTIES
               valueFrom:
@@ -72,7 +91,16 @@ spec:
             - name: configdata
               mountPath: "/config_data"
               readOnly: true
+            - name: dbnamesecret
+              mountPath: "/secrets"
+              readOnly: true
       volumes:
+      - name: dbnamesecret
+        secret:
+          secretName: dbname-secret
+          items:
+            - key: username
+              path: dbdata/condb
       - name: configdata
         configMap:
           name: configdemo-data
