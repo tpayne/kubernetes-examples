@@ -34,6 +34,10 @@ Once you have setup the client to point to the desired Kubernetes server, please
 
 The `--record` option will record the history of changes to the deployment.
 
+This command will dump the deployment as YAML, so you can look at it...
+
+    % kubectl get deploy logicapp-deployment -o yaml -n logicapp-pro
+
 If everything has worked as expected, then this will generate output like the following...
 
     mac:LoadBalancer bob$ kubectl get all -n logicapp-prod
