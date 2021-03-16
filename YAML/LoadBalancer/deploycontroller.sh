@@ -31,6 +31,13 @@ done
 return 0
 }
 
+show_usage()
+{
+echo "${command}: -n,--namespace <namespace>"
+echo "${command}: where <namespace> is the namespace to use"
+exit 0
+}
+
 cleanUp()
 {
 echo "${command}: Cleaning up the controller..."
