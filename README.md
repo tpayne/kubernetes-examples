@@ -34,3 +34,10 @@ After you have finished you can clean up your Docker repo with the following com
     docker system prune --all -f
     
 Be sure you want to run this command however as it will reclaim all unused space!
+
+Notes
+-----
+You can merge Kubeconfigs with the following...
+    
+    export KUBECONFIG=~/.kube/config:~/new-config-file 
+    kubectl config view --flatten
