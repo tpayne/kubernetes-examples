@@ -73,7 +73,7 @@ metadata:
   name: postgres
   namespace: logicapp-db
 spec:
-  # Open port 5432 only to pods in cluster
+  # Open port 5432 to the world for use... (not secure, but only for demos)
   selector:
     app: postgres-container
   ports:
