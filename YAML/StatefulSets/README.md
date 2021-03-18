@@ -90,3 +90,7 @@ To clean up the installation, do the following...
         kubectl delete sc localstorage
         
 This will delete all the items created in your Kubernetes installation.
+
+Notes
+-----
+- https://hub.docker.com/_/postgres
