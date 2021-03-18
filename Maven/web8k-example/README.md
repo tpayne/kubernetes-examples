@@ -88,9 +88,9 @@ Testing the App
 If you wish to test (or change the app) on your local system, then you can either use the 
 Docker image or run the app directly using...
 
-    mvn clean package spring-boot:run
-    http://localhost:8080
-    curl localhost:8080/cmd/version
+    % mvn clean package spring-boot:run
+    % curl localhost:8080/cmd/version
+    <h2>Version 1.0</h2>
 
 Deploying the App to Azure
 --------------------------
