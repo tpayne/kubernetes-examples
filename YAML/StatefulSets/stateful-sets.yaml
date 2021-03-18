@@ -112,7 +112,7 @@ spec:
         volumeMounts:
           - name: postgres-persistent-storage
             mountPath: /var/lib/postgres
-        resources:
+        resources: # These will need much better tuning...
           requests:
             memory: 300Mi
             cpu: 400m
