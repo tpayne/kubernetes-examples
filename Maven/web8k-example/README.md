@@ -90,6 +90,7 @@ Docker image or run the app directly using...
 
     mvn clean package spring-boot:run
     http://localhost:8080
+    curl localhost:8080/cmd/version
 
 Deploying the App to Azure
 --------------------------
