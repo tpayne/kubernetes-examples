@@ -11,7 +11,7 @@ Dependencies
 Before you attempt this example, please ensure you have done the following: -
 - You have installed the Kubernetes client (kubectl) and Postgres client (psql)
 - You have logged into a (Unix) terminal window that will allow you to do deployments to a valid K8s cluster
-- You have setup the PSQL environment (e.g. % . ./pg_env.sh)
+- You have setup the PSQL environment (e.g. `% . ./pg_env.sh`)
 - You have your Kubernetes' context set to a system that you have permission to deploy to
 
 Note: These solutions have only been tested with Kubernetes server `version 1.19.7`. 
