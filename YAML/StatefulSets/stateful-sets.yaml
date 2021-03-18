@@ -1,0 +1,134 @@
+# Postgres deployment...
+---
+# Lets first create an application namespace to use...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logicapp-db
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: logicapp-db
+  labels:
+    app: postgres
+data:
+  POSTGRES_DB: postgresdb
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password # Change this to a secret when doing for real...
+
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: localstorage
+  namespace: logicapp-db
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: Immediate
+reclaimPolicy: Delete
+allowVolumeExpansion: True
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: postgres-01
+  namespace: logicapp-db
+  labels:
+    type: local
+spec:
+  storageClassName: localstorage
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/postgres01"
+    type: DirectoryOrCreate
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: postgres-02
+  namespace: logicapp-db
+  labels:
+    type: local
+spec:
+  storageClassName: localstorage
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/postgres02"
+    type: DirectoryOrCreate
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: logicapp-db
+spec:
+  # Open port 5432 only to pods in cluster
+  selector:
+    app: postgres-container
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-container
+  namespace: logicapp-db
+spec:
+  serviceName: postgres
+  replicas: 2
+  selector:
+    matchLabels:
+      app: postgres-container
+  template:
+    metadata:
+      labels:
+        app: postgres-container
+    spec:
+      containers:
+      - name: postgres-container
+        image: postgres
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 5432
+        envFrom:
+          - configMapRef:
+              name: postgres-config
+        volumeMounts:
+          - name: postgres-persistent-storage
+            mountPath: /var/lib/postgres
+        resources:
+          requests:
+            memory: 300Mi
+            cpu: 400m
+          limits:
+            memory: 400Mi
+            cpu: 500m
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-persistent-storage
+      spec:
+        storageClassName: localstorage
+        accessModes: ["ReadWriteOnce"]
+        resources:
+         requests:
+          storage: 5Gi
+        selector:
+         matchLabels:
+          type: local
