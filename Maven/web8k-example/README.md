@@ -92,6 +92,14 @@ Docker image or run the app directly using...
     % curl localhost:8080/cmd/version
     <h2>Version 1.0</h2>
 
+To test using POST and GET methods, you can do...
+
+    % curl -X POST -H "Content-Type: application/json" \
+            -d '{"name": "james", "surName": "bailey"}' \
+            http://localhost:8080/user/create
+    % curl http://localhost:8080/user/list
+    <p><b>The following users are registered...</b><br><ol><li>james bailey</li><ol></p>
+
 Deploying the App to Azure
 --------------------------
 The `pom.xml` has been extended to to allow deployment to Azure as an App service. If you want
