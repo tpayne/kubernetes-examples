@@ -26,6 +26,7 @@ The examples contained in this repo run on Maven and Kubernetes. They are based 
 >| [YAML/ConfigMap/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/ConfigMap) | This sample will use YAML to create various config maps/secrets to a specified Kubernetes repo |
 >| [YAML/RollingUpdate/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/RollingUpdate) | This sample will use YAML to show rolling update strategies in a specified Kubernetes repo |
 >| [YAML/Probes/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/Probes) | This sample will use YAML to show how to use probes |
+>| [YAML/StatefulSets/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/StatefulSets) | This sample will use YAML to show how to use StatefulSets |
 
 Clean Up
 --------
