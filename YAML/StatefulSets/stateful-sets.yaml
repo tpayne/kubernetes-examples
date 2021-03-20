@@ -18,6 +18,7 @@ data:
   POSTGRES_DB: postgresdb
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: password # Change this to a secret when doing for real...
+  PGDATA: /var/lib/postgresql/data/
 
 ---
 apiVersion: storage.k8s.io/v1
@@ -111,7 +112,7 @@ spec:
               name: postgres-config
         volumeMounts:
           - name: postgres-persistent-storage
-            mountPath: /var/lib/postgres
+            mountPath: /var/lib/postgresql
         resources: # These will need much better tuning...
           requests:
             memory: 300Mi
