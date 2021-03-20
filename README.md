@@ -28,6 +28,7 @@ The examples contained in this repo run on Maven and Kubernetes. They are based 
 >| [YAML/Probes/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/Probes) | This sample will use YAML to show how to use probes |
 >| [YAML/StatefulSets/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/StatefulSets) | This sample will use YAML to show how to use StatefulSets |
 >| [YAML/CronJobs/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/CronJobs) | This sample will use YAML to show how to use CronJobs |
+>| [YAML/DaemonSets/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/DaemonSets) | This sample will use YAML to show how to use DaemonSets and monitoring solutions |
 
 Clean Up
 --------
