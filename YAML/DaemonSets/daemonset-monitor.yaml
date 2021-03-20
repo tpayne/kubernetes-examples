@@ -1,0 +1,129 @@
+---
+# Lets first create an application namespace to use...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logicapp-prod
+  labels:
+    env: prod
+---
+# Now let's create a deployment in that namespace that contains 2 versions of the same app...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: logicapp-prod
+  name: logicapp-deployment
+spec:
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 # Maximum number of pods we allow above the number of replicas (i.e. 5)
+      maxUnavailable: 1  # Minimum number of pods that has to be available
+  selector:
+    matchLabels:
+      app: logicapp-deployment
+  template:
+    metadata:
+      labels:
+        app: logicapp-deployment # the label for the pods and the deployments
+        env: prod
+    spec:
+      containers:
+      - name: samplev1
+        image: tpayne666/samples:v1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080 # the application listens to this port
+---
+# Create a service for the deployment
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: logicapp-prod
+  name: logicapp-prod-service
+  labels:  
+    env: prod
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+  selector:
+    app: logicapp-deployment
+---
+# Monitoring exporter...
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-monitor
+  namespace: logicapp-prod
+  labels:
+    name: node-monitor
+    env: prod
+spec:
+  selector:
+    matchLabels:
+      name: node-monitor
+  template:
+    metadata:
+      labels:
+        name: node-monitor
+      annotations:
+         prometheus.io/scrape: "true"
+         prometheus.io/port: "9100"
+    spec:
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      #nodeSelector:
+      #  env: prod
+      containers:
+        - ports:
+            - containerPort: 9100
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 0.15
+          securityContext:
+            privileged: true
+          image: prom/node-exporter:v0.15.2
+          args:
+            - --path.procfs
+            - /host/proc
+            - --path.sysfs
+            - /host/sys
+            - --collector.filesystem.ignored-mount-points
+            - '"^/(sys|proc|dev|host|etc)($|/)"'
+            - --collector.textfile.directory 
+            - /logs
+          name: node-exporter
+          volumeMounts:
+            - name: dev
+              mountPath: /host/dev
+            - name: proc
+              mountPath: /host/proc
+            - name: sys
+              mountPath: /host/sys
+            - name: rootfs
+              mountPath: /rootfs
+            - name: logs
+              mountPath: /logs              
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: dev
+          hostPath:
+            path: /dev
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: logs
+          hostPath:
+            path: /logs
+        - name: rootfs
+          hostPath:
+            path: /
