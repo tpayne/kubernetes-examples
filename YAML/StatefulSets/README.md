@@ -93,3 +93,4 @@ This will delete all the items created in your Kubernetes installation.
 Notes
 -----
 - https://hub.docker.com/_/postgres
+- This example is only for demo purposes. IT WILL NOT WORK IN PRODUCTION ENVIRONMENTS DUE TO POSSIBLE DATA INSCONSISTENCY ISSUES
