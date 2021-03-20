@@ -21,14 +21,14 @@ The examples contained in this repo run on Maven and Kubernetes. They are based 
 >| Project | Description | 
 >| ------- | ----------- |
 >| [Maven/web8k-example/](https://github.com/tpayne/kubernetes-examples/tree/main/Maven/web8k-example) | This sample will use Maven and various plugins to build, push a deploy a custom spring app to a specified Kubernetes repo |
->| [YAML/LoadBalancer/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/LoadBalancer) | This sample will use YAML to create various load balancing/redirection solutions to a specified Kubernetes repo |
 >| [YAML/CanaryDeployments/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/CanaryDeployments) | This sample will use YAML to create a canary deployment solution to a specified Kubernetes repo |
 >| [YAML/ConfigMap/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/ConfigMap) | This sample will use YAML to create various config maps/secrets to a specified Kubernetes repo |
->| [YAML/RollingUpdate/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/RollingUpdate) | This sample will use YAML to show rolling update strategies in a specified Kubernetes repo |
->| [YAML/Probes/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/Probes) | This sample will use YAML to show how to use probes |
->| [YAML/StatefulSets/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/StatefulSets) | This sample will use YAML to show how to use StatefulSets |
 >| [YAML/CronJobs/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/CronJobs) | This sample will use YAML to show how to use CronJobs |
 >| [YAML/DaemonSets/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/DaemonSets) | This sample will use YAML to show how to use DaemonSets and monitoring solutions |
+>| [YAML/LoadBalancer/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/LoadBalancer) | This sample will use YAML to create various load balancing/redirection solutions to a specified Kubernetes repo |
+>| [YAML/Probes/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/Probes) | This sample will use YAML to show how to use probes |
+>| [YAML/RollingUpdate/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/RollingUpdate) | This sample will use YAML to show rolling update strategies in a specified Kubernetes repo |
+>| [YAML/StatefulSets/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/StatefulSets) | This sample will use YAML to show how to use StatefulSets |
 
 Clean Up
 --------
