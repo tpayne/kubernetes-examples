@@ -3,8 +3,7 @@ StatefulSet Sample
 
 This repo contains an example which shows how to do StatefulSets using Kubernetes.
 
-StatefulSets are used to set state between pods, so that when one goes down the 
-state (data) is maintained.
+StatefulSets are used to maintain machine names and IP addressed between pod restarts.
 
 Dependencies
 ------------
