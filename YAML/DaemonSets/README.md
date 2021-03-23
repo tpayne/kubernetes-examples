@@ -4,7 +4,10 @@ DaemonSets Sample
 This repo contains an example which shows how to do DaemonSets using Kubernetes.
 
 DaemonSets are used to create maintenance sets that can attach to nodes to run system
-actvities like monitoring.
+actvities like monitoring (Prometheus) and logging (Fluentd).
+
+- https://prometheus.io
+- https://www.fluentd.org
 
 Dependencies
 ------------
@@ -38,29 +41,29 @@ If everything has worked as expected, then this will generate output like the fo
 
     mac:LoadBalancer bob$ kubectl get all -n logicapp-prod
     NAME                                     READY   STATUS    RESTARTS   AGE
-    pod/logicapp-deployment-cdf4b945-2ptd5   1/1     Running   0          3m47s
-    pod/logicapp-deployment-cdf4b945-dp74b   1/1     Running   0          3m47s
-    pod/logicapp-deployment-cdf4b945-w2hw2   1/1     Running   0          3m47s
-    pod/logicapp-deployment-cdf4b945-wwszs   1/1     Running   0          3m47s
-    pod/node-monitor-55ln7                   1/1     Running   0          3m46s
-    pod/node-monitor-f6jwq                   1/1     Running   0          3m46s
-    pod/node-monitor-rwq88                   1/1     Running   0          3m46s
+    pod/logicapp-deployment-cdf4b945-5ptjg   1/1     Running   0          11s
+    pod/logicapp-deployment-cdf4b945-h7qwq   1/1     Running   0          11s
+    pod/logicapp-deployment-cdf4b945-ng4vj   1/1     Running   0          11s
+    pod/logicapp-deployment-cdf4b945-ztcfc   1/1     Running   0          11s
+    pod/node-monitor-mx2rz                   2/2     Running   0          10s
+    pod/node-monitor-t2zvf                   2/2     Running   0          10s
+    pod/node-monitor-tqmg4                   2/2     Running   0          10s
 
-    NAME                            TYPE           CLUSTER-IP   EXTERNAL-IP     PORT(S)        AGE
-    service/logicapp-prod-service   LoadBalancer   10.0.8.126   52.191.35.147   80:30113/TCP   3m47s
+    NAME                            TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+    service/logicapp-prod-service   LoadBalancer   10.0.38.167   20.42.34.34   80:32376/TCP   11s
 
     NAME                          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-    daemonset.apps/node-monitor   3         3         3       3            3           <none>          3m47s
+    daemonset.apps/node-monitor   3         3         3       3            3           <none>          10s
 
     NAME                                  READY   UP-TO-DATE   AVAILABLE   AGE
-    deployment.apps/logicapp-deployment   4/4     4            4           3m47s
+    deployment.apps/logicapp-deployment   4/4     4            4           12s
 
     NAME                                           DESIRED   CURRENT   READY   AGE
-    replicaset.apps/logicapp-deployment-cdf4b945   4         4         4       3m47s
+    replicaset.apps/logicapp-deployment-cdf4b945   4         4         4       12s
 
 To show the solution, monitor the monitor logs...
 
-    % kubectl logs daemonset.apps/node-monitor -n logicapp-prod -f
+    % kubectl logs daemonset.apps/node-monitor -n logicapp-prod -f -c node-monitor
     Found 3 pods, using pod/node-monitor-25ww4
     time="2021-03-20T15:30:08Z" level=info msg="Starting node_exporter (version=0.15.2, branch=HEAD, revision=98bc64930d34878b84a0f87dfe6e1a6da61e532d)" source="node_exporter.go:43"
     time="2021-03-20T15:30:08Z" level=info msg="Build context (go=go1.9.2, user=root@d5c4792c921f, date=20171205-14:50:53)" source="node_exporter.go:44"
@@ -94,15 +97,37 @@ To show the solution, monitor the monitor logs...
     time="2021-03-20T15:30:08Z" level=info msg=" - sockstat" source="node_exporter.go:52"
     time="2021-03-20T15:30:08Z" level=info msg="Listening on :9100" source="node_exporter.go:76"
 
+    % kubectl logs daemonset.apps/node-monitor -n logicapp-prod -f -c fluentd-esearch
+    Found 3 pods, using pod/node-monitor-tqmg4
+    2021-03-23 23:11:23 +0000 [info]: parsing config file is succeeded path="/etc/fluent/fluent.conf"
+    2021-03-23 23:11:23 +0000 [info]: using configuration file: <ROOT>
+      <match fluent.**>
+        @type null
+      </match>
+    </ROOT>
+    2021-03-23 23:11:23 +0000 [info]: starting fluentd-1.4.2 pid=32293 ruby="2.3.3"
+    2021-03-23 23:11:23 +0000 [info]: spawn command to main:  cmdline=["/usr/bin/ruby2.3", "-Eascii-8bit:ascii-8bit", "/usr/local/bin/fluentd", "--under-supervisor"]
+    2021-03-23 23:11:24 +0000 [info]: gem 'fluent-plugin-concat' version '2.3.0'
+    2021-03-23 23:11:24 +0000 [info]: gem 'fluent-plugin-detect-exceptions' version '0.0.12'
+    2021-03-23 23:11:24 +0000 [info]: gem 'fluent-plugin-elasticsearch' version '3.4.3'
+    2021-03-23 23:11:24 +0000 [info]: gem 'fluent-plugin-kubernetes_metadata_filter' version '2.1.6'
+    2021-03-23 23:11:24 +0000 [info]: gem 'fluent-plugin-multi-format-parser' version '1.0.0'
+    2021-03-23 23:11:24 +0000 [info]: gem 'fluent-plugin-prometheus' version '1.3.0'
+    2021-03-23 23:11:24 +0000 [info]: gem 'fluent-plugin-systemd' version '1.0.2'
+    2021-03-23 23:11:24 +0000 [info]: gem 'fluentd' version '1.4.2'
+    2021-03-23 23:11:24 +0000 [info]: adding match pattern="fluent.**" type="null"
+    2021-03-23 23:11:24 +0000 [info]: #0 starting fluentd worker pid=32543 ppid=32293 worker=0
+    2021-03-23 23:11:24 +0000 [info]: #0 fluentd worker is now running worker=0
+
     % kubectl get pod -o wide -n logicapp-prod 
-    NAME                                 READY   STATUS    RESTARTS   AGE     IP             NODE                                NOMINATED NODE   READINESS GATES
-    logicapp-deployment-cdf4b945-2ptd5   1/1     Running   0          8m20s   10.240.0.119   aks-agentpool-38144429-vmss00000j   <none>           <none>
-    logicapp-deployment-cdf4b945-dp74b   1/1     Running   0          8m20s   10.240.0.20    aks-agentpool-38144429-vmss00000i   <none>           <none>
-    logicapp-deployment-cdf4b945-w2hw2   1/1     Running   0          8m20s   10.240.0.194   aks-agentpool-38144429-vmss00000j   <none>           <none>
-    logicapp-deployment-cdf4b945-wwszs   1/1     Running   0          8m20s   10.240.0.249   aks-agentpool-38144429-vmss00000k   <none>           <none>
-    node-monitor-55ln7                   1/1     Running   0          8m19s   10.240.0.226   aks-agentpool-38144429-vmss00000k   <none>           <none>
-    node-monitor-f6jwq                   1/1     Running   0          8m19s   10.240.0.115   aks-agentpool-38144429-vmss00000j   <none>           <none>
-    node-monitor-rwq88                   1/1     Running   0          8m19s   10.240.0.4     aks-agentpool-38144429-vmss00000i   <none>           <none>
+        NAME                                 READY   STATUS    RESTARTS   AGE     IP             NODE                                NOMINATED NODE   READINESS GATES
+    logicapp-deployment-cdf4b945-5ptjg   1/1     Running   0          2m10s   10.240.0.126   aks-agentpool-38144429-vmss00000p   <none>           <none>
+    logicapp-deployment-cdf4b945-h7qwq   1/1     Running   0          2m10s   10.240.0.19    aks-agentpool-38144429-vmss00000o   <none>           <none>
+    logicapp-deployment-cdf4b945-ng4vj   1/1     Running   0          2m10s   10.240.1.28    aks-agentpool-38144429-vmss00000q   <none>           <none>
+    logicapp-deployment-cdf4b945-ztcfc   1/1     Running   0          2m10s   10.240.1.32    aks-agentpool-38144429-vmss00000q   <none>           <none>
+    node-monitor-mx2rz                   2/2     Running   0          2m9s    10.240.0.4     aks-agentpool-38144429-vmss00000o   <none>           <none>
+    node-monitor-t2zvf                   2/2     Running   0          2m9s    10.240.0.226   aks-agentpool-38144429-vmss00000q   <none>           <none>
+    node-monitor-tqmg4                   2/2     Running   0          2m9s    10.240.0.115   aks-agentpool-38144429-vmss00000p   <none>           <none>
 
     % kubectl describe daemonset.apps/node-monitor -n logicapp-prod 
     Name:           node-monitor
@@ -122,7 +147,20 @@ To show the solution, monitor the monitor logs...
       Annotations:  prometheus.io/port: 9100
                     prometheus.io/scrape: true
       Containers:
-       node-exporter:
+       fluentd-esearch:
+        Image:      quay.io/fluentd_elasticsearch/fluentd:v2.5.2
+        Port:       <none>
+        Host Port:  <none>
+        Limits:
+          memory:  200Mi
+        Requests:
+          cpu:        100m
+          memory:     200Mi
+        Environment:  <none>
+        Mounts:
+          /var/lib/docker/containers from varlibdockercontainers (ro)
+          /var/log from varlog (rw)
+       node-monitor:
         Image:      prom/node-exporter:v0.15.2
         Port:       9100/TCP
         Host Port:  9100/TCP
@@ -145,6 +183,14 @@ To show the solution, monitor the monitor logs...
           /logs from logs (rw)
           /rootfs from rootfs (rw)
       Volumes:
+       varlog:
+        Type:          HostPath (bare host directory volume)
+        Path:          /var/log
+        HostPathType:  
+       varlibdockercontainers:
+        Type:          HostPath (bare host directory volume)
+        Path:          /var/lib/docker/containers
+        HostPathType:  
        proc:
         Type:          HostPath (bare host directory volume)
         Path:          /proc
@@ -166,15 +212,15 @@ To show the solution, monitor the monitor logs...
         Path:          /
         HostPathType:  
     Events:
-      Type    Reason            Age   From                  Message
-      ----    ------            ----  ----                  -------
-      Normal  SuccessfulCreate  116s  daemonset-controller  Created pod: node-monitor-xvhn6
-      Normal  SuccessfulCreate  116s  daemonset-controller  Created pod: node-monitor-nfkn4
-      Normal  SuccessfulCreate  115s  daemonset-controller  Created pod: node-monitor-25ww4
+      Type    Reason            Age    From                  Message
+      ----    ------            ----   ----                  -------
+      Normal  SuccessfulCreate  2m53s  daemonset-controller  Created pod: node-monitor-tqmg4
+      Normal  SuccessfulCreate  2m53s  daemonset-controller  Created pod: node-monitor-mx2rz
+      Normal  SuccessfulCreate  2m53s  daemonset-controller  Created pod: node-monitor-t2zvf
 
 To view various metrics, you can do the following...
 
-    % kubectl exec daemonset.apps/node-monitor -n logicapp-prod -- wget -O- http://localhost:9100/metrics
+    % kubectl exec daemonset.apps/node-monitor -n logicapp-prod -c node-monitor -- wget -O- http://localhost:9100/metrics
     Connecting to localhost:9100 (127.0.0.1:9100)
     # HELP go_gc_duration_seconds A summary of the GC invocation durations.
     # TYPE go_gc_duration_seconds summary
@@ -227,6 +273,25 @@ To view various metrics, you can do the following...
     # HELP go_memstats_heap_sys_bytes Number of heap bytes obtained from system.
     # TYPE go_memstats_heap_sys_bytes gauge
     ...
+
+    % kubectl exec daemonset.apps/node-monitor -n logicapp-prod -c fluentd-esearch  -- tail -f /var/log/azure-cnimonitor.log
+    2021/03/23 23:18:52 [1] [Azure-Utils] ebtables -t nat -L PREROUTING --Lmac2
+    2021/03/23 23:18:52 [1] [Azure-Utils] ebtables -t nat -L POSTROUTING --Lmac2
+    2021/03/23 23:18:52 [1] [monitor] Going to sleep for 10 seconds
+    2021/03/23 23:19:02 [1] [net] Restored state, &{Version:v1.2.0_hotfix TimeStamp:2021-03-23 23:11:22.564711722 +0000 UTC ExternalInterfaces:map[eth0:0xc0000dc100] store:0xc000076f30 Mutex:{state:0 sema:0}}
+    2021/03/23 23:19:02 [1] External Interface &{Name:eth0 Networks:map[azure:0xc0001304e0] Subnets:[10.240.0.0/16] BridgeName: DNSInfo:{Suffix: Servers:[] Options:[]} MacAddress:00:22:48:1e:42:3f IPAddresses:[] Routes:[] IPv4Gateway:0.0.0.0 IPv6Gateway:::}
+    2021/03/23 23:19:02 [1] Number of endpoints: 17
+    2021/03/23 23:19:02 [1] [monitor] network manager:&{Version:v1.2.0_hotfix TimeStamp:2021-03-23 23:11:22.564711722 +0000 UTC ExternalInterfaces:map[eth0:0xc0000dc100] store:0xc000076f30 Mutex:{state:0 sema:0}}
+    2021/03/23 23:19:02 [1] [Azure-Utils] ebtables -t nat -L PREROUTING --Lmac2
+    2021/03/23 23:19:02 [1] [Azure-Utils] ebtables -t nat -L POSTROUTING --Lmac2
+    2021/03/23 23:19:02 [1] [monitor] Going to sleep for 10 seconds
+    2021/03/23 23:19:12 [1] [net] Restored state, &{Version:v1.2.0_hotfix TimeStamp:2021-03-23 23:11:22.564711722 +0000 UTC ExternalInterfaces:map[eth0:0xc0000fe600] store:0xc0003a8a80 Mutex:{state:0 sema:0}}
+    2021/03/23 23:19:12 [1] External Interface &{Name:eth0 Networks:map[azure:0xc00051b860] Subnets:[10.240.0.0/16] BridgeName: DNSInfo:{Suffix: Servers:[] Options:[]} MacAddress:00:22:48:1e:42:3f IPAddresses:[] Routes:[] IPv4Gateway:0.0.0.0 IPv6Gateway:::}
+    2021/03/23 23:19:12 [1] Number of endpoints: 17
+    2021/03/23 23:19:12 [1] [monitor] network manager:&{Version:v1.2.0_hotfix TimeStamp:2021-03-23 23:11:22.564711722 +0000 UTC ExternalInterfaces:map[eth0:0xc0000fe600] store:0xc0003a8a80 Mutex:{state:0 sema:0}}
+    2021/03/23 23:19:12 [1] [Azure-Utils] ebtables -t nat -L PREROUTING --Lmac2
+    2021/03/23 23:19:12 [1] [Azure-Utils] ebtables -t nat -L POSTROUTING --Lmac2
+    2021/03/23 23:19:12 [1] [monitor] Going to sleep for 10 seconds
 
 Cleaning Up
 -----------

@@ -44,7 +44,7 @@ spec:
   capacity:
     storage: 5Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   hostPath:
     path: "/mnt/postgres01"
     type: DirectoryOrCreate
@@ -62,7 +62,7 @@ spec:
   capacity:
     storage: 5Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   hostPath:
     path: "/mnt/postgres02"
     type: DirectoryOrCreate
@@ -126,7 +126,7 @@ spec:
         name: postgres-persistent-storage
       spec:
         storageClassName: localstorage
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteMany"]
         resources:
          requests:
           storage: 5Gi
