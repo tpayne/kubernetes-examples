@@ -6,11 +6,6 @@ This repo contains an example which shows how to do DaemonSets using Kubernetes.
 DaemonSets are used to create maintenance sets that can attach to nodes to run system
 actvities like monitoring (Prometheus) and logging (Fluentd).
 
-- https://prometheus.io
-- https://www.fluentd.org
-- https://docs.fluentd.org/output/elasticsearch
-- https://github.com/prometheus-operator/kube-prometheus
-
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
@@ -303,3 +298,11 @@ To clean up the installation, do the following...
         
 This will delete all the items created in your Kubernetes installation.
 
+References
+----------
+- https://prometheus.io
+- https://www.fluentd.org
+- https://docs.fluentd.org/output/elasticsearch
+- https://github.com/prometheus-operator/kube-prometheus
+- https://faun.pub/trying-prometheus-operator-with-helm-minikube-b617a2dccfa3
+- https://www.codenotary.com/blog/kubernetes-configure-prometheus-node-exporter-to-collect-numa-information/
