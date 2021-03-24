@@ -9,6 +9,7 @@ actvities like monitoring (Prometheus) and logging (Fluentd).
 - https://prometheus.io
 - https://www.fluentd.org
 - https://docs.fluentd.org/output/elasticsearch
+- https://github.com/prometheus-operator/kube-prometheus
 
 Dependencies
 ------------
