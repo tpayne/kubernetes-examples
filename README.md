@@ -28,6 +28,7 @@ The examples contained in this repo run on Maven and Kubernetes. They are based 
 >| [YAML/LoadBalancer/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/LoadBalancer) | This sample will use YAML to create various load balancing/redirection solutions to a specified Kubernetes repo |
 >| [YAML/Probes/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/Probes) | This sample will use YAML to show how to use probes |
 >| [YAML/RollingUpdate/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/RollingUpdate) | This sample will use YAML to show rolling update strategies in a specified Kubernetes repo |
+>| [YAML/Roles/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/Roles) | This sample will use YAML to show how to use roles |
 >| [YAML/StatefulSets/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/StatefulSets) | This sample will use YAML to show how to use StatefulSets |
 
 Clean Up
