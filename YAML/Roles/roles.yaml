@@ -1,0 +1,90 @@
+# These examples are taken as samples from https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+---
+# Lets first create an application namespace to use...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logicapp-prod
+  labels:
+    env: prod
+---
+# Now let's create a set of example roles...
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: logicapp-prod
+  name: pod-reader
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods","pods/log"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: logicapp-prod
+  name: pod-creator
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]
+  verbs: ["create", "delete", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: logicapp-prod
+subjects:
+- kind: User
+  name: postgres # "name" is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: users
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: pod-reader # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: admin-pods
+  namespace: logicapp-prod
+subjects:
+- kind: User
+  name: james # "name" is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: admin
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: pod-reader # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
+---
+# ClusterRole samples...
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nodeadmin
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["create", "delete", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-nodes
+subjects:
+- kind: User
+  name: james # "name" is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: admin
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: ClusterRole #this must be Role or ClusterRole
+  name: nodeadmin # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
