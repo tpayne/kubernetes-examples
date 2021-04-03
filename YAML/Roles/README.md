@@ -4,9 +4,11 @@ Roles Sample
 This repo contains an example which shows how to do roles using Kubernetes.
 
 Roles are used to limit what users or groups can do in Kubernetes. Roles are
-namespaced. ClusterRoles are non-namespaced
-
+namespaced. ClusterRoles are non-namespaced.
 - https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+
+Users and groups are external stores that are referenced by tokens from Kubernetes
+- https://kubernetes.io/docs/reference/access-authn-authz/authentication/
 
 Dependencies
 ------------
