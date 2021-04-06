@@ -144,6 +144,8 @@ To access the addons, you can use...
     % istioctl dashboard jaeger (trace logs)
     % istioctl dashboard kiali (observability)
     % istioctl dashboard envoy <pod-name>.<namespace> (pod proxy metrics)
+    
+These will start a localhost web page which will use port forwarding to access data in the K8s install.
 
 Cleaning Up
 -----------
