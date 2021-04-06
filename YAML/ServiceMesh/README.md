@@ -75,41 +75,47 @@ To install the additional components, please do...
     % kubectl create ns istio-system && kubectl apply -f istio-install-aks.yaml
     % kubectl get all -n istio-system
     NAME                                        READY   STATUS    RESTARTS   AGE
-    pod/grafana-f7bf8676f-vnj2x                 1/1     Running   0          91s
-    pod/istio-ingressgateway-7c67ffddc8-b4zkg   1/1     Running   0          94s
-    pod/istio-tracing-86cdb7df6-h5csx           1/1     Running   0          91s
-    pod/istiod-bf956b554-fwfzg                  1/1     Running   0          104s
-    pod/prometheus-5fb76b8c4d-fwkwk             1/1     Running   0          91s
+    pod/grafana-f7bf8676f-vnj2x                 1/1     Running   0          89m
+    pod/istio-ingressgateway-7c67ffddc8-b4zkg   1/1     Running   0          89m
+    pod/istio-tracing-86cdb7df6-h5csx           1/1     Running   0          89m
+    pod/istiod-bf956b554-fwfzg                  1/1     Running   0          89m
+    pod/kiali-7ff5c568d7-2kgn6                  1/1     Running   0          32s
+    pod/prometheus-5fb76b8c4d-fwkwk             1/1     Running   0          89m
 
     NAME                                TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)                                                      AGE
-    service/grafana                     ClusterIP      10.0.176.199   <none>           3000/TCP                                                     91s
-    service/istio-ingressgateway        LoadBalancer   10.0.229.251   52.151.208.200   15021:30482/TCP,80:32120/TCP,443:31148/TCP,15443:32424/TCP   93s
-    service/istiod                      ClusterIP      10.0.56.45     <none>           15010/TCP,15012/TCP,443/TCP,15014/TCP,853/TCP                104s
-    service/jaeger-agent                ClusterIP      None           <none>           5775/UDP,6831/UDP,6832/UDP                                   91s
-    service/jaeger-collector            ClusterIP      10.0.74.15     <none>           14267/TCP,14268/TCP,14250/TCP                                91s
-    service/jaeger-collector-headless   ClusterIP      None           <none>           14250/TCP                                                    90s
-    service/jaeger-query                ClusterIP      10.0.103.149   <none>           16686/TCP                                                    90s
-    service/prometheus                  ClusterIP      10.0.179.10    <none>           9090/TCP                                                     90s
-    service/tracing                     ClusterIP      10.0.176.110   <none>           80/TCP                                                       90s
-    service/zipkin                      ClusterIP      10.0.10.107    <none>           9411/TCP                                                     90s
+    service/grafana                     ClusterIP      10.0.176.199   <none>           3000/TCP                                                     89m
+    service/istio-ingressgateway        LoadBalancer   10.0.229.251   52.151.208.200   15021:30482/TCP,80:32120/TCP,443:31148/TCP,15443:32424/TCP   89m
+    service/istiod                      ClusterIP      10.0.56.45     <none>           15010/TCP,15012/TCP,443/TCP,15014/TCP,853/TCP                89m
+    service/jaeger-agent                ClusterIP      None           <none>           5775/UDP,6831/UDP,6832/UDP                                   89m
+    service/jaeger-collector            ClusterIP      10.0.74.15     <none>           14267/TCP,14268/TCP,14250/TCP                                89m
+    service/jaeger-collector-headless   ClusterIP      None           <none>           14250/TCP                                                    89m
+    service/jaeger-query                ClusterIP      10.0.103.149   <none>           16686/TCP                                                    89m
+    service/kiali                       ClusterIP      10.0.153.43    <none>           20001/TCP                                                    33s
+    service/prometheus                  ClusterIP      10.0.179.10    <none>           9090/TCP                                                     89m
+    service/tracing                     ClusterIP      10.0.176.110   <none>           80/TCP                                                       89m
+    service/zipkin                      ClusterIP      10.0.10.107    <none>           9411/TCP                                                     89m
 
     NAME                                   READY   UP-TO-DATE   AVAILABLE   AGE
-    deployment.apps/grafana                1/1     1            1           91s
-    deployment.apps/istio-ingressgateway   1/1     1            1           94s
-    deployment.apps/istio-tracing          1/1     1            1           91s
-    deployment.apps/istiod                 1/1     1            1           104s
-    deployment.apps/prometheus             1/1     1            1           91s
+    deployment.apps/grafana                1/1     1            1           89m
+    deployment.apps/istio-ingressgateway   1/1     1            1           89m
+    deployment.apps/istio-tracing          1/1     1            1           89m
+    deployment.apps/istiod                 1/1     1            1           89m
+    deployment.apps/kiali                  1/1     1            1           33s
+    deployment.apps/prometheus             1/1     1            1           89m
 
     NAME                                              DESIRED   CURRENT   READY   AGE
-    replicaset.apps/grafana-f7bf8676f                 1         1         1       92s
-    replicaset.apps/istio-ingressgateway-7c67ffddc8   1         1         1       95s
-    replicaset.apps/istio-tracing-86cdb7df6           1         1         1       92s
-    replicaset.apps/istiod-bf956b554                  1         1         1       105s
-    replicaset.apps/prometheus-5fb76b8c4d             1         1         1       92s
+    replicaset.apps/grafana-f7bf8676f                 1         1         1       89m
+    replicaset.apps/istio-ingressgateway-7c67ffddc8   1         1         1       89m
+    replicaset.apps/istio-tracing-86cdb7df6           1         1         1       89m
+    replicaset.apps/istiod-bf956b554                  1         1         1       89m
+    replicaset.apps/kiali-7ff5c568d7                  1         1         1       33s
+    replicaset.apps/prometheus-5fb76b8c4d             1         1         1       89m
 
     NAME                                                       REFERENCE                         TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-    horizontalpodautoscaler.autoscaling/istio-ingressgateway   Deployment/istio-ingressgateway   3%/80%    1         5         1          94s
-    horizontalpodautoscaler.autoscaling/istiod                 Deployment/istiod                 0%/80%    1         5         1          105s
+    horizontalpodautoscaler.autoscaling/istio-ingressgateway   Deployment/istio-ingressgateway   4%/80%    1         5         1          89m
+    horizontalpodautoscaler.autoscaling/istiod                 Deployment/istiod                 0%/80%    1         5         1          89m
+
+Logs of the install process can be accessed via the `logs` command as shown below...
 
     % kubectl logs -n istio-operator -l name=istio-operator -f
     2021-04-06T13:33:28.019926Z info    installer   creating resource: Service/istio-system/jaeger-query
