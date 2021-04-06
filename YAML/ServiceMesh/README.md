@@ -172,3 +172,4 @@ References
 - https://www.codenotary.com/blog/kubernetes-configure-prometheus-node-exporter-to-collect-numa-information/
 - https://istio.io/latest/docs/setup/getting-started/
 - https://istio.io/latest/docs/examples/microservices-istio/
+- https://computingforgeeks.com/install-istio-service-mesh-in-eks-cluster/#:~:text=%20Install%20Istio%20Service%20Mesh%20in%20EKS%20Kubernetes,created%20the%20Secrets%20required%20we%20can...%20More%20
