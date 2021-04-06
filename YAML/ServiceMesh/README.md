@@ -9,6 +9,8 @@ discovery etc.
 
 The most common implementation is Istio which is used here.
 
+>![Service Mesh](https://istio.io/latest/docs/ops/deployment/architecture/arch.svg)
+
 This sample is adapted from... 
 - https://docs.microsoft.com/en-us/azure/aks/servicemesh-istio-install?pivots=client-operating-system-linux#:~:text=Install%20and%20use%20Istio%20in%20Azure%20Kubernetes%20Service,Uninstall%20Istio%20from%20AKS.%20...%206%20Next%20steps
 
