@@ -153,10 +153,50 @@ To access the addons, you can use...
     
 These will start a localhost web page which will use port forwarding to access data in the K8s install.
 
+Running a Load Balancer Example
+-------------------------------
+A load balancer example for Istio is provided. This can be installed using...
+
+    % kubectl delete ns logicapp-dev; kubectl create -f istio-load-balancer.yaml
+
+To see the deployment, do...
+
+    % kubectl get all -n logicapp-dev
+    NAME                                                   READY   STATUS    RESTARTS   AGE
+    pod/logicapp-dev-deployment-jenkins-54b9dd46cb-ws2mw   2/2     Running   0          14s
+    pod/logicapp-dev-deployment-nginx-55858b8766-chnhs     2/2     Running   0          14s
+
+    NAME                                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+    service/logicapp-dev-service-jenkins   ClusterIP   10.0.10.248    <none>        8080/TCP   15s
+    service/logicapp-dev-service-nginx     ClusterIP   10.0.133.117   <none>        80/TCP     15s
+
+    NAME                                              READY   UP-TO-DATE   AVAILABLE   AGE
+    deployment.apps/logicapp-dev-deployment-jenkins   1/1     1            1           15s
+    deployment.apps/logicapp-dev-deployment-nginx     1/1     1            1           15s
+
+    NAME                                                         DESIRED   CURRENT   READY   AGE
+    replicaset.apps/logicapp-dev-deployment-jenkins-54b9dd46cb   1         1         1       15s
+    replicaset.apps/logicapp-dev-deployment-nginx-55858b8766     1         1         1       15s
+
+The deployment is exactly the same as that shown in the LoadBalancer example.
+
+For more information on how to use it, please see the documentation for `LoadBalancer` example
+(NGINX). You can find out the Istio external-ip using the command,
+
+    % kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+
+This IP can be used by CURL or your HTTP browser to access the service, e.g.
+
+    % kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+    52.151.208.255
+    % open http://52.151.208.255/svrnginx
+    % open http://52.151.208.255/svrjenkins
+
 Cleaning Up
 -----------
 To clean up the installation, do the following...
 
+    % kubectl delete ns logicapp-dev
     % kubectl delete istiooperator istio-control-plane -n istio-system
     % istioctl operator remove
     % kubectl delete ns istio-system && kubectl delete ns istio-operator
@@ -164,6 +204,7 @@ To clean up the installation, do the following...
 References
 ----------
 - https://istio.io/latest/docs/concepts/what-is-istio/
+- https://istio.io/latest/docs/reference/config/networking/virtual-service/
 - https://prometheus.io
 - https://www.fluentd.org
 - https://docs.fluentd.org/output/elasticsearch
