@@ -223,6 +223,7 @@ References
 - https://istio.io/latest/docs/concepts/what-is-istio/
 - https://istio.io/latest/docs/reference/config/networking/virtual-service/
 - https://istio.io/latest/docs/reference/config/networking/destination-rule/
+- https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking
 - https://prometheus.io
 - https://www.fluentd.org
 - https://docs.fluentd.org/output/elasticsearch
