@@ -41,9 +41,14 @@ After you have finished you can clean up your Docker repo with the following com
     
 Be sure you want to run this command however as it will reclaim all unused space!
 
-Notes
------
+Notes on Configs
+----------------
 You can merge Kubeconfigs with the following...
     
     export KUBECONFIG=~/.kube/config:~/new-config-file 
     kubectl config view --flatten
+
+Notes on Network Control
+------------------------
+Network control (ingress/egress) Calico policies are managed by Network Policies
+- https://kubernetes.io/docs/concepts/services-networking/network-policies/
