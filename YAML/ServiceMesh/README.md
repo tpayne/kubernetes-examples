@@ -18,6 +18,11 @@ Note: This example will only work with version 1.7.2. For later versions, please
 - https://istio.io/latest/docs/setup/getting-started/
 - https://istio.io/latest/docs/setup/platform-setup/azure/
 
+This sample shows how to use Istio to install...
+- Virtual services (Ingress rules)
+- Circuit breakers 
+- Gateways
+
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
@@ -117,6 +122,8 @@ To install the additional components, please do...
     horizontalpodautoscaler.autoscaling/istio-ingressgateway   Deployment/istio-ingressgateway   4%/80%    1         5         1          89m
     horizontalpodautoscaler.autoscaling/istiod                 Deployment/istiod                 0%/80%    1         5         1          89m
 
+It will take a few minutes for the install process to complete.
+
 Logs of the install process can be accessed via the `logs` command as shown below...
 
     % kubectl logs -n istio-operator -l name=istio-operator -f
@@ -207,6 +214,7 @@ References
 ----------
 - https://istio.io/latest/docs/concepts/what-is-istio/
 - https://istio.io/latest/docs/reference/config/networking/virtual-service/
+- https://istio.io/latest/docs/reference/config/networking/destination-rule/
 - https://prometheus.io
 - https://www.fluentd.org
 - https://docs.fluentd.org/output/elasticsearch
