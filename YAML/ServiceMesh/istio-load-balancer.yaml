@@ -22,6 +22,11 @@ spec:
     metadata:
       labels:
         app: logicapp-dev-nginx # the label for the pods and the deployments
+        # This annotation causes Envoy to serve cluster.outbound statistics via 15000/stats
+        # in addition to the stats normally served by Istio.  The Circuit Breaking example task
+        # gives an example of inspecting Envoy stats.
+      annotations:
+        sidecar.istio.io/statsInclusionPrefixes: cluster.outbound,cluster_manager,listener_manager,http_mixer_filter,tcp_mixer_filter,server,cluster.xds-grpc
     spec:
       containers:
       - name: nginx
@@ -43,6 +48,11 @@ spec:
     metadata:
       labels:
         app: logicapp-dev-jenkins # the label for the pods and the deployments
+        # This annotation causes Envoy to serve cluster.outbound statistics via 15000/stats
+        # in addition to the stats normally served by Istio.  The Circuit Breaking example task
+        # gives an example of inspecting Envoy stats.
+      annotations:
+        sidecar.istio.io/statsInclusionPrefixes: cluster.outbound,cluster_manager,listener_manager,http_mixer_filter,tcp_mixer_filter,server,cluster.xds-grpc
     spec:
       containers:
       # To get the password for Jenkins do the following...
@@ -130,7 +140,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: logicapp-dev-ingress-services
+  name: logicapp-dev-ingress-nginx
   namespace: logicapp-dev
 spec:
   hosts:
@@ -173,3 +183,57 @@ spec:
         host: logicapp-dev-service-jenkins
         port:
           number: 8080
+---
+# Put in a circuit breaker to help smooth throughput...
+# https://istio.io/latest/docs/reference/config/networking/destination-rule/
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: logicapp-dev-cb-nginx
+  namespace: logicapp-dev
+spec:
+  host: logicapp-dev-service-nginx
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 50 # Support 50 concurrent connections...
+        connectTimeout: 30ms
+        tcpKeepalive:
+          time: 100s
+          interval: 10s
+      http:
+        http1MaxPendingRequests: 50
+        maxRequestsPerConnection: 10
+    outlierDetection: 
+      # Check every 15 mins for connections that fail 10 times between checks
+      # If detected, then ban them for 10mins
+      consecutive5xxErrors: 10
+      interval: 15m
+      baseEjectionTime: 10m
+      maxEjectionPercent: 100
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: logicapp-dev-cb-jenkins
+  namespace: logicapp-dev
+spec:
+  host: logicapp-dev-service-jenkins
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 50 # Support 50 concurrent connections...
+        connectTimeout: 30ms
+        tcpKeepalive:
+          time: 100s
+          interval: 10s
+      http:
+        http1MaxPendingRequests: 50
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      # Check every 15 mins for connections that fail 10 times between checks
+      # If detected, then ban them for 10mins
+      consecutive5xxErrors: 10
+      interval: 15m
+      baseEjectionTime: 10m
+      maxEjectionPercent: 100
