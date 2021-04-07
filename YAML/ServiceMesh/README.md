@@ -23,6 +23,8 @@ This sample shows how to use Istio to install...
 - Circuit breakers 
 - Gateways
 
+>![Sample Dashboard](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/ServiceMesh/Istio_DashSample.png)
+
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
