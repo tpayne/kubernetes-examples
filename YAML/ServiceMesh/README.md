@@ -23,6 +23,12 @@ This sample shows how to use Istio to install...
 - Circuit breakers 
 - Gateways
 
+Example Dashboard
+-----------------
+You can invoke sample dashboard(s) like below using...
+
+    % istioctl dashboard grafana
+    
 >![Sample Dashboard](https://github.com/tpayne/kubernetes-examples/blob/main/YAML/ServiceMesh/Samples/Istio_DashSample.png)
 
 Dependencies
