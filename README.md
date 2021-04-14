@@ -13,6 +13,7 @@ Build CI/Testing Status
 The following indicates the CI and coverage status.
 
 [![Build Status](https://travis-ci.org/tpayne/kubernetes-examples.svg?branch=main)](https://travis-ci.org/tpayne/kubernetes-examples)
+[![Java CI with Maven](https://github.com/tpayne/kubernetes-examples/actions/workflows/maven.yml/badge.svg)](https://github.com/tpayne/kubernetes-examples/actions/workflows/maven.yml)
 
 Kubernetes Examples
 -------------------
