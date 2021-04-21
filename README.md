@@ -3,6 +3,8 @@ Kubernetes Examples Repo
 
 This repo contains various examples of Kubernetes projects that have been created to help people get started with (Maven and) Kubernetes.
 
+It is assumed you have a basic understanding of what Kubernetes and Docker is. If not, then please see the notes below.
+
 Status
 ------
 ````
@@ -53,3 +55,8 @@ Notes on Network Control
 ------------------------
 Network control (ingress/egress) Calico policies are managed by Network Policies
 - https://kubernetes.io/docs/concepts/services-networking/network-policies/
+
+Notes for Getting Started
+-------------------------
+- https://kubernetes.io/docs
+- https://docs.docker.com
