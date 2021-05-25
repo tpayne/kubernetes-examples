@@ -72,6 +72,10 @@ To clean up the installation, do the following...
 
 This will delete all the items created in your Kubernetes installation.
 
+Issues
+------
+- Arc does not seem to be able to handle mixed case repo directories. Always make them lowercase
+
 Notes
 -----
 - https://techcommunity.microsoft.com/t5/azure-arc/azure-arc-enabled-kubernetes-with-gitops/ba-p/1654171
