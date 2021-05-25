@@ -1,0 +1,47 @@
+---
+# Now let's create a deployment in that namespace that contains 2 versions of the same app...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: "{{ include "demo-app.namespace" . }}-prod"
+  name: "{{ include "demo-app.namespace" . }}-deployment"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: "{{ include "demo-app.namespace" . }}-deployment"
+  template:
+    metadata:
+      labels:
+        app: "{{ include "demo-app.namespace" . }}-deployment" # the label for the pods and the deployments
+        env: prod
+    spec:
+      containers:
+      - name: samplev1
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 8080 # the application listens to this port
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: "{{ include "demo-app.namespace" . }}-prod"
+  name: "{{ include "demo-app.namespace" . }}-canary"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ include "demo-app.namespace" . }}-deployment"
+  template:
+    metadata:
+      labels:
+        app: "{{ include "demo-app.namespace" . }}-deployment" # the label for the pods and the deployments
+        env: canary
+    spec:
+      containers:
+      - name: samplev2
+        image: "{{ .Values.image.repository }}:latest"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 8080 # the application listens to this port

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "demo-app.namespace" . }}-test-connection"
+  labels:
+    app: "{{ .Values.namespace }}-deployment"
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "demo-app.namespace" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

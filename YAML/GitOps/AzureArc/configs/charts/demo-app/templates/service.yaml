@@ -1,0 +1,10 @@
+# Create a service for the deployment
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: "{{ include "demo-app.namespace" . }}-prod"
+  name: "{{ include "demo-app.namespace" . }}-prod-service"
+spec:
+  {{- toYaml  .Values.service | nindent 2 }}
+  selector:
+    app: "{{ include "demo-app.namespace" . }}-deployment"
