@@ -74,3 +74,8 @@ Notes
 -----
 - https://docs.microsoft.com/en-gb/azure/azure-arc/kubernetes/tutorial-use-gitops-connected-cluster
 - https://docs.fluxcd.io/projects/helm-operator/en/1.0.0-rc9/references/helmrelease-custom-resource.html
+- https://techcommunity.microsoft.com/t5/azure-arc/azure-arc-enabled-kubernetes-with-gitops/ba-p/1654171
+- https://docs.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-configurations
+- https://www.mytechramblings.com/posts/gitops-with-azure-devops-helm-acr-flux-and-k8s/
+- https://docs.microsoft.com/en-gb/azure/governance/policy/concepts/policy-for-kubernetes
+
