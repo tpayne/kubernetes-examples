@@ -46,6 +46,8 @@ Create the Kubernetes resources for the demo...
         --ssh-private-key '' --ssh-private-key-file '' --https-user '' --https-key '' \
         --ssh-known-hosts '' --ssh-known-hosts-file ''
     az k8s-configuration show -n demo-app -c k8gitops -g rg_001 --cluster-type connectedClusters
+    
+This will deploy a canary release to the cluster based on the configuration in the `releases/prod` directory.
 
 Creating Helm Templates
 -----------------------
@@ -74,8 +76,11 @@ Notes
 -----
 - https://docs.microsoft.com/en-gb/azure/azure-arc/kubernetes/tutorial-use-gitops-connected-cluster
 - https://docs.fluxcd.io/projects/helm-operator/en/1.0.0-rc9/references/helmrelease-custom-resource.html
+<<<<<<< HEAD
 - https://techcommunity.microsoft.com/t5/azure-arc/azure-arc-enabled-kubernetes-with-gitops/ba-p/1654171
 - https://docs.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-configurations
 - https://www.mytechramblings.com/posts/gitops-with-azure-devops-helm-acr-flux-and-k8s/
 - https://docs.microsoft.com/en-gb/azure/governance/policy/concepts/policy-for-kubernetes
+=======
+>>>>>>> 07f6795a8d5072cc324d1d207c235882b66c1ea7
 
