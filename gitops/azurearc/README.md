@@ -40,8 +40,9 @@ Create the Kubernetes resources for the demo...
         --operator-namespace demo-app \
         --repository-url https://github.com/tpayne/kubernetes-examples.git --scope cluster \
         --cluster-type connectedClusters \
-        --operator-params '--git-readonly --git-poll-interval 30s --git-path=YAML/GitOps/AzureArc/configs/releases/prod' \
+        --operator-params '"--git-readonly --git-branch=main --git-poll-interval 30s --git-path=gitops/azurearc/configs/releases/prod"' \
         --enable-helm-operator  \
+        --helm-operator-params '--set helm.versions=v3' \
         --ssh-private-key '' --ssh-private-key-file '' --https-user '' --https-key '' \
         --ssh-known-hosts '' --ssh-known-hosts-file ''
     az k8s-configuration show -n demo-app -c k8gitops -g rg_001 --cluster-type connectedClusters

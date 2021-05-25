@@ -7,6 +7,6 @@ spec:
   releaseName: demo-app-prod
   chart:
     git: https://github.com/tpayne/kubernetes-examples.git
-    path: YAML/GitOps/AzureArc/configs/charts/demo-app
+    path: gitops/azurearc/configs/charts/demo-app
     ref: main
 
