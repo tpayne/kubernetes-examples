@@ -26,21 +26,25 @@ List available regions to you and select a region...
 
 Create the Kubernetes resources for the demo...
 
+    az provider register --namespace Microsoft.Kubernetes
+    az provider register --namespace Microsoft.KubernetesConfiguration
+    az provider register --namespace Microsoft.ExtendedLocation
     az group create -n rg_001
     az aks create -n k8gitops -g rg_001
     az aks get-credentials -n k8gitops -g rg_001 --overwrite-existing
     az connectedk8s connect -n k8gitops -g rg_001
-    az k8s-configuration create --name gitops \
+    kubectl -name azure-arc get deployments,pods
+    az k8s-configuration create --name demo-app \
         --cluster-name k8gitops -g rg_001 \
         --operator-instance-name gitops \
         --operator-namespace gitops \
-        --repository-url https://github.com/tpayne/kubernetes-examples --scope cluster \
+        --repository-url https://github.com/tpayne/kubernetes-examples.git --scope cluster \
         --cluster-type connectedClusters \
-        --helm-operator-params '--git-readonly --git-poll-interval 30s --git-path=YAML/GitOps/AzureArc/configs/releases/prod/' \
+        --operator-params '--git-readonly --git-poll-interval 30s --git-path=YAML/GitOps/AzureArc/configs/releases/prod' \
         --enable-helm-operator  \
         --ssh-private-key '' --ssh-private-key-file '' --https-user '' --https-key '' \
         --ssh-known-hosts '' --ssh-known-hosts-file ''
-    az k8s-configuration show -n gitops -c k8gitops -g rg_001 --cluster-type connectedClusters
+    az k8s-configuration show -n demo-app -c k8gitops -g rg_001 --cluster-type connectedClusters
 
 Creating Helm Templates
 -----------------------
