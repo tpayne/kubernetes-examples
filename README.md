@@ -34,7 +34,8 @@ The examples contained in this repo run on Maven and Kubernetes. They are based 
 >| [YAML/Roles/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/Roles) | This sample will use YAML to show how to use roles |
 >| [YAML/ServiceMesh/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/ServiceMesh) | This sample will use YAML to show how to use Service Meshes |
 >| [YAML/StatefulSets/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/StatefulSets) | This sample will use YAML to show how to use StatefulSets |
-
+>| [gitops/azurearc/](https://github.com/tpayne/kubernetes-examples/tree/main/gitops/azurearc) | This sample will use Helm and Arc to setup GitOps in Azure |
+>
 Clean Up
 --------
 After you have finished you can clean up your Docker repo with the following commands...
