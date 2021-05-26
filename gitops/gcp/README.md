@@ -41,20 +41,22 @@ Unfortunately, `Cloud Build` does not have a CLI, so you will need to define the
 * Login into https://console.cloud.google.com/cloud-build/
 * Select `Trigger` from the left sidebar
 * In the `Trigger` dialog select `Create Trigger` and setup the details below
-** Name: Maven Build
-** Description: Maven Build
-** Event: Push to a branch
-** Source: Repository - Connect to new repository
-*** Connect repository - Select Source - GitHub (Cloud Build GitHub App)
-*** Connect repository - Authenticate - As a GitHub user (assuming you have one)
-*** Connect repository - Select Repo - Select/Edit (https://github.com/tpayne/kubernetes-examples)
-** Source: Branch - ^main$
-** Source: Included files filter - Maven/web8k-example/**
-** Configuration: Cloud Build configuration file
-** Configuration: Location - Maven/web8k-example/cloudbuild.yaml
-** Create trigger
 
-This should then build the repo image and save to your project. The `cloudbuild.yaml` file is hardcoded
+    Name: Maven Build
+    Description: Maven Build
+    Event: Push to a branch
+    Source: Repository - Connect to new repository
+    Connect repository - Select Source - GitHub (Cloud Build GitHub App)
+    Connect repository - Authenticate - As a GitHub user (assuming you have one)
+    Connect repository - Select Repo - Select/Edit (https://github.com/tpayne/kubernetes-examples)
+    Source: Branch - ^main$
+    Source: Included files filter - Maven/web8k-example/**
+    Configuration: Cloud Build configuration file
+    Configuration: Location - Maven/web8k-example/cloudbuild.yaml
+
+* Then, press `Create trigger`
+
+This should then build the repo image and save it to your project. The `cloudbuild.yaml` file is hardcoded
 for the cluster name and location, so you might need to resolve this with other variables.
 
 Cleaning Up
