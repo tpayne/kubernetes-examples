@@ -11,6 +11,7 @@ COPY src ./src
 RUN mvn package 
 
 FROM adoptopenjdk/openjdk11:alpine-slim
+
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 
