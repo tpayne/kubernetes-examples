@@ -4,6 +4,8 @@ StatefulSet Sample
 This repo contains an example which shows how to do StatefulSets using Kubernetes.
 
 StatefulSets are used to maintain machine names and IP addressed between pod restarts.
+They will not maintain system state between restarts, so are useful for only really 
+useful for fixed host IPs/names.
 
 Dependencies
 ------------
