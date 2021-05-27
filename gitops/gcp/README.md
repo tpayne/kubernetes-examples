@@ -44,10 +44,10 @@ Unfortunately, `Cloud Build` does not have a CLI, so you will need to define the
 * Name: `Maven Build`
 * Description: `Maven Build`
 * Event: `Push to a branch`
-* Source: `Repository - Connect to new repository`
-* Connect `repository - Select Source - GitHub (Cloud Build GitHub App)`
-* Connect `repository - Authenticate - As a GitHub user (assuming you have one)`
-* Connect `repository - Select Repo - Select/Edit (https://github.com/tpayne/kubernetes-examples)`
+* Source: Repository - `Connect to new repository`
+* Connect Repository - `Select Source - GitHub (Cloud Build GitHub App)`
+* Connect Repository - `Authenticate - As a GitHub user (assuming you have one)`
+* Connect Repository - `Select Repo - Select/Edit (https://github.com/tpayne/kubernetes-examples)`
 * Source: `Branch - ^main$`
 * Source: `Included files filter - Maven/web8k-example/**`
 * Configuration: `Cloud Build configuration file`
