@@ -2,6 +2,7 @@
 # and putting it into a docker image...
 
 # This is not really needed, but it shows how to do it...
+# It also uses a trusted image, although using Github Actions, can achieve the same effect
 FROM maven:3.8-jdk-11 as imagebuilder
 
 WORKDIR /app
