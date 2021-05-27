@@ -17,7 +17,8 @@ Note: These solutions have only been tested with Kubernetes server `version 1.19
 
 Running the Example
 -------------------
-This solution uses Kubernete's Cronjob to run jobs once every 5 mins.
+This example creates a deployment and then defines a couple of daemonsets to monitor the 
+deployment.
 
 To run this solution please do the following steps.
 
