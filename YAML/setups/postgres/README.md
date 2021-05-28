@@ -5,6 +5,8 @@ This repo contains an example front/backend deployment in Kubernetes.
 
 StatefulSets are used to maintain machine names and IP used between pod restarts.
 
+The PG server and PG client are in separate namespaces and neither are exposed to the internet.
+
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
@@ -49,4 +51,4 @@ This will delete all the items created in your Kubernetes installation.
 Notes
 -----
 - https://hub.docker.com/_/postgres
-- This example is only for demo purposes. IT WILL NOT WORK IN PRODUCTION ENVIRONMENTS DUE TO POSSIBLE DATA INSCONSISTENCY ISSUES
+- This example is only for demo purposes
