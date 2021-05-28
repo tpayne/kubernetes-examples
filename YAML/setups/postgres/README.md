@@ -32,9 +32,11 @@ Once you have setup the client to point to the desired Kubernetes server, please
 
 This script will deploy the resources for you and then display the database server IP to use below.
 
-To show the solution, use the EXTERNAL_IP shown above run the following command (use password as the password)...
+To show the solution, use the database server IP shown above run the following command (use password as the password)...
 
     kubectl exec postgres-client -it -n db-frontend -- psql -h <DatabaseServerIP> -U postgres -c "select * from pg_database"
+
+This will use the postgres client installed on Kubernetes to run the PSQL. Nothing is exposed to the public internet.
 
 Cleaning Up
 -----------
