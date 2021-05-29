@@ -32,13 +32,15 @@ Once you have setup the client to point to the desired Kubernetes server, please
 
     ./reset.sh
 
-This script will deploy the resources for you and then display the database server IP to use below.
+This script will deploy the resources for you and then display the database server IP to use in the connect statement below.
 
 To show the solution, use the database server IP shown above run the following command (use password as the password)...
 
     kubectl exec postgres-client -it -n db-frontend -- psql -h <DatabaseServerIP> -U postgres -c "select * from pg_database"
 
-This will use the postgres client installed on Kubernetes to run the PSQL. Nothing is exposed to the public internet.
+This will use the postgres client installed on Kubernetes to run the PSQL against the database backend. 
+
+Nothing is exposed to the public internet.
 
 Cleaning Up
 -----------
@@ -52,3 +54,11 @@ Notes
 -----
 - https://hub.docker.com/_/postgres
 - This example is only for demo purposes
+
+Liability Warning
+-----------------
+The contents of this repository (documents and examples) are provided “as-is” with no warrantee implied 
+or otherwise about the accuracy or functionality of the examples.
+
+You use them at your own risk. If anything results to your machine or environment or anything else as a 
+result of ignoring this warning, then the fault is yours only and has nothing to do with me.
