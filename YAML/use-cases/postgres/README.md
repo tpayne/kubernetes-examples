@@ -54,6 +54,7 @@ Notes
 -----
 - https://hub.docker.com/_/postgres
 - This example is only for demo purposes
+- A custom image is provided for the PSQL client. The Dockerfile is used to build the image (if needed)
 
 Liability Warning
 -----------------
