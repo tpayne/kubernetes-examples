@@ -64,6 +64,7 @@ Notes for Getting Started
 -------------------------
 - https://kubernetes.io/docs
 - https://docs.docker.com
+- https://github.com/kubernetes-sigs/kustomize
 
 Liability Warning
 -----------------
