@@ -57,7 +57,9 @@ Unfortunately, `Cloud Build` does not have a CLI, so you will need to define the
 
 Then, press `Create trigger`
 
-This should then build the repo image and save it to your project. The `cloudbuild.yaml` file is hardcoded for the cluster name and location, so you might need to resolve this with other variables.
+This should then build the repo image and save it to your project. 
+
+**The `cloudbuild.yaml` file is hardcoded for the cluster name and location, so you might need to resolve this with other variables.**
 
 Cleaning Up
 -----------
