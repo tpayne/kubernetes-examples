@@ -307,3 +307,4 @@ References
 - https://github.com/prometheus-operator/kube-prometheus
 - https://faun.pub/trying-prometheus-operator-with-helm-minikube-b617a2dccfa3
 - https://www.codenotary.com/blog/kubernetes-configure-prometheus-node-exporter-to-collect-numa-information/
+- https://phoenixnap.com/kb/kubernetes-daemonset#:~:text=A%20DaemonSet%20is%20an%20active%20Kubernetes%20object%20managed,the%20desired%20state%20with%20the%20current%20observed%20state.
