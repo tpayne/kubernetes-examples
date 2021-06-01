@@ -10,7 +10,7 @@ This sample implements a Helm chart to do a deployment. The GitHub repo detailed
 * Branch: main
 * Repo path: gitops/azurearc/configs/releases/prod
 
-So, any changes push to `releases/prod` will cause a deployment to execute.
+So, any changes pushed to `releases/prod` will cause a deployment to execute.
 
 Dependencies
 ------------
