@@ -5,6 +5,13 @@ This repo contains an example which shows how to do implement GitOps in Azure Ar
 
 **To try this sample for real, it is best to fork this repo to your own Github repo so that you can modify files as appropriate.**
 
+This sample implements a Helm chart to do a deployment. The GitHub repo detailed being monitored are: -
+* Repo: https://github.com/tpayne/kubernetes-examples.git
+* Branch: main
+* Repo path: gitops/azurearc/configs/releases/prod
+
+So, any changes push to `releases/prod` will cause a deployment to execute.
+
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
