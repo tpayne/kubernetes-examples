@@ -35,19 +35,29 @@ The examples contained in this repo run on Maven and Kubernetes. They are based 
 >| [YAML/ServiceMesh/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/ServiceMesh) | This sample will use YAML to show how to use Service Meshes |
 >| [YAML/StatefulSets/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/StatefulSets) | This sample will use YAML to show how to use StatefulSets |
 
+These samples will run on any Kubernetes provider.
+
 Kubernetes Use-cases
 --------------------
-The following examples show common deployment types using Kubernetes.
+The following examples show some common deployment types using Kubernetes.
 
+>| Project | Description | 
+>| ------- | ----------- |
 >| [YAML/use-cases/postgres](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/use-cases/postgres) | This sample will use YAML to show how to setup front/backend DB services |
 >| [YAML/use-cases/standard3tier](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/use-cases/standard3tier) | This sample will use YAML to show how to setup DB services, frontend apps and a monitoring service |
+
+These samples will run on any Kubernetes provider.
 
 Kubernetes GitOps
 -----------------
 The following examples show example methods for implementing `GitOps` using Kubernetes.
 
+>| Project | Description | 
+>| ------- | ----------- |
 >| [gitops/azurearc/](https://github.com/tpayne/kubernetes-examples/tree/main/gitops/azurearc) | This sample will use Helm and Arc to setup GitOps in Azure |
 >| [gitops/gcp/](https://github.com/tpayne/kubernetes-examples/tree/main/gitops/gcp) | This sample will use Cloud Build and Kubectl to setup GitOps in GCP |
+
+These samples will only run on GCP and Azure appropriately.
 
 Clean Up
 --------
