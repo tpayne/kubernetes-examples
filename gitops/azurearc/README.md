@@ -3,6 +3,8 @@ GitOps Deployment Sample
 
 This repo contains an example which shows how to do implement GitOps in Azure Arc.
 
+**To try this sample for real, it is best to fork this repo to your own Github repo so that you can modify files as appropriate.**
+
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
