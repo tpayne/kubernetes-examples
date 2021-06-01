@@ -5,6 +5,13 @@ This repo contains an example which shows how to do implement GitOps in GCP.
 
 **To try this sample for real, it is best to fork this repo to your own Github repo so that you can modify files as appropriate.**
 
+This sample implements a Cloud Build trigger to do a deployment. The GitHub repo detailed being monitored are: -
+* Repo: https://github.com/tpayne/kubernetes-examples.git
+* Branch: main
+* Repo path: Maven/web8k-example/
+
+So, any changes pushed to `Maven/web8k-example/` will cause a deployment to execute.
+
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
