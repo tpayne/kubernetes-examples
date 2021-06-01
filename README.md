@@ -74,6 +74,8 @@ You can merge Kubeconfigs with the following...
     
     export KUBECONFIG=~/.kube/config:~/new-config-file 
     kubectl config view --flatten
+    
+You can also use krew/konfig
 
 Notes on Network Control
 ------------------------
@@ -86,6 +88,8 @@ Notes for Getting Started
 - https://docs.docker.com
 - https://github.com/kubernetes-sigs/kustomize
 - https://medium.com/stakater/k8s-deployments-vs-statefulsets-vs-daemonsets-60582f0c62d4
+- https://krew.sigs.k8s.io/
+- https://github.com/corneliusweig/konfig
 
 Liability Warning
 -----------------
