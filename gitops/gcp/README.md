@@ -84,4 +84,5 @@ Notes
 -----
 - https://cloud.google.com/build/docs/deploying-builds/deploy-gke
 - https://cloud.google.com/build/docs/building/build-java
+- As with any model, there are various way of doing GitOps, `Cloud Run` is another example. For samples for this, please see my Cloud Run [repo](https://github.com/tpayne/CloudRun)
 
