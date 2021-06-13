@@ -184,3 +184,8 @@ To clean up the installation, do the following...
     % kubectl delete all --all -n logicapp-prod; kubectl delete namespace logicapp-prod
         
 This will delete all the items created in your Kubernetes installation.
+
+Notes
+-----
+* https://cloud.google.com/kubernetes-engine/docs/how-to/updating-apps
+* https://kubernetes.io/docs/tutorials/kubernetes-basics/update/update-intro/
