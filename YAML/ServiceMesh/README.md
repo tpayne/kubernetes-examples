@@ -4,7 +4,7 @@ Service Mesh Sample
 This repo contains an example which shows how to install a service mesh using Kubernetes.
 
 Service meshes are an additional network management plane that can be added to Kubernetes
-to help improve the reliability and management on network messaging, load balancing, service
+to help improve the reliability and management of network messaging, load balancing, service
 discovery etc.
 
 The most common implementation is Istio which is used here.
