@@ -90,6 +90,7 @@ Notes for Getting Started
 - https://medium.com/stakater/k8s-deployments-vs-statefulsets-vs-daemonsets-60582f0c62d4
 - https://krew.sigs.k8s.io/
 - https://github.com/corneliusweig/konfig
+- https://kubernetes-tutorial.schoolofdevops.com/advanced_pod_scheduling/
 
 Liability Warning
 -----------------
