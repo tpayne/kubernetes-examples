@@ -91,6 +91,7 @@ Notes for Getting Started
 - https://krew.sigs.k8s.io/
 - https://github.com/corneliusweig/konfig
 - https://kubernetes-tutorial.schoolofdevops.com/advanced_pod_scheduling/
+- https://github.com/kubernetes/dns/blob/master/docs/specification.md
 
 Liability Warning
 -----------------
