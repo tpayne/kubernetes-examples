@@ -36,6 +36,8 @@ To setup the example, please do the following...
 Create the Kubernetes resources for the demo (we will assume "testdemo-311716" is the project and
 "europe-west1-d" is the zone to use)...
 
+    gcloud config get-value project
+    gcloud config get-value compute/zone
     ./create_cluster.sh -p "testdemo-311716" -z "europe-west1-d" -c "gitops"
     gcloud container clusters get-credentials gitops --zone europe-west1-d
     kubectl config get-contexts
