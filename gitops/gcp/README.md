@@ -32,6 +32,7 @@ To setup the example, please do the following...
     gcloud compute zones list
     gcloud config set compute/zone <zone>
     gcloud services enable cloudbuild.googleapis.com
+    gcloud services enable container.googleapis.com
 
 Create the Kubernetes resources for the demo (we will assume "testdemo-311716" is the project and
 "europe-west1-d" is the zone to use)...
