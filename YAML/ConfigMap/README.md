@@ -10,7 +10,7 @@ Before you attempt this example, please ensure you have done the following: -
 - You have logged into a (Unix) terminal window that will allow you to do deployments to a valid K8s cluster
 - You have your Kubernetes' context set to a system that you have permission to deploy to
 
-Note: These solutions have only been tested with Kubernetes server `version 1.19.7`. 
+Note: These solutions have only been tested with Kubernetes server `version 1.19.7`.
 
 Running the Example
 -------------------
@@ -23,12 +23,13 @@ You only need to do this first step if you are changing your Kubernetes configur
     % kubectl config get-contexts
     % kubectl config use-context <default>
     % kubectl config current-context
-    
+
 Once you have setup the client to point to the desired Kubernetes server, please run the following...
 
     % kubectl delete all -n logicapp-prod --all; \
         kubectl delete namespace logicapp-prod; \
         kubectl create -f config-map.yaml
+    % kubectl describe configmap -n logicapp-prod
     % kubectl get all -n logicapp-prod
 
 If everything has worked as expected, then this will generate output like the following...
@@ -91,5 +92,5 @@ Cleaning Up
 To clean up the installation, do the following...
 
     % kubectl delete all --all -n logicapp-prod; kubectl delete namespace logicapp-prod
-        
+
 This will delete all the items created in your Kubernetes installation.

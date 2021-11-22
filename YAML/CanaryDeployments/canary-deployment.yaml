@@ -22,6 +22,8 @@ spec:
       labels:
         app: logicapp-deployment # the label for the pods and the deployments
         env: prod
+      annotations:
+        imagerepo: DockerHub
     spec:
       containers:
       - name: samplev1
@@ -45,6 +47,8 @@ spec:
       labels:
         app: logicapp-deployment # the label for the pods and the deployments
         env: canary
+      annotations:
+        imagerepo: DockerHub
     spec:
       containers:
       - name: samplev2

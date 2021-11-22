@@ -21,7 +21,7 @@ Kubernetes Examples
 -------------------
 The examples contained in this repo run on Maven and Kubernetes. They are based in the following directories.
 
->| Project | Description | 
+>| Project | Description |
 >| ------- | ----------- |
 >| [Maven/web8k-example/](https://github.com/tpayne/kubernetes-examples/tree/main/Maven/web8k-example) | This sample will use Maven and various plugins to build, push a deploy a custom spring app to a specified Kubernetes repo |
 >| [YAML/CanaryDeployments/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/CanaryDeployments) | This sample will use YAML to create a canary deployment solution to a specified Kubernetes repo |
@@ -41,7 +41,7 @@ Kubernetes Use-cases
 --------------------
 The following examples show some common deployment types using Kubernetes.
 
->| Project | Description | 
+>| Project | Description |
 >| ------- | ----------- |
 >| [YAML/use-cases/postgres](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/use-cases/postgres) | This sample will use YAML to show how to setup front/backend DB services |
 >| [YAML/use-cases/standard3tier](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/use-cases/standard3tier) | This sample will use YAML to show how to setup DB services, frontend apps and a monitoring service |
@@ -52,7 +52,7 @@ Kubernetes GitOps
 -----------------
 The following examples show example methods for implementing `GitOps` using Kubernetes.
 
->| Project | Description | 
+>| Project | Description |
 >| ------- | ----------- |
 >| [gitops/azurearc/](https://github.com/tpayne/kubernetes-examples/tree/main/gitops/azurearc) | This sample will use Helm and Arc to setup GitOps in Azure |
 >| [gitops/gcp/](https://github.com/tpayne/kubernetes-examples/tree/main/gitops/gcp) | This sample will use Cloud Build and Kubectl to setup GitOps in GCP |
@@ -65,16 +65,16 @@ After you have finished you can clean up your Docker repo with the following com
 
     docker system df
     docker system prune --all -f
-    
+
 Be sure you want to run this command however as it will reclaim all unused space!
 
 Notes on Configs
 ----------------
 You can merge Kubeconfigs with the following...
-    
-    export KUBECONFIG=~/.kube/config:~/new-config-file 
+
+    export KUBECONFIG=~/.kube/config:~/new-config-file
     kubectl config view --flatten
-    
+
 You can also use krew/konfig
 
 Notes on Network Control
@@ -93,10 +93,19 @@ Notes for Getting Started
 - https://kubernetes-tutorial.schoolofdevops.com/advanced_pod_scheduling/
 - https://github.com/kubernetes/dns/blob/master/docs/specification.md
 
+Notes
+-----
+- Set default namespace via `kubectl config set-context <context> --namespace=<defaultNs>`
+- Various management commands to be aware of...
+    cordon = Mark a node as unscheduleable, i.e. not able to do any new deployments to it
+    uncordon = Mark a node as scheduleable
+    drain = Drain node of all unused transactions (safely)
+    taint = Reserve nodes for scheduling of deployments with tolerances set
+
 Liability Warning
 -----------------
-The contents of this repository (documents and examples) are provided “as-is” with no warrantee implied 
+The contents of this repository (documents and examples) are provided “as-is” with no warrantee implied
 or otherwise about the accuracy or functionality of the examples.
 
-You use them at your own risk. If anything results to your machine or environment or anything else as a 
+You use them at your own risk. If anything results to your machine or environment or anything else as a
 result of ignoring this warning, then the fault is yours only and has nothing to do with me.
