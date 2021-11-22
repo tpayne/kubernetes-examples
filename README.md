@@ -97,10 +97,10 @@ Notes
 -----
 - Set default namespace via `kubectl config set-context <context> --namespace=<defaultNs>`
 - Various management commands to be aware of...
-    cordon = Mark a node as unscheduleable, i.e. not able to do any new deployments to it
-    uncordon = Mark a node as scheduleable
-    drain = Drain node of all unused transactions (safely)
-    taint = Reserve nodes for scheduling of deployments with tolerances set
+    - cordon = Mark a node as unscheduleable, i.e. not able to do any new deployments to it
+    - uncordon = Mark a node as scheduleable
+    - drain = Drain node of all unused transactions (safely)
+    - taint = Reserve nodes for scheduling of deployments with tolerances set
 
 Liability Warning
 -----------------
