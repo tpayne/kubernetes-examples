@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  statefulset-deployment:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-11-24T16:32:15.976491Z"
+    description: A Helm chart for Kubernetes
+    digest: bcd78aa3c20980b22439ce90b11ccf789367e77f932e89de983adc80f520a5b1
+    name: statefulset-deployment
+    type: application
+    urls:
+    - statefulset-deployment-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-11-24T16:32:15.713572Z"

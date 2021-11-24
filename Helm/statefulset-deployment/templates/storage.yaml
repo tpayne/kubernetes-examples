@@ -1,0 +1,47 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: localstorage
+  namespace: {{ .Values.namespace }}
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: Immediate
+reclaimPolicy: Delete
+allowVolumeExpansion: True
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ .Values.appName }}-demo-01
+  namespace: {{ .Values.namespace }}
+  labels:
+    type: local
+spec:
+  storageClassName: localstorage
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/postgres01"
+    type: DirectoryOrCreate
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ .Values.appName }}-demo-02
+  namespace: {{ .Values.namespace }}
+  labels:
+    type: local
+spec:
+  storageClassName: localstorage
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/postgres02"
+    type: DirectoryOrCreate
+
