@@ -1,0 +1,56 @@
+---
+# Now let's create a deployment in that namespace that contains 2 versions of the same app...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-deployment
+  labels:
+    {{- include "canary-deployment.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "canary-deployment.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "canary-deployment.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - containerPort: 8080 # the application listens to this port
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-canary
+spec:
+  replicas: {{ .Values.replicaCountCanary }}
+  selector:
+    matchLabels:
+      {{- include "canary-deployment.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "canary-deployment.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.canaryRepository }}:{{ .Values.image.canaryTag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - containerPort: 8080 # the application listens to this port
+---
