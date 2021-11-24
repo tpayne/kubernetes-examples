@@ -3,12 +3,12 @@ entries:
   configmap-deployment:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-11-24T15:49:44.934125Z"
+    created: "2021-11-24T15:52:43.911387Z"
     description: A Helm chart for Kubernetes
-    digest: 2c30b443bfd08c90839a25478bef9a44563d88910aedbafb275064ce13000333
+    digest: be05e0a23daaa128e30636120b2e54c239a48fc899b9e24beec188e61e17fbbf
     name: configmap-deployment
     type: application
     urls:
     - configmap-deployment-0.1.0.tgz
     version: 0.1.0
-generated: "2021-11-24T15:49:44.932201Z"
+generated: "2021-11-24T15:52:43.909819Z"
