@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "statefulset-deployment.labels" . | nindent 4 }}
 spec:
+  serviceName: {{ .Values.appName }}-demo
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
@@ -27,7 +28,7 @@ spec:
           - containerPort: 5432
           envFrom:
           - configMapRef:
-              {{ .Values.appName }}-config
+              name: {{ .Values.appName }}-config
           volumeMounts:
           - name: {{ .Values.appName }}-persistent-storage
             mountPath: /var/lib/postgresql
