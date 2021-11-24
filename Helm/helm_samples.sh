@@ -1,4 +1,8 @@
 #!/bin/sh
+#
+# Helper script for using helm...
+# ./helm_samples.sh statefulset-deployment \
+#   https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/statefulset-deployment
 
 helmCreate()
 {
