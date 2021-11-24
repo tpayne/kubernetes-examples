@@ -1,0 +1,81 @@
+---
+# Now let's create a deployment in that namespace that contains 2 versions of the same app...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-deployment
+  labels:
+    {{- include "configmap-deployment.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "configmap-deployment.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "configmap-deployment.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: {{ .Values.image.cmd }}
+          args:
+          - {{ .Files.Get "files/args.txt" | indent 16 }}
+          env:
+            # Single key
+            - name: KEY1
+              valueFrom:
+                # Get key1 from the config defined...
+                configMapKeyRef:
+                  name: {{ .Values.appName }}-demo
+                  key: key1
+            - name: SSH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.appName }}-ssh-secret
+                  key: ssh-privatekey
+            - name: CONDBSECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.appName }}-dbname-secret
+                  key: username
+            - name: CONDBSECRET_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.appName }}-dbname-secret
+                  key: password
+            # File key
+            - name: APP_PROPERTIES
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.appName }}-demo
+                  key: app.properties
+          volumeMounts:
+            - name: configdata
+              mountPath: "/config_data"
+              readOnly: true
+            - name: dbnamesecret
+              mountPath: "/secrets"
+              readOnly: true
+      volumes:
+      - name: dbnamesecret
+        secret:
+          secretName: {{ .Values.appName }}-dbname-secret
+          items:
+            - key: username
+              path: dbdata/condb
+      - name: configdata
+        configMap:
+          name: {{ .Values.appName }}-demo
+          items:
+            - key: "app.properties"
+              path: "appDemo.properties"
+            - key: "db.properties"
+              path: "db.properties"

@@ -1,0 +1,22 @@
+# Lets create a very simple secret...
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-demo
+  labels:
+    {{- include "configmap-deployment.labels" . | nindent 4 }}
+data:
+  # Key value pairs...
+  key1: "value1"
+  key2: "value2"
+
+  # File properties...
+  app.properties: |
+    appkey.key1=value1
+    appkey.key2=value2
+    dbkey.key1=value1
+  db.properties: |
+    dbkey.key1=value1
+    dbkey.key2=value2
+    dbkey.connect=user/passwd@dbName
