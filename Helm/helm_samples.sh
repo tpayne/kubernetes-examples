@@ -4,6 +4,16 @@
 # ./helm_samples.sh statefulset-deployment \
 #   https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/statefulset-deployment
 
+tmpFile="/tmp/tmpHelm$$.txt"
+
+rmFile()
+{
+if [ -f "${1}" ]; then
+    rm -f "${1}"
+fi
+return 0
+}
+
 helmCreate()
 {
 if [ -d "$1" ]; then
@@ -30,8 +40,15 @@ return $?
 
 helmInstall()
 {
+rmFile "${tmpFile}"
+
 echo "Install packages..."
-helm install $1 $1/$1 > /dev/null 2>&1
+helm install $1 $1/$1 > "${tmpFile}" 2>&1
+if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
+    return 1
+fi
 return $?
 }
 
@@ -97,6 +114,7 @@ if [ $? -gt 0 -o $# -eq 3 ]; then
 # Add and commit your repo to git...
     gitAdd $1
     if [ $? -gt 0 ]; then
+        echo "- Git add failed"
         return 1
     fi
 fi
@@ -107,14 +125,17 @@ echo "Add to repo..."
 helm repo remove $1 > /dev/null 2>&1
 helm repo add $1 $2 > /dev/null 2>&1
 if [ $? -gt 0 ]; then
+    echo "- Helm add failed"
     return 1
 fi
 helm repo update $1 > /dev/null 2>&1
 if [ $? -gt 0 ]; then
+    echo "- Helm update failed"
     return 1
 fi
 helm search repo $1 > /dev/null 2>&1
 if [ $? -gt 0 ]; then
+    echo "- Helm search failed"
     return 1
 fi
 return $?
@@ -157,52 +178,64 @@ return $?
 
 helmCreate $1
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmLint $1
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmTemplate $1
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmPackage $1 $2 $3
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmRepoAdd $1 $2 $3
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmUninstall $1
 sleep 120
 helmInstall $1
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmList $1
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmHistory $1
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmShow $1
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmStatus $1
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmRollback $1
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 helmUninstall $1
 if [ $? -gt 0 ]; then
+    echo "Error: Op failed"
     exit 1
 fi
 exit 0
