@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  probe-deployment:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-11-25T13:56:13.236997Z"
+    description: A Helm chart for Kubernetes
+    digest: 7f0bd0f667b6e734e3f5c4fdb7114bdac3bb0461fa936e0277d7291f3f0c2c6c
+    name: probe-deployment
+    type: application
+    urls:
+    - probe-deployment-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-11-25T13:56:13.233901Z"

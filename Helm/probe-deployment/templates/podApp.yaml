@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-appdemo
+  labels:
+    {{- include "probe-deployment.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "probe-deployment.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "probe-deployment.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-appdemo
+          image: "{{ .Values.image.repository_imageappprobe }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          {{- with .Values.livenessProbeApp }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbeApp }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
