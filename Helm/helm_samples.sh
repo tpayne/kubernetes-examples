@@ -109,6 +109,7 @@ return $?
 
 helmRepoAdd()
 {
+rmFile "${tmpFile}"
 testURL "${2}/index.yaml"
 if [ $? -gt 0 -o $# -eq 3 ]; then
 # Add and commit your repo to git...
@@ -125,16 +126,22 @@ echo "Add to repo..."
 helm repo remove $1 > /dev/null 2>&1
 helm repo add $1 $2 > /dev/null 2>&1
 if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
     echo "- Helm add failed"
     return 1
 fi
 helm repo update $1 > /dev/null 2>&1
 if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
     echo "- Helm update failed"
     return 1
 fi
 helm search repo $1 > /dev/null 2>&1
 if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
     echo "- Helm search failed"
     return 1
 fi
