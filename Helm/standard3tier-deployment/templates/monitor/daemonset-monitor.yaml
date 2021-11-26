@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "standard3tier-deployment.fullname" . }}
+  namespace: {{ .Values.namespaces.mnnamespace }}
+  labels:
+    {{- include "standard3tier-deployment.labels" . | nindent 4 }}
+    kubernetes.io/cluster-service: "true"
+    env: prod
+spec:
+  selector:
+    matchLabels:
+      {{- include "standard3tier-deployment.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "standard3tier-deployment.selectorLabels" . | nindent 8 }}
+      {{- with .Values.monitorPodAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccount: {{ include "standard3tier-deployment.serviceAccountName" . }}
+      serviceAccountName: {{ include "standard3tier-deployment.serviceAccountName" . }}
+      {{- with .Values.monitorTolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      containers:
+        - name: {{ .Chart.Name }}-fld-search
+          image: "{{ .Values.image.monitorSearchImage }}:{{ .Values.image.monitorSearchTag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.monitor.searchResources | nindent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.monitor.searchMounts | nindent 12 }}
+        - name: {{ .Chart.Name }}-node-monitor
+          ports:
+            - containerPort: 9100
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.monitor.monitorResources | nindent 12 }}
+          securityContext:
+            privileged: true
+          image: "{{ .Values.image.monitorImage }}:{{ .Values.image.monitorTag | default .Chart.AppVersion }}"
+          args:
+            - {{ .Files.Get "files/monitorArgs.txt" | indent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.monitor.monitorMounts | nindent 12 }}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        {{- toYaml .Values.monitor.monitorVolumes | nindent 8 }}
