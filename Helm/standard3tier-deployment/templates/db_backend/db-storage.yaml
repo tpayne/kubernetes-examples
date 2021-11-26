@@ -3,6 +3,8 @@ kind: StorageClass
 metadata:
   name: localstorage
   namespace: {{ .Values.namespaces.benamespace }}
+  labels:
+    {{- include "standard3tier-deployment.labels" . | nindent 4 }}
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: Immediate
 reclaimPolicy: Delete
@@ -15,6 +17,7 @@ metadata:
   namespace: {{ .Values.namespaces.benamespace }}
   labels:
     type: local
+    {{- include "standard3tier-deployment.labels" . | nindent 4 }}
 spec:
   storageClassName: localstorage
   capacity:
