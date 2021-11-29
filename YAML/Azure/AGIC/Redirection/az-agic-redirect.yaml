@@ -1,0 +1,65 @@
+---
+# Lets first create an application namespace to use...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logicapp-ndev
+---
+# Now let's create a deployment in that namespace...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: logicapp-ndev
+  name: logicapp-dev-deployment-nginx
+spec:
+  selector:
+    matchLabels:
+      app: logicapp-dev-nginx
+  template:
+    metadata:
+      labels:
+        app: logicapp-dev-nginx # the label for the pods and the deployments
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:stable
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80 # the application listens to this port
+---
+# Create a service for the deployment
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: logicapp-ndev
+  name: logicapp-dev-service-nginx
+spec:
+  selector:
+    app: logicapp-dev-nginx
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: logicapp-dev-ingress-nginx
+  namespace: logicapp-ndev
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/backend-path-prefix: "/"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /svrnginx/*
+        pathType: Prefix
+        backend:
+          service:
+            name: logicapp-dev-service-nginx
+            port:
+              number: 80
+---
