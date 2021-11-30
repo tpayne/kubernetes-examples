@@ -34,6 +34,7 @@ The examples contained in this repo run on Maven and Kubernetes. They are based 
 >| [YAML/Roles/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/Roles) | This sample will use YAML to show how to use roles |
 >| [YAML/ServiceMesh/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/ServiceMesh) | This sample will use YAML to show how to use Service Meshes |
 >| [YAML/StatefulSets/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/StatefulSets) | This sample will use YAML to show how to use StatefulSets |
+>| [YAML/AGIC/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/Azure/AGIC/Redirection) | This sample shows you how to use the Azure AGW Ingress Controllers with AKS|
 
 These samples will run on any Kubernetes provider.
 
