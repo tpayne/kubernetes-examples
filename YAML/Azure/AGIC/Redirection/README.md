@@ -31,7 +31,7 @@ Once you have deployed the controller, you can install some basic examples...
     ./deployingress.sh
     ./deploycontroller.sh --getIp
 
-These will have examples that show how the IC functionality works.
+These examples will show how the IC functionality works. You can try them by doing...
 
     curl <gatewayIp>/apicmd/version
     curl "<gatewayIp>/apiuser/hello?name=myName&surName=mySurname"
