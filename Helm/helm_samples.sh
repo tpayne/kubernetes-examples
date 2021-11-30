@@ -4,7 +4,87 @@
 # ./helm_samples.sh statefulset-deployment \
 #   https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/statefulset-deployment
 
+command=`basename $0`
+direct=`dirname $0`
+trap 'stty echo; echo "${command} aborted"; cd ${CWD}; exit' 1 2 3 15
+#
+CWD=`pwd`
+
 tmpFile="/tmp/tmpHelm$$.txt"
+
+create=0
+lint=0
+addRepo=0
+package=0
+install=0
+uninstall=0
+info=0
+rollback=0
+override=0
+pull=0
+
+repoName=""
+dirName=""
+gitRepo=""
+indexURL=""
+#
+# Usage
+#
+usage()
+{
+#
+
+while [ $# -ne 0 ] ; do
+        case $1 in
+             -n | --name) repoName=$2
+                 shift 2;;
+             -wd | --directory) dirName=$2
+                 shift 2;;
+             -gr | --git-repo) gitRepo=$2
+                 shift 2;;
+             -iurl | --index-url) indexURL=$2
+                 shift 2;;
+             -p | --package) package=1 ; shift;;
+             -g | --get | --pull) pull=1 ; shift;;
+             -c | --create) create=1 ; shift;;
+             -l | --lint) lint=1 ; shift;;
+             -a | --add-repo) addRepo=1 ; shift;;
+             -i | --install) install=1 ; shift;;
+             -u | --uninstall) uninstall=1 ; shift;;
+             -v | --verbose) info=1 ; shift;;
+             -r | --rollback) rollback=1 ; shift;;
+             -f | --force) override=1 ; shift;;
+             --debug) set -xv ; shift;;
+             -?*) show_usage ; break;;
+             --) shift ; break;;
+             -|*) break;;
+        esac
+done
+
+if [ "x${dirName}" != "x" ]; then
+    if [ ! -d "${dirName}" ]; then
+        echo "${command}: Error: directory does not exist"
+        return 1
+    fi
+else
+    dirName=${CWD}
+fi
+
+if [ "x${repoName}" = "x" ]; then
+    echo "${command}: Error: Repo name must be specified"
+    return 1
+fi
+
+if [ "x${indexURL}" = "x" ]; then
+    if [ $addRepo -gt 0 -o $package -gt 0 ]; then
+        echo "${command}: Error: Index URL must be specified"
+        return 1
+    fi
+fi
+
+return 0
+}
+
 
 rmFile()
 {
@@ -19,21 +99,21 @@ helmCreate()
 if [ -d "$1" ]; then
     return 0
 fi
-echo "Run a couple of helm create commands..."
+echo "${command}: Creating a helm module..."
 helm create $1
 return $?
 }
 
 helmTemplate()
 {
-echo "Running template..."
+echo "${command}: Running template..."
 helm template $1 --name-template=$1 --dry-run > /dev/null 2>&1
 return $?
 }
 
 helmLint()
 {
-echo "Running lint..."
+echo "${command}: Running lint..."
 helm lint $1 > /dev/null 2>&1
 return $?
 }
@@ -42,7 +122,7 @@ helmInstall()
 {
 rmFile "${tmpFile}"
 
-echo "Install packages..."
+echo "${command}: Installing $1..."
 helm install $1 $1/$1 > "${tmpFile}" 2>&1
 if [ $? -gt 0 ]; then
     cat "${tmpFile}"
@@ -52,16 +132,9 @@ fi
 return $?
 }
 
-helmList()
-{
-echo "List packages..."
-helm list
-return $?
-}
-
 helmUninstall()
 {
-echo "Uninstall packages..."
+echo "${command}: Uninstalling $1..."
 helm uninstall $1  > /dev/null 2>&1
 return $?
 }
@@ -69,10 +142,10 @@ return $?
 helmPackage()
 {
 testURL "${2}/index.yaml"
-if [ $? -eq 0 -a $# -lt 3 ]; then
+if [ $? -eq 0 -a $3 -eq 0 ]; then
     return 0
 fi
-echo "Create package..."
+echo "${command}: Create package..."
 cd $1
 helm package .
 if [ $? -gt 0 ]; then
@@ -119,7 +192,7 @@ if [ $? -gt 0 -o $# -eq 3 ]; then
         return 1
     fi
 fi
-echo "Add to repo..."
+echo "${command}: Add to repo..."
 # Then add index.yaml raw URL, e.g.
 # https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/canary-deployment/index.yaml
 # helm repo add canary-deployment https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/canary-deployment/
@@ -150,99 +223,159 @@ return $?
 
 helmPull()
 {
-echo "Pull package..."
-(cd /tmp && helm pull $1/$1)
+echo "${command}: Pull package..."
+helm pull $1/$1
 return $?
 }
 
 helmHistory()
 {
-echo "List package history..."
+echo "${command}: List package history..."
 helm history $1
 return $?
 }
 
 helmRollback()
 {
-echo "Rollback package..."
+echo "${command}: Rollback package..."
 helm rollback $1 1 > /dev/null 2>&1
 return $?
 }
 
 helmShow()
 {
-echo "Show package..."
+echo "${command}: Show package..."
 helm show all $1/$1
 return $?
 }
 
 helmStatus()
 {
-echo "Status package..."
+echo "${command}: Status package..."
 helm status $1
 return $?
 }
 
-helmCreate $1
+helmList()
+{
+echo "${command}: List packages..."
+helm list
+return $?
+}
+
+usage $*
 if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
     exit 1
 fi
-helmLint $1
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
+
+cd ${dirName}
+
+if [ $create -gt 0 ]; then
+    helmCreate ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
 fi
-helmTemplate $1
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
+
+if [ $lint -gt 0 ]; then
+    helmLint ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
+    helmTemplate ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
 fi
-helmPackage $1 $2 $3
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
+
+if [ $package -gt 0 ]; then
+    helmPackage ${repoName} ${indexURL} ${override}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
 fi
-helmRepoAdd $1 $2 $3
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
+
+if [ $addRepo -gt 0 ]; then
+    helmRepoAdd ${repoName} ${indexURL} ${override}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
 fi
-helmUninstall $1
-sleep 120
-helmInstall $1
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
+
+if [ $install -gt 0 ]; then
+    helmUninstall ${repoName}
+    sleep 120
+    helmInstall ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
 fi
-helmList $1
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
+
+if [ $info -gt 0 ]; then
+    helmList ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
+    helmHistory ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
+    helmShow ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
+    helmStatus ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
 fi
-helmHistory $1
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
+
+if [ $pull -gt 0 ]; then
+    helmPull ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
 fi
-helmShow $1
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
+
+if [ $rollback -gt 0 ]; then
+    helmRollback ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
 fi
-helmStatus $1
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
+
+if [ $uninstall -gt 0 ]; then
+    helmUninstall ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
 fi
-helmRollback $1
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
-fi
-helmUninstall $1
-if [ $? -gt 0 ]; then
-    echo "Error: Op failed"
-    exit 1
-fi
+
+cd ${CWD}
 exit 0
