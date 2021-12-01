@@ -23,11 +23,13 @@ rollback=0
 override=0
 pull=0
 expand=0
+test=0
 
 repoName=""
 dirName=""
 gitRepo=""
 indexURL=""
+namespace=""
 #
 # Usage
 #
@@ -45,6 +47,8 @@ while [ $# -ne 0 ] ; do
                  shift 2;;
              -iurl | --index-url) indexURL=$2
                  shift 2;;
+             -ns | --namespace) namespace=$2
+                 shift 2;;
              -p | --package) package=1 ; shift;;
              -g | --get | --pull) pull=1 ; shift;;
              -c | --create) create=1 ; shift;;
@@ -54,8 +58,9 @@ while [ $# -ne 0 ] ; do
              -u | --uninstall) uninstall=1 ; shift;;
              -v | --verbose) info=1 ; shift;;
              -r | --rollback) rollback=1 ; shift;;
-             -f | --force) override=1 ; shift;;
+             --force) override=1 ; shift;;
              -e | --expand) expand=1 ; shift;;
+             -t | --test) test=1 ; shift;;
              --debug) set -xv ; shift;;
              -?*) show_usage ; break;;
              --) shift ; break;;
@@ -122,8 +127,34 @@ return $retStat
 helmLint()
 {
 echo "${command}: Running lint..."
-helm lint $1 > /dev/null 2>&1
-return $?
+helm lint $1 > "${tmpFile}" 2>&1
+retStat=$?
+if [ $retStat -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
+    return 1
+fi
+rmFile "${tmpFile}"
+return $retStat
+}
+
+helmTest()
+{
+echo "${command}: Running test..."
+if [ "x$2" = "x" ]; then
+    helm test $1 > "${tmpFile}" 2>&1
+    retStat=$?
+else
+    helm test $1 -n $2 > "${tmpFile}" 2>&1
+    retStat=$?
+fi    
+if [ $retStat -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
+    return 1
+fi
+rmFile "${tmpFile}"
+return $retStat
 }
 
 helmInstall()
@@ -132,12 +163,13 @@ rmFile "${tmpFile}"
 
 echo "${command}: Installing $1..."
 helm install $1 $1/$1 > "${tmpFile}" 2>&1
-if [ $? -gt 0 ]; then
+retStat=$?
+if [ $retStat -gt 0 ]; then
     cat "${tmpFile}"
     rmFile "${tmpFile}"
     return 1
 fi
-return $?
+return $retStat
 }
 
 helmUninstall()
@@ -335,8 +367,19 @@ fi
 
 if [ $install -gt 0 ]; then
     helmUninstall ${repoName}
-    sleep 120
+    if [ $? -eq 0 ]; then
+        sleep 120
+    fi    
     helmInstall ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
+fi
+
+if [ $test -gt 0 ]; then
+    helmTest ${repoName} ${namespace}
     if [ $? -gt 0 ]; then
         echo "${command}: Error: Op failed"
         cd ${CWD}
