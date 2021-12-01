@@ -73,6 +73,7 @@ The following command for example will run a sequence of Helm commands to...
 - Create a new Helm index and package
 - Update the git repo with the new package and changed Helm code
 - Install a Helm repo definition (if needed)
+- Uninstall the existing package - if installed
 - Install the Helm chart/package in the K8s system
 - Verify the install
 
