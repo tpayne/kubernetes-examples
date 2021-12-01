@@ -3,8 +3,6 @@ Helm Samples
 
 This repo has a couple of example Helm deployment samples.
 
-This repo is still WIP - do not use
-
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
