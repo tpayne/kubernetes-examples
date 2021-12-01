@@ -14,7 +14,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 namespace: logic-app
-
+namespaceOverride: logic-app
 
 podAnnotations: {}
 
