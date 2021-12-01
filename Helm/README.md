@@ -16,16 +16,38 @@ Running the samples
 -------------------
 To run the samples, please do the following steps.
 
-TBD
+    git clone https://github.com/tpayne/kubernetes-examples
+    cd kubernetes-examples/Helm
 
-Cleaning Up
------------
-To clean up the installation, do the following...
+The following command will check the Helm package syntax and then install the package
 
-TBD
+    ./helm_samples.sh -n standard3tier-deployment -l -a \
+        -iurl https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/
+    ./helm_samples.sh -n standard3tier-deployment -i
 
-    ./deploycontroller.sh -d
+The following command will display information about the deployed package
 
+    ./helm_samples.sh -n standard3tier-deployment -v
+
+The following command will display information about the deployed package and then rollback the
+deployment to a previous release
+
+    ./helm_samples.sh -n standard3tier-deployment -r -v
+
+The following command will uninstall the Helm package and then generate an error as no packages are
+installed
+
+    ./helm_samples.sh -n standard3tier-deployment -u -v
+    ./helm_samples.sh -n standard3tier-deployment -v
+
+The following command will pull a Helm package from the repo
+
+    ./helm_samples.sh -n standard3tier-deployment --pull
+    ls *.tgz
+
+The following command will show the expanded syntax
+
+    ./helm_samples.sh -n standard3tier-deployment -e
 
 Notes
 -----

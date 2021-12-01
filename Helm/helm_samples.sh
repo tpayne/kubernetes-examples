@@ -22,6 +22,7 @@ info=0
 rollback=0
 override=0
 pull=0
+expand=0
 
 repoName=""
 dirName=""
@@ -54,6 +55,7 @@ while [ $# -ne 0 ] ; do
              -v | --verbose) info=1 ; shift;;
              -r | --rollback) rollback=1 ; shift;;
              -f | --force) override=1 ; shift;;
+             -e | --expand) expand=1 ; shift;;
              --debug) set -xv ; shift;;
              -?*) show_usage ; break;;
              --) shift ; break;;
@@ -107,8 +109,14 @@ return $?
 helmTemplate()
 {
 echo "${command}: Running template..."
-helm template $1 --name-template=$1 --dry-run > /dev/null 2>&1
-return $?
+helm template $1 --name-template=$1 --dry-run > "${tmpFile}" 2>&1
+retStat=$?
+if [ $expand -gt 0 -a $retStat -eq 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
+fi
+rmFile "${tmpFile}"
+return $retStat
 }
 
 helmLint()
@@ -183,21 +191,22 @@ return $?
 helmRepoAdd()
 {
 rmFile "${tmpFile}"
-testURL "${2}/index.yaml"
-if [ $? -gt 0 -o $# -eq 3 ]; then
-# Add and commit your repo to git...
+testURL "${2}/${1}/index.yaml"
+if [ $? -gt 0 -o $3 -gt 0 ]; then
+    echo "${command}: Add to repo..."
+    # Add and commit your repo to git...
     gitAdd $1
     if [ $? -gt 0 ]; then
         echo "- Git add failed"
         return 1
     fi
 fi
-echo "${command}: Add to repo..."
+echo "${command}: Add Helm repo..."
 # Then add index.yaml raw URL, e.g.
 # https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/canary-deployment/index.yaml
 # helm repo add canary-deployment https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/canary-deployment/
 helm repo remove $1 > /dev/null 2>&1
-helm repo add $1 $2 > /dev/null 2>&1
+helm repo add $1 $2/$1 > "${tmpFile}" 2>&1
 if [ $? -gt 0 ]; then
     cat "${tmpFile}"
     rmFile "${tmpFile}"
@@ -211,13 +220,16 @@ if [ $? -gt 0 ]; then
     echo "- Helm update failed"
     return 1
 fi
-helm search repo $1 > /dev/null 2>&1
+echo "${command}: Search repo for contents..."
+helm search repo $1 > "${tmpFile}" 2>&1
 if [ $? -gt 0 ]; then
     cat "${tmpFile}"
     rmFile "${tmpFile}"
     echo "- Helm search failed"
     return 1
 fi
+cat "${tmpFile}"
+rmFile "${tmpFile}"
 return $?
 }
 
@@ -294,6 +306,15 @@ if [ $lint -gt 0 ]; then
     fi
 fi
 
+if [ $expand -gt 0 ]; then
+    helmTemplate ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
+fi
+
 if [ $package -gt 0 ]; then
     helmPackage ${repoName} ${indexURL} ${override}
     if [ $? -gt 0 ]; then
@@ -316,6 +337,15 @@ if [ $install -gt 0 ]; then
     helmUninstall ${repoName}
     sleep 120
     helmInstall ${repoName}
+    if [ $? -gt 0 ]; then
+        echo "${command}: Error: Op failed"
+        cd ${CWD}
+        exit 1
+    fi
+fi
+
+if [ $rollback -gt 0 ]; then
+    helmRollback ${repoName}
     if [ $? -gt 0 ]; then
         echo "${command}: Error: Op failed"
         cd ${CWD}
@@ -352,15 +382,6 @@ fi
 
 if [ $pull -gt 0 ]; then
     helmPull ${repoName}
-    if [ $? -gt 0 ]; then
-        echo "${command}: Error: Op failed"
-        cd ${CWD}
-        exit 1
-    fi
-fi
-
-if [ $rollback -gt 0 ]; then
-    helmRollback ${repoName}
     if [ $? -gt 0 ]; then
         echo "${command}: Error: Op failed"
         cd ${CWD}
