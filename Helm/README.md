@@ -28,7 +28,7 @@ To run the samples, please do the following steps.
     git clone https://github.com/tpayne/kubernetes-examples
     cd kubernetes-examples/Helm
 
-The following command will check the Helm package syntax and then install the package
+The following commands will check the Helm package syntax and then install the package
 
     ./helm_samples.sh -n standard3tier-deployment -l -a \
         -iurl https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/
@@ -57,6 +57,12 @@ The following command will pull a Helm package from the repo
 The following command will show the expanded syntax
 
     ./helm_samples.sh -n standard3tier-deployment -e
+
+Helper Script
+-------------
+The helper script wraps the majority of the Helm commands and allows many commands to be sequenced together 
+to achieve a CI/CD flow. The script has been developed to support specific command flows and git repo locations
+as such, if you wish to use the script outside of this context, please review and modify it as appropriate.
 
 Notes
 -----
