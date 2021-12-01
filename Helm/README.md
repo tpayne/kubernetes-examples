@@ -24,6 +24,7 @@ Running the samples
 -------------------
 To run the samples, please do the following steps.
 
+    cd /tmp
     git clone https://github.com/tpayne/kubernetes-examples
     cd kubernetes-examples/Helm
 
