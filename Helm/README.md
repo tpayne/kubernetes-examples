@@ -64,6 +64,18 @@ The helper script wraps the majority of the Helm commands and allows many comman
 to achieve a CI/CD flow. The script has been developed to support specific command flows and git repo locations
 as such, if you wish to use the script outside of this context, please review and modify it as appropriate.
 
+The following command for example will run a sequence of Helm commands to...
+
+    ./helm_samples.sh -n canary-deployment -l -p -a -i -v \
+        -iurl https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm --force
+
+- Lint a Helm chart and test it for syntax errors
+- Create a new Helm index and package
+- Update the git repo with the new package and changed Helm code
+- Install a Helm repo definition (if needed)
+- Install the Helm chart/package in the K8s system
+- Verify the install
+
 Notes
 -----
 - https://helm.sh/docs/topics/charts/
