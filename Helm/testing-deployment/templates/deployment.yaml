@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "testing-deployment.labels" . | nindent 4 }}
 spec:
+  serviceName: {{ include "testing-deployment.fullname" . }}
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
