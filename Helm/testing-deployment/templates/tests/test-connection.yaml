@@ -11,6 +11,6 @@ spec:
   containers:
     - name: wget
       image: busybox
-      command: ['wget']
-      args: ['{{ include "testing-deployment.fullname" . }}:{{ .Values.service.port }}']
+      command: ['curl']
+      args: ['{{ include "testing-deployment.fullname" . }}:{{ .Values.service.port }}/cmd/version']
   restartPolicy: Never
