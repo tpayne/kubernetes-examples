@@ -51,4 +51,4 @@ The following command will show the expanded syntax
 
 Notes
 -----
-TBD
+- https://helm.sh/docs/topics/charts/
