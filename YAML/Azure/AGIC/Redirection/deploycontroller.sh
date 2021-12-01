@@ -74,6 +74,7 @@ if [ $? -gt 0 ]; then
     return 1
 fi
 
+# dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com
 exIpAddr="`dig +short myip.opendns.com @resolver1.opendns.com`"
 ipAddr="`ipconfig getifaddr en0`"
 echo "${command}: - create K8s system scoped to ${exIpAddr}..."
