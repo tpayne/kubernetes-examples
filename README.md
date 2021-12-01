@@ -24,6 +24,7 @@ The examples contained in this repo run on Maven and Kubernetes. They are based 
 >| Project | Description |
 >| ------- | ----------- |
 >| [Maven/web8k-example/](https://github.com/tpayne/kubernetes-examples/tree/main/Maven/web8k-example) | This sample will use Maven and various plugins to build, push a deploy a custom spring app to a specified Kubernetes repo |
+>| [Helm/](https://github.com/tpayne/kubernetes-examples/tree/main/Helm) | These samples use Helm to install packages into Kubernetes |
 >| [YAML/CanaryDeployments/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/CanaryDeployments) | This sample will use YAML to create a canary deployment solution to a specified Kubernetes repo |
 >| [YAML/ConfigMap/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/ConfigMap) | This sample will use YAML to create various config maps/secrets to a specified Kubernetes repo |
 >| [YAML/CronJobs/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/CronJobs) | This sample will use YAML to show how to use CronJobs |
