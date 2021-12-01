@@ -68,6 +68,7 @@ This will delete all the items created in your Kubernetes installation.
 Notes
 -----
 - These scripts are only for demo purposes and have not been thoroughly vetted for production use
+- The syntax for the controllers given in the Azure documentation and samples is incorrect. It uses the beta IC syntax which is no longer supported. Please use the correct v1 syntax. See this repo for the correct usage
 - https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/application-gateway/redirect-internal-site-cli.md#:~:text=You%20can%20use%20az%20network%20public-ip%20show%20to,may%20change%20when%20the%20application%20gateway%20is%20restarted.
 - https://github.com/jenkinsci/helm-charts
 - https://github.com/Azure/application-gateway-kubernetes-ingress/blob/master/docs/tutorials/tutorial.e2e-ssl.md
@@ -75,3 +76,9 @@ Notes
 - https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-annotations
 - https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-private-ip
 - https://github.com/Azure-Samples/app-gateway-ingress-controller
+- https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-overview
+- https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-expose-service-over-http-https
+- https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-new
+- https://azure.microsoft.com/en-gb/blog/application-gateway-ingress-controller-for-azure-kubernetes-service/
+- https://github.com/Azure/application-gateway-kubernetes-ingress/blob/master/docs/tutorials/tutorial.general.md
+- https://docs.microsoft.com/en-us/azure/application-gateway/rewrite-url-portal
