@@ -76,6 +76,9 @@ The following command for example will run a sequence of Helm commands to...
 - Install the Helm chart/package in the K8s system
 - Verify the install
 
+(Note - You cannot run this command on this repo as you will be blocked from the git commit. The above
+is only provided as a sample).
+
 Notes
 -----
 - https://helm.sh/docs/topics/charts/
