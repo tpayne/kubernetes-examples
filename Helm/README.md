@@ -60,3 +60,4 @@ The following command will show the expanded syntax
 Notes
 -----
 - https://helm.sh/docs/topics/charts/
+- The examples contained in this repo are focusing on core functionality only
