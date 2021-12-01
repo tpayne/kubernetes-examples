@@ -2,7 +2,6 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  namespace: {{ .Values.namespace }}
   name: {{ include "testing-deployment.fullname" . }}
   labels:
     {{- include "testing-deployment.labels" . | nindent 4 }}
