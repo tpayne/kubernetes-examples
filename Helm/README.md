@@ -3,6 +3,16 @@ Helm Samples
 
 This repo has a couple of example Helm deployment samples.
 
+What is Helm?
+-------------
+Helm is a package manager and templating engine that sits on top of Kubernetes. It is one of a couple of options
+that can be used in this type of area, but it is one of the most common ones.
+
+This repo has some precanned Helm packages which can be used with the helper script to demonstrate the functionality
+and how to use the commands. You can either use the helper script or debug the script to find out the actual Helm
+commands used. The helper script is provided as a method of convinence for formatting commands and doing necessary
+prep work.
+
 Dependencies
 ------------
 Before you attempt this example, please ensure you have done the following: -
