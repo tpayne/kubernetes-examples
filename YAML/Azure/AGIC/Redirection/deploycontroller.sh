@@ -58,10 +58,13 @@ exit 0
 cleanUp()
 {
 echo "${command}: Cleaning up the controller resource group..."
+(az group show -n $1) > /dev/null 2>&1
+if [ $? -gt 0 ]; then
+    return 0
+fi
 
 (az group delete -n $1 -y) > /dev/null 2>&1
-
-return 0
+return $?
 }
 
 install()
