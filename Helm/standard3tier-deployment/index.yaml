@@ -3,12 +3,12 @@ entries:
   standard3tier-deployment:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-12-06T20:00:31.886332Z"
+    created: "2021-12-06T20:32:50.209862Z"
     description: A Helm chart for Kubernetes
-    digest: 2b993654c82757719dd31a534524ac77a3bc2b90f91fce6b24b40f572f2a794e
+    digest: 632b75b485405147eaf9abda3b014fd64d53a61f2014e7260f2662be3a7af695
     name: standard3tier-deployment
     type: application
     urls:
     - standard3tier-deployment-0.1.0.tgz
     version: 0.1.0
-generated: "2021-12-06T20:00:31.882579Z"
+generated: "2021-12-06T20:32:50.207308Z"

@@ -1,3 +1,4 @@
+# This does not work unless you override the value of standard3tier-deployment.fullname-fesvr with the external lb ip
 apiVersion: v1
 kind: Pod
 metadata:
@@ -12,5 +13,6 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
+      # You will need to modify this by hand to point to your external LB ip addr
       args: ['{{ include "standard3tier-deployment.fullname" . }}-fesvr:{{ .Values.service.httpport }}/cmd/version']
   restartPolicy: Never
