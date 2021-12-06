@@ -25,7 +25,7 @@ image:
   monitorSearchImage: quay.io/fluentd_elasticsearch/fluentd
   monitorImage: prom/node-exporter
   dbImage: tpayne666/alpine-pgclient
-  feImage: tpayne666/sample
+  feImage: tpayne666/samples
   dbsrvImage: postgres
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
