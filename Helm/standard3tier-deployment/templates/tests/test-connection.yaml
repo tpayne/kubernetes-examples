@@ -12,5 +12,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "standard3tier-deployment.fullname" . }}:{{ .Values.service.httpport }}/cmd/version']
+      args: ['{{ include "standard3tier-deployment.fullname" . }}-fesvr:{{ .Values.service.httpport }}/cmd/version']
   restartPolicy: Never
