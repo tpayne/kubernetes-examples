@@ -19,6 +19,10 @@ To run the samples, please do the following steps.
 First, install the Falco...
 
     ./deployfalco.sh
+    
+If you want to install a custom ruleset, you can use...
+
+    ./deployfalco.sh -c
 
 Cleaning Up
 -----------
