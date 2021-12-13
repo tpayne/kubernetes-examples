@@ -36,7 +36,7 @@ To clean up the installation, do the following...
 
     ./deployfalco.sh -d
 
-This will delete all the Falco items created in your Kubernetes installation.
+This will delete all the Falco items created in your Kubernetes installation, although it may have a while.
 
 Notes
 -----
