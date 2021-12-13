@@ -1,0 +1,38 @@
+apiVersion: kubeless.io/v1beta1
+kind: Function
+metadata:
+  finalizers:
+    - kubeless.io/function
+  generation: 1
+  labels:
+    created-by: kubeless
+    function: delete-pod
+  name: delete-pod
+spec:
+  checksum: sha256:a68bf570ea30e578e392eab18ca70dbece27bce850a8dbef2586eff55c5c7aa0
+  deps: |
+    kubernetes>=12.0.1
+  function-content-type: text
+  function: |-
+    from kubernetes import client,config
+
+    config.load_incluster_config()
+
+    def delete_pod(event, context):
+        rule = event['data']['rule'] or None
+        output_fields = event['data']['output_fields'] or None
+
+        if rule and rule == "Terminal shell in container" and output_fields:
+            if output_fields['k8s.ns.name'] and output_fields['k8s.pod.name']:
+                pod = output_fields['k8s.pod.name']
+                namespace = output_fields['k8s.ns.name']
+                print (f"Deleting pod \"{pod}\" in namespace \"{namespace}\"")
+                client.CoreV1Api().delete_namespaced_pod(name=pod, namespace=namespace, body=client.V1DeleteOptions())
+  handler: delete-pod.delete_pod
+  runtime: python3.7
+  deployment:
+    spec:
+      template:
+        spec:
+          serviceAccountName: falco-pod-delete
+

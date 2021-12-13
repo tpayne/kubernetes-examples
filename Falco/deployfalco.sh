@@ -9,6 +9,8 @@ CWD=`pwd`
 namespace="falco"
 remove=0
 custom_rules=0
+sidekick=0
+tmpFile="/tmp/tmpdeployfalco.$$"
 #
 # Usage
 #
@@ -22,6 +24,7 @@ while [ $# -ne 0 ] ; do
                  shift 2;;
              -d | --delete) remove=1 ; shift;;
              -c | --custom-rules) custom_rules=1 ; shift;;
+             -s | --side-kick) sidekick=1 ; shift;;
              --debug) set -xv ; shift;;
              -?*) show_usage ; break;;
              --) shift ; break;;
@@ -41,21 +44,57 @@ exit 0
 
 cleanUp()
 {
-echo "${command}: Cleanup Falco..."
-(helm uninstall falco -n $1 && kubectl delete ns $1) > /dev/null 2>&1
+echo "${command}: - Cleanup Falco..."
+(kubectl delete ns kubeless && true) > /dev/null 2>&1
+(kubectl delete ns $1) > /dev/null 2>&1
 return $?
 }
 
 installcustom()
 {
-echo "${command}: Deploying custom rules..."
+echo "${command}: - Deploying custom rules..."
 (helm upgrade falco falcosecurity/falco -f custom_rules.yaml -n $1) > /dev/null 2>&1
 return $?
 }
 
+installkubeless()
+{
+echo "${command}: - Deploying Kubeless..."
+kubeRel=$(curl -s https://api.github.com/repos/kubeless/kubeless/releases/latest \
+    | grep tag_name | cut -d '"' -f 4)
+(kubectl create ns kubeless && \
+    kubectl apply --force=true --overwrite=true -n kubeless -f \
+    https://github.com/kubeless/kubeless/releases/download/$kubeRel/kubeless-$kubeRel.yaml) \
+    > ${tmpFile} 2>&1
+
+if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rm -f "${tmpFile}"
+    return 1
+fi
+rm -f "${tmpFile}"
+return 0
+}
+
+installsidekick()
+{
+echo "${command}: - Deploying Sidekick..."
+(helm install falcosidekick falcosecurity/falcosidekick \
+    --set config.kubeless.namespace=kubeless \
+    -n $1) > ${tmpFile} 2>&1
+
+if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rm -f "${tmpFile}"
+    return 1
+fi
+rm -f "${tmpFile}"
+return 0
+}
+
 install()
 {
-echo "${command}: Deploying Falco..."
+echo "${command}: - Deploying Falco..."
 
 (kubectl create namespace $1) > /dev/null 2>&1
 if [ $? -gt 0 ]; then
@@ -69,18 +108,31 @@ fi
 
 # helm install falco -n falco falcosecurity/falco
 # helm upgrade falco falcosecurity/falco -f custom_rules.yaml -n falco
-(helm upgrade --create-namespace --install -n $1 falco \
-    falcosecurity/falco --set falco.jsonOutput=true --set \
-    fakeEventGenerator.enabled=false) > /dev/null 2>&1
-
-if [ $? -gt 0 ]; then
-    return 1
+if [ $sidekick -eq 0 ]; then
+    (helm upgrade --create-namespace --install -n $1 falco \
+        falcosecurity/falco --set falco.jsonOutput=true \
+        --set falco.jsonOutput=true --set falco.httpOutput.enabled=true \
+        --set fakeEventGenerator.enabled=false) > ${tmpFile} 2>&1
+else
+    (helm upgrade --create-namespace --install -n $1 falco \
+        falcosecurity/falco --set falco.jsonOutput=true \
+        --set falco.jsonOutput=true --set falco.httpOutput.enabled=true \
+        --set falco.httpOutput.url=http://falcosidekick:2801 \
+        --set fakeEventGenerator.enabled=false) > ${tmpFile} 2>&1
 fi
 
+if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rm -f "${tmpFile}"
+    return 1
+fi
+rm -f "${tmpFile}"
 return 0
 }
 
 usage $*
+
+echo "${command}: Running"
 
 cleanUp ${namespace}
 if [ $? -ne 0 -a $remove -gt 0 ]; then
@@ -96,7 +148,25 @@ install ${namespace}
 if [ $? -ne 0 ]; then
     echo "${command}: - Error: The installation of Falco failed"
     exit 1
-elif [ $custom_rules -gt 0 ]; then
+fi
+
+if [ $sidekick -gt 0 ]; then
+    echo "${command}: - Let Falco infra spin-up..."
+    sleep 120
+    installsidekick ${namespace}
+    if [ $? -ne 0 ]; then
+        echo "${command}: - Error: The installation of Falco failed"
+        exit 1
+    fi
+    installkubeless
+    if [ $? -ne 0 ]; then
+        echo "${command}: - Error: The installation of Falco failed"
+        exit 1
+    fi
+fi
+
+if [ $custom_rules -gt 0 ]; then
+    echo "${command}: - Let Falco infra spin-up..."
     sleep 120
     installcustom ${namespace}
     if [ $? -ne 0 ]; then
@@ -104,5 +174,11 @@ elif [ $custom_rules -gt 0 ]; then
         exit 1
     fi
 fi
+
+echo "${command}: - Package list..."
+(helm list -n ${namespace} --short)
+echo "${command}: Done"
+
+rm -f "${tmpFile}"
 
 exit 0

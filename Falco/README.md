@@ -16,13 +16,19 @@ Running the samples
 -------------------
 To run the samples, please do the following steps.
 
-First, install the Falco...
+First, install the Falco (with sidekick)...
 
-    ./deployfalco.sh
-    
+    ./deployfalco.sh -s
+
 If you want to install a custom ruleset, you can use...
 
-    ./deployfalco.sh -c
+    ./deployfalco.sh -c -s
+
+Deploying the Kubeless samples, you can do...
+
+    (kubectl apply -n kubeless -f kubeless/ns.yml && \
+        kubectl apply -n kubeless -f kubeless/roles.yml && \
+        kubectl apply -n kubeless -f kubeless/function.yml)
 
 Cleaning Up
 -----------
@@ -40,3 +46,4 @@ Notes
 - https://en.wikipedia.org/wiki/Security_information_and_event_management
 - https://github.com/falcosecurity/charts/
 - https://www.acloudjourney.io/blog/threat-detection-on-aks-with-falco#:~:text=%20Besides%20that%2C%20you%20may%20want%20to%20dig,may%20want%20to%20use%20this%20integration...%20More%20
+- https://kubeless.io/docs/quick-start/
