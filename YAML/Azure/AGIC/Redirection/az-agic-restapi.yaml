@@ -101,6 +101,8 @@ spec:
             port:
               number: 80
 ---
+# These controller definitions can be merged in the future. No reason to have 
+# two of them using the same service
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -123,6 +125,7 @@ spec:
             port:
               number: 80
 ---
+# See above comments
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
