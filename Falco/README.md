@@ -16,7 +16,7 @@ Running the samples
 -------------------
 To run the samples, please do the following steps.
 
-First, install the Falco (with sidekick)...
+First, install the Falco (with sidekick and Kubeless)...
 
     ./deployfalco.sh -s
 
