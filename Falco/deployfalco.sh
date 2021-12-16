@@ -62,9 +62,14 @@ installkubeless()
 echo "${command}: - Deploying Kubeless..."
 kubeRel=$(curl -s https://api.github.com/repos/kubeless/kubeless/releases/latest \
     | grep tag_name | cut -d '"' -f 4)
+
+if [ "x${kubeRel}" = "x" ]; then
+    kubeRel="v1.0.8"
+fi
+
 (kubectl create ns kubeless && \
     kubectl apply --force=true --overwrite=true -n kubeless -f \
-    https://github.com/kubeless/kubeless/releases/download/$kubeRel/kubeless-$kubeRel.yaml) \
+    https://github.com/vmware-archive/kubeless/releases/download/$kubeRel/kubeless-$kubeRel.yaml) \
     > ${tmpFile} 2>&1
 
 if [ $? -gt 0 ]; then
