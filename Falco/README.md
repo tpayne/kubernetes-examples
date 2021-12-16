@@ -40,7 +40,7 @@ This will delete all the Falco items created in your Kubernetes installation, al
 
 Notes
 -----
-As of 15th of Dec, 2021, Falco has been archived as a project which means it will no longer be actively maintained by its developers. As such, the tooling no longer works as it should be installations etc. I might work around this issue to get it to install, but what the behaviour of the product is at the point is up in the air.
+As of 15th of Dec, 2021, Kubeless has been archived as a project which means it will no longer be actively maintained by its developers. As such, the tooling no longer works as it should be installations etc. I might work around this issue to get it to install, but what the behaviour of the product is at the point is up in the air.
 
 - https://falco.org/labs/
 - https://falco.org/docs/rules/
