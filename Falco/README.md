@@ -16,9 +16,13 @@ Running the samples
 -------------------
 To run the samples, please do the following steps.
 
-First, install the Falco (with sidekick and Kubeless)...
+First, install the Falco (with sidekick)...
 
     ./deployfalco.sh -s
+
+If you want to install Falco with Kubeless (which is no longer supported), then do...
+
+    ./deployfalco.sh -s -k
 
 If you want to install a custom ruleset, you can use...
 
