@@ -10,6 +10,7 @@ namespace="falco"
 remove=0
 custom_rules=0
 sidekick=0
+kubeless=0
 tmpFile="/tmp/tmpdeployfalco.$$"
 #
 # Usage
@@ -25,6 +26,7 @@ while [ $# -ne 0 ] ; do
              -d | --delete) remove=1 ; shift;;
              -c | --custom-rules) custom_rules=1 ; shift;;
              -s | --side-kick) sidekick=1 ; shift;;
+             -k | --kubeless) kubeless=1 ; shift;;
              --debug) set -xv ; shift;;
              -?*) show_usage ; break;;
              --) shift ; break;;
@@ -163,6 +165,11 @@ if [ $sidekick -gt 0 ]; then
         echo "${command}: - Error: The installation of Falco failed"
         exit 1
     fi
+fi
+
+if [ $kubeless -gt 0 ]; then
+    echo "${command}: - Let Falco infra spin-up..."
+    sleep 120
     installkubeless
     if [ $? -ne 0 ]; then
         echo "${command}: - Error: The installation of Falco failed"
