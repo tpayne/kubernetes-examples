@@ -44,7 +44,7 @@ This will delete all the Falco items created in your Kubernetes installation, al
 
 Notes
 -----
-As of 15th of Dec, 2021, Kubeless has been archived as a project which means it will no longer be actively maintained by its developers. As such, the tooling no longer works as it should be installations etc. I have worked around this issue to get it to install, but what the behaviour of the product is at the point is up in the air.
+As of 15th of Dec, 2021, Kubeless has been archived as a project which means it will no longer be actively maintained by its developers. As such, the tooling no longer works as it should for installations etc. I have worked around this issue to get it to install using my scripts, but what the behaviour of the product is at this point is up in the air so do not be surprised if it does odd things.
 
 - https://falco.org/labs/
 - https://falco.org/docs/rules/
@@ -53,3 +53,4 @@ As of 15th of Dec, 2021, Kubeless has been archived as a project which means it 
 - https://github.com/falcosecurity/charts/
 - https://www.acloudjourney.io/blog/threat-detection-on-aks-with-falco#:~:text=%20Besides%20that%2C%20you%20may%20want%20to%20dig,may%20want%20to%20use%20this%20integration...%20More%20
 - https://kubeless.io/docs/quick-start/
+- https://github.com/vmware-archive/kubeless
