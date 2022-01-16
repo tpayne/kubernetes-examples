@@ -101,6 +101,7 @@ fi
 return 0
 }
 
+# This will create a helm chart
 helmCreate()
 {
 if [ -d "$1" ]; then
@@ -111,6 +112,7 @@ helm create $1
 return $?
 }
 
+# This will expand a chart to show what the expanded text looks like
 helmTemplate()
 {
 echo "${command}: Running template..."
@@ -124,6 +126,7 @@ rmFile "${tmpFile}"
 return $retStat
 }
 
+# This will lint a chart for syntax errors
 helmLint()
 {
 echo "${command}: Running lint..."
@@ -138,6 +141,7 @@ rmFile "${tmpFile}"
 return $retStat
 }
 
+# This will test a helm chart (running test YAML against the deployment to check it)
 helmTest()
 {
 echo "${command}: Running test..."
@@ -157,6 +161,7 @@ rmFile "${tmpFile}"
 return $retStat
 }
 
+# This will install a chart
 helmInstall()
 {
 rmFile "${tmpFile}"
@@ -172,6 +177,7 @@ fi
 return $retStat
 }
 
+# This will uninstall a chart
 helmUninstall()
 {
 echo "${command}: Uninstalling $1..."
@@ -179,6 +185,7 @@ helm uninstall $1  > /dev/null 2>&1
 return $?
 }
 
+# This will create a helm package
 helmPackage()
 {
 testURL "${2}/index.yaml"
@@ -220,6 +227,7 @@ git push
 return $?
 }
 
+# This will add package to a repo and refresh the repo definitions
 helmRepoAdd()
 {
 rmFile "${tmpFile}"
@@ -265,6 +273,7 @@ rmFile "${tmpFile}"
 return $?
 }
 
+# This will pull a helm package from a repo
 helmPull()
 {
 echo "${command}: Pull package..."
@@ -272,6 +281,7 @@ helm pull $1/$1
 return $?
 }
 
+# This will display the package history
 helmHistory()
 {
 echo "${command}: List package history..."
@@ -279,6 +289,7 @@ helm history $1
 return $?
 }
 
+# This will rollback a chart
 helmRollback()
 {
 echo "${command}: Rollback package..."
@@ -286,6 +297,7 @@ helm rollback $1 1 > /dev/null 2>&1
 return $?
 }
 
+# This will show a package 
 helmShow()
 {
 echo "${command}: Show package..."
@@ -293,6 +305,7 @@ helm show all $1/$1
 return $?
 }
 
+# This will display a package status
 helmStatus()
 {
 echo "${command}: Status package..."
@@ -300,6 +313,7 @@ helm status $1
 return $?
 }
 
+# This will list a known packages
 helmList()
 {
 echo "${command}: List packages..."
