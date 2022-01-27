@@ -9,6 +9,7 @@ Before you attempt this example, please ensure you have done the following: -
 - You have installed the Kubernetes client (kubectl)
 - You have logged into a (Unix) terminal window that will allow you to do deployments to a valid K8s cluster
 - You have your Kubernetes' context set to a system that you have permission to deploy to
+- You have installed `brew` package manager
 
 Running the samples
 -------------------
@@ -43,6 +44,7 @@ This will delete all the items created in your Kubernetes installation.
 Notes
 -----
 - These scripts are only for demo purposes and have not been vetted for production use
+- The script was developed on Mac and may not work on other OSs
 - https://argo-cd.readthedocs.io/en/stable/getting_started/
 - https://github.com/argoproj/argocd-example-apps
 - https://argo-cd.readthedocs.io/en/stable/
