@@ -59,8 +59,11 @@ while [ "x${argoIp}" = "x" ]
 do
     sleep 20
     argoIp="`kubectl get svc argocd-server -n ${namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'`"
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
 done
-return $?
+return 0
 }
 
 argoLogin()
