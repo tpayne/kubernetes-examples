@@ -81,6 +81,23 @@ rmFile "${tmpFile}"
 return 0
 }
 
+argoSetContext()
+{
+echo "${command}: Set default Argocd context..."
+rmFile "${tmpFile}"
+context="`kubectl config current-context`"
+(argocd cluster add "${context}") > "${tmpFile}" 2>&1
+
+if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
+    return 1
+fi
+
+rmFile "${tmpFile}"
+return 0
+}
+
 cleanUp()
 {
 echo "${command}: Cleaning up Argocd..."
@@ -174,5 +191,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+argoSetContext
+if [ $? -ne 0 ]; then
+    echo "${command}: - Error: Context setting failed"
+    exit 1
+fi
 echo "${command}: Done"
 exit 0

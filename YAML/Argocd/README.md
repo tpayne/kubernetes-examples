@@ -18,7 +18,19 @@ First, install ArgoCD...
 
     ./deployargocd.sh
 
-TBD
+Install the ArgoCD default sample apps repo and an application using CLI (can do it with UI as well)...
+
+    argocd app create guestbook --repo https://github.com/argoproj/argocd-example-apps.git \
+        --path guestbook --dest-server https://kubernetes.default.svc --dest-namespace default
+    argocd app get guestbook
+
+Bring the app just created into synch with the latest repo state by using...
+
+    argocd app sync guestbook
+
+This will run the synchronisation.
+
+    argocd app get guestbook
 
 Cleaning Up
 -----------
@@ -32,3 +44,5 @@ Notes
 -----
 - These scripts are only for demo purposes and have not been vetted for production use
 - https://argo-cd.readthedocs.io/en/stable/getting_started/
+- https://github.com/argoproj/argocd-example-apps
+- https://argo-cd.readthedocs.io/en/stable/
