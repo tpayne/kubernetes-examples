@@ -48,6 +48,15 @@ Standard K8s sample(s)
     argocd app delete canarydeploy -y 
     argocd app list
 
+    argocd app create daemonsets --repo https://github.com/tpayne/kubernetes-examples \
+        --path YAML/DaemonSets --dest-server https://kubernetes.default.svc
+    argocd app get daemonsets
+    argocd app sync daemonsets
+    argocd app get daemonsets
+    open "`argocd app get daemonsets | grep URL: | awk '{print $2}'`"
+    argocd app delete daemonsets -y 
+    argocd app list
+
 Cleaning Up
 -----------
 To clean up the installation, do the following...
