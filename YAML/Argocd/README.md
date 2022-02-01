@@ -33,6 +33,21 @@ This will run the synchronisation.
 
     argocd app get guestbook
 
+Installing custom samples
+-------------------------
+The following instructions can be used to install stables from this repo that will also work with ArgoCD.
+
+Standard K8s sample(s)
+
+    argocd app create canarydeploy --repo https://github.com/tpayne/kubernetes-examples \
+        --path YAML/CanaryDeployments --dest-server https://kubernetes.default.svc
+    argocd app get canarydeploy
+    argocd app sync canarydeploy
+    argocd app get canarydeploy
+    open "`argocd app get canarydeploy | grep URL: | awk '{print $2}'`"
+    argocd app delete canarydeploy -y 
+    argocd app list
+
 Cleaning Up
 -----------
 To clean up the installation, do the following...
