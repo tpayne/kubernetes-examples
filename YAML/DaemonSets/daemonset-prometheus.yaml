@@ -1,4 +1,12 @@
 ---
+# Lets first create an application namespace to use...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    env: prod
+------
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
