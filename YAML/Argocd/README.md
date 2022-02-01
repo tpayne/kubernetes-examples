@@ -97,6 +97,10 @@ Kustomization sample(s)
     argocd app delete standard3tier-kust -y 
     argocd app list
 
+The standard 3 tier sample should give you a deployment that looks something like this...
+
+>![Standard 3 tier](https://github.com/tpayne/kubernetes-examples/blob/main/YAML/Argocd/images/ExampleDeployment.png)
+
 Cleaning Up
 -----------
 To clean up the installation, do the following...
