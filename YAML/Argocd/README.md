@@ -57,6 +57,46 @@ Standard K8s sample(s)
     argocd app delete daemonsets -y 
     argocd app list
 
+Helm charts sample(s)
+
+    argocd app create canarydeploy-helm --repo https://github.com/tpayne/kubernetes-examples \
+        --path Helm/canary-deployment --dest-server https://kubernetes.default.svc
+    argocd app get canarydeploy-helm
+    argocd app sync canarydeploy-helm
+    argocd app get canarydeploy-helm
+    open "`argocd app get canarydeploy-helm | grep URL: | awk '{print $2}'`"
+    argocd app delete canarydeploy-helm -y 
+    argocd app list
+
+    argocd app create standard3tier-helm --repo https://github.com/tpayne/kubernetes-examples \
+        --path Helm/standard3tier-deployment --dest-server https://kubernetes.default.svc
+    argocd app get standard3tier-helm
+    argocd app sync standard3tier-helm
+    argocd app get standard3tier-helm
+    open "`argocd app get standard3tier-helm | grep URL: | awk '{print $2}'`"
+    argocd app delete standard3tier-helm -y 
+    argocd app list
+
+Kustomization sample(s)
+
+    argocd app create postgress-kust --repo https://github.com/tpayne/kubernetes-examples \
+        --path YAML/use-cases/postgres --dest-server https://kubernetes.default.svc
+    argocd app get postgress-kust
+    argocd app sync postgress-kust
+    argocd app get postgress-kust
+    open "`argocd app get postgress-kust | grep URL: | awk '{print $2}'`"
+    argocd app delete postgress-kust -y 
+    argocd app list
+
+    argocd app create standard3tier-kust --repo https://github.com/tpayne/kubernetes-examples \
+        --path YAML/use-cases/standard3tier --dest-server https://kubernetes.default.svc
+    argocd app get standard3tier-kust
+    argocd app sync standard3tier-kust
+    argocd app get standard3tier-kust
+    open "`argocd app get standard3tier-kust | grep URL: | awk '{print $2}'`"
+    argocd app delete standard3tier-kust -y 
+    argocd app list
+
 Cleaning Up
 -----------
 To clean up the installation, do the following...
