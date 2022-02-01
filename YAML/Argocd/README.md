@@ -35,7 +35,7 @@ This will run the synchronisation.
 
 Installing custom samples
 -------------------------
-The following instructions can be used to install stables from this repo that will also work with ArgoCD.
+The following instructions can be used to install samples from this repo that will also work with ArgoCD and show more complex cases.
 
 Standard K8s sample(s)
 
