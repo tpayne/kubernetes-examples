@@ -116,3 +116,4 @@ Notes
 - https://argo-cd.readthedocs.io/en/stable/getting_started/
 - https://github.com/argoproj/argocd-example-apps
 - https://argo-cd.readthedocs.io/en/stable/
+- https://argo-cd.readthedocs.io/en/stable/operator-manual/webhook/
