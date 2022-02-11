@@ -17,6 +17,12 @@ The following indicates the CI and coverage status.
 [![Build Status](https://travis-ci.org/tpayne/kubernetes-examples.svg?branch=main)](https://travis-ci.org/tpayne/kubernetes-examples)
 [![Java CI with Maven](https://github.com/tpayne/kubernetes-examples/actions/workflows/maven.yml/badge.svg?branch=main)](https://github.com/tpayne/kubernetes-examples/actions/workflows/maven.yml)
 
+Introduction to Kubernetes
+--------------------------
+The following is a training video I put together for Kubernetes and Microservices...
+
+[![Intro into K8s](https://img.youtube.com/vi/VT_8cJ3Lxog/0.jpg)](https://www.youtube.com/watch?v=VT_8cJ3Lxog)
+
 Kubernetes Examples
 -------------------
 The examples contained in this repo run on Maven and Kubernetes. They are based in the following directories.
