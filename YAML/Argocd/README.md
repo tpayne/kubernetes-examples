@@ -3,7 +3,7 @@ ArgoCD Samples
 
 This repo has a couple of example Kubernetes deployment YAML files that show how to use ArgoCD.
 
-To understand what ArgoCD does, then please refer to the following article. It will describe what ArgoCD is and what cases
+To understand what ArgoCD does, then please refer to the following article. It describes what ArgoCD is and what cases
 it should be used in. Essentially, it is a GitOps tool running on top of Kubernetes.
 
 https://argo-cd.readthedocs.io/en/stable/getting_started/
