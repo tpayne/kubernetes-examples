@@ -21,3 +21,19 @@ jobs:
         distribution: 'adopt'
     - name: Build with Maven
       run: (cd Maven/web8k-example/ && mvn clean verify)
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to DockerHub...
+      run: |
+        echo ${{ secrets.DOCKERHUB_PASSWORD }} | \
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+    - name: Build SimpleSpringApp with Docker
+      run: |
+        (cd Maven/web8k-example/ && \
+         docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/samples:latest && \
+         docker push ${{ secrets.DOCKERHUB_USERNAME }}/samples:latest)
