@@ -55,7 +55,6 @@ following commands...
 
 You will need to answer various questions as you run these commands.  
 
-
 Running the samples
 -------------------
 TBD
@@ -75,3 +74,8 @@ Notes
 - https://codefresh.io/docs/docs/getting-started/create-a-basic-pipeline/
 - https://g.codefresh.io/projects/
 - https://codefresh.io/pricing/
+- https://g.codefresh.io/2.0/account-settings/runtimes/codefresh/git-sources
+- https://codefresh.io/csdp-docs/docs/runtime/git-sources/
+- https://codefresh.io/csdp-docs/docs/clients/csdp-cli/
+- https://codefresh.io/docs/docs/getting-started/deployment-to-kubernetes-quick-start-guide/
+- https://codefresh.io/docs/docs/administration/codefresh-on-prem/
