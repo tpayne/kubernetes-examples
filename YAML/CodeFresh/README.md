@@ -62,3 +62,4 @@ Notes
 - The script was developed on Mac and may not work on other OSs
 - https://codefresh.io/docs/docs/getting-started/create-a-basic-pipeline/
 - https://g.codefresh.io/projects/
+- https://codefresh.io/pricing/
