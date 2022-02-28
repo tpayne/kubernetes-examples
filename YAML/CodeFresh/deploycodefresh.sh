@@ -15,6 +15,7 @@ gitToken=
 repoUrl=
 namespace="ingress-basic"
 keep=0
+pwd="ThisIsADefaultPassword001"
 
 rmFile()
 {
@@ -42,6 +43,8 @@ while [ $# -ne 0 ] ; do
              -gt | --git-token) gitToken=$2
                  shift 2;;
              -repo | --git-repo) repoUrl=$2
+                 shift 2;;
+             -p | --pwd) pwd=$2
                  shift 2;;
              -d | --delete) remove=1 ; shift;;
              -k | --keep) keep=1 ; shift;;
@@ -129,6 +132,7 @@ if [ $? -gt 0 ]; then
 fi
 
 (brew install argocd argocd-autopilot) > "${tmpFile}" 2>&1
+(brew tap codefresh-io/cli && brew install codefresh) > "${tmpFile}" 2>&1
 (cf config create-context ${runtime} --api-key ${token}) > "${tmpFile}" 2>&1
 rmFile "${tmpFile}"
 return 0   
@@ -158,6 +162,7 @@ if [ $? -gt 0 ]; then
     rmFile "${tmpFile}"
     return 1
 fi
+
 rmFile "${tmpFile}"
 return 0
 }

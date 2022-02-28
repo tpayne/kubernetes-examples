@@ -44,6 +44,18 @@ repo URL you have created. You can either specify an existing empty repo or a ne
 
 This script will install CodeFresh and setup the necessary tokens.
 
+Integrating GitOps Provider
+---------------------------
+Once you have installed `CodeFresh`, it may be necessary to integrate with a GitOps provider. This can be done via the
+following commands...
+
+    brew tap codefresh-io/cli && brew install codefresh
+    codefresh install gitops codefresh
+    codefresh upgrade gitops argocd-agent
+
+You will need to answer various questions as you run these commands.  
+
+
 Running the samples
 -------------------
 TBD
