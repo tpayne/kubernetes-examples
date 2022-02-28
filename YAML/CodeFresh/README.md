@@ -39,7 +39,7 @@ Once you have signed up for CodeFresh and have a CodeFresh token, you can instal
 
     ./deploycodefresh.sh -t <codefresh-token> -gt <git-token> -repo <git-repo> 
 
-Where <codefresh-toke> is the CodeFresh token you have, <git-token> is a valid Git Token and <git-repo> is an EMPTY Git
+Where `<codefresh-token>` is the CodeFresh token you have, `<git-token>` is a valid Git Token and `<git-repo>` is an EMPTY Git
 repo URL you have created. You can either specify an existing empty repo or a new one (which will get created for you).
 
 This script will install CodeFresh and setup the necessary tokens.
