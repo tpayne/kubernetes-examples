@@ -79,3 +79,4 @@ Notes
 - https://codefresh.io/csdp-docs/docs/clients/csdp-cli/
 - https://codefresh.io/docs/docs/getting-started/deployment-to-kubernetes-quick-start-guide/
 - https://codefresh.io/docs/docs/administration/codefresh-on-prem/
+- https://codefresh.io/docs/docs/administration/platform-ip-addresses/
