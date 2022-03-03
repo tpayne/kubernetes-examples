@@ -10,7 +10,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-RUN mvn package 
+RUN mvn -q -B clean package 
 
 FROM adoptopenjdk/openjdk11:alpine-slim
 RUN apk add --upgrade apk-tools && apk upgrade --available
