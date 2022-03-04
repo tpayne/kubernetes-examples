@@ -36,7 +36,7 @@ spec:
     - metadata:
         name: {{ include "database-deployment.fullname" . }}-dbstorage
       spec:
-        storageClassName: localstorage
+        storageClassName: {{ include "database-deployment.fullname" . }}-lstore
         accessModes: ["ReadWriteMany"]
         resources:
          requests:
