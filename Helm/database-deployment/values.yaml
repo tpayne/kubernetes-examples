@@ -5,7 +5,7 @@
 replicaCount: 1
 
 namespaces:
-  benamespace: db-backend
+  benamespace: pgdb-backend
 
 image:
   repository: postgres
@@ -28,7 +28,7 @@ backend:
     limits:
       memory: 400Mi
       cpu: 500m
-      
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
