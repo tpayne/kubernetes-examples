@@ -1,0 +1,6 @@
+dependencies:
+- name: database-deployment
+  repository: file://../database-deployment
+  version: 0.1.0
+digest: sha256:35b06c3bb64b0f6fba9a28eb42d8827bf93769d5f1c59ef4b79f4a6817bfacc8
+generated: "2022-03-04T13:14:44.378341Z"

@@ -1,0 +1,29 @@
+apiVersion: v1
+entries:
+  database-deployment:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-03-04T13:16:14.727747Z"
+    description: A Helm chart for Kubernetes
+    digest: d241b15a93456e9f1310fdb03e64bb1f60b058ece12ac67dcae8a26c8d3b2f78
+    name: database-deployment
+    type: application
+    urls:
+    - charts/database-deployment-0.1.0.tgz
+    version: 0.1.0
+  dependencies-deployment:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-03-04T13:16:14.726017Z"
+    dependencies:
+    - name: database-deployment
+      repository: file://../database-deployment
+      version: 0.1.0
+    description: A Helm chart for Kubernetes
+    digest: 170cac3a9278c15d427cf3486aef4d91b994cbbd0b1a52b200d0bedce0151f21
+    name: dependencies-deployment
+    type: application
+    urls:
+    - dependencies-deployment-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-03-04T13:16:14.464084Z"
