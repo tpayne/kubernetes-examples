@@ -12,7 +12,7 @@ image:
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
-  
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -41,7 +41,9 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  fetype: LoadBalancer
+  httpport: 80
+  http_port: 8080
 
 ingress:
   enabled: false
