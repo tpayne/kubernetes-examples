@@ -83,4 +83,4 @@ is only provided as a sample).
 Notes
 -----
 - https://helm.sh/docs/topics/charts/
-- The examples contained in this repo are focusing on core functionality only
+- The examples contained in this repo are focusing on core functionality only and show various use-cases
