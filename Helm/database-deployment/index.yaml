@@ -3,12 +3,12 @@ entries:
   database-deployment:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-03-04T11:47:20.589262Z"
+    created: "2022-03-04T12:14:19.645196Z"
     description: A Helm chart for Kubernetes
-    digest: 41a550552f907ef078adb58af348a3713f71f0e5c78cd2ad108e53a52cd56181
+    digest: 5013368573635124bd5c6bf7b9c7f690c6c54bee8aee3ba571d44f2604d8cf38
     name: database-deployment
     type: application
     urls:
     - database-deployment-0.1.0.tgz
     version: 0.1.0
-generated: "2022-03-04T11:47:20.588175Z"
+generated: "2022-03-04T12:14:19.38071Z"
