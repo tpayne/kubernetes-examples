@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: {{ include "database-deployment.fullname" . }}-dbcontainer
-        image: {{ .Values.image.dbsrvImage }}
+        image: {{ .Values.image.repository }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.service.dbport }}

@@ -8,5 +8,5 @@ metadata:
 spec:
   containers:
   - name: {{ include "database-deployment.fullname" . }}-dbclient
-    image: "{{ .Values.image.dbImage }}:{{ .Values.image.dbTag | default .Chart.AppVersion }}"
+    image: "{{ .Values.image.dbImage }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
     imagePullPolicy: {{ .Values.image.pullPolicy }}

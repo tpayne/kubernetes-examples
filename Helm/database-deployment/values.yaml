@@ -8,6 +8,7 @@ namespaces:
   benamespace: pgdb-backend
 
 image:
+  dbImage: tpayne666/alpine-pgclient
   repository: postgres
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
