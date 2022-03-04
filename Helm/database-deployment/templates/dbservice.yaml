@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.namespaces.benamespace }}
+  name: {{ include "database-deployment.fullname" . }}-dbsvr
+  labels:
+    {{- include "database-deployment.labels" . | nindent 4 }}
+spec:
+  selector:
+    app: {{ include "database-deployment.fullname" . }}-dbclient
+  ports:
+    - name: {{ include "database-deployment.fullname" . }}-dbsvr
+      port: {{ .Values.service.dbport }}
+      protocol: TCP
+      targetPort: {{ .Values.service.dbport }}
+  type: {{ .Values.service.type }}

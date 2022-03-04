@@ -4,12 +4,31 @@
 
 replicaCount: 1
 
+namespaces:
+  benamespace: db-backend
+
 image:
-  repository: mysql
+  repository: postgres
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
+config:
+  dbMap:
+    POSTGRES_DB: postgresdb
+    POSTGRES_USER: postgres
+    PGDATA: /var/lib/postgresql/data/
+    POSTGRES_PASSWORD: password
+
+backend:
+  dbServerResources:
+    requests:
+      memory: 300Mi
+      cpu: 400m
+    limits:
+      memory: 400Mi
+      cpu: 500m
+      
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -38,7 +57,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  dbport: 5432
 
 ingress:
   enabled: false

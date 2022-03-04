@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: {{ .Values.namespaces.benamespace }}
+  name: {{ include "database-deployment.fullname" . }}-dbclient
+  labels:
+    {{- include "database-deployment.labels" . | nindent 4 }}
+spec:
+  containers:
+  - name: {{ include "database-deployment.fullname" . }}-dbclient
+    image: "{{ .Values.image.dbImage }}:{{ .Values.image.dbTag | default .Chart.AppVersion }}"
+    imagePullPolicy: {{ .Values.image.pullPolicy }}
