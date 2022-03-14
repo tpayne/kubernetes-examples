@@ -103,6 +103,7 @@ Notes for Getting Started
 
 Notes
 -----
+- Block/reject deployents - https://kubernetes.io/blog/2019/03/21/a-guide-to-kubernetes-admission-controllers/
 - Set default namespace via `kubectl config set-context <context> --namespace=<defaultNs>`
 - Various management commands to be aware of...
     - cordon = Mark a node as unscheduleable, i.e. not able to do any new deployments to it
