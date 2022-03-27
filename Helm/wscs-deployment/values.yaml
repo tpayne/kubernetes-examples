@@ -5,10 +5,10 @@
 replicaCount: 2
 
 image:
-  repository: tpayne666/csharpws
+  repository: tpayne666/webrestapi
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.0"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
