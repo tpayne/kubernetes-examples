@@ -1,0 +1,80 @@
+# Default values for testing-deployment.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  repository: tpayne666/csharpws
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+namespace: ""
+namespaceOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: LoadBalancer
+  port: 8080
+  targetPort: 80
+
+
+resources:
+  sampleResources:
+    requests:
+      memory: 150Mi
+      cpu: 200m
+    limits:
+      memory: 300Mi
+      cpu: 400m
+
+probes:
+  enabled: true
+  sampleProbes:
+    livenessProbe:
+      httpGet:
+        path: /api/test/version
+        port: 80
+      httpGet:
+        path: /api/repo/version
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    readinessProbe:
+      httpGet:
+        path: /api/test/version
+        port: 80
+      httpGet:
+        path: /api/repo/version
+        port: 80
+      initialDelaySeconds: 15
+      periodSeconds: 20
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
