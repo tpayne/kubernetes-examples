@@ -125,3 +125,4 @@ Notes
 - https://argo-cd.readthedocs.io/en/stable/
 - https://argo-cd.readthedocs.io/en/stable/operator-manual/webhook/
 - https://argoproj.github.io/argo-workflows/quick-start/
+- https://argoproj.github.io/argo-workflows/argo-server-sso/
