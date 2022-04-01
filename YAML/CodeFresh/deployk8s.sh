@@ -65,6 +65,22 @@ fi
 return $?
 }
 
+getIp()
+{
+rgName="MC_${group}_${name}_${location}"
+echo "${command}: Getting gateway ip address for ${name} ${group}..."
+rmFile "${tmpFile}"
+
+# For some reason, this seems to be the only way to get the shell to protect the quotes correctly...
+echo "(az network lb show -n kubernetes -g \"${rgName}\" --query 'frontendIpConfigurations[].publicIpAddress.id' -o tsv)" | \
+    sh > ${tmpFile} 2>&1
+publicIpId="`cat ${tmpFile}`"
+xipAddr="`az network public-ip show --ids \"${publicIpId}\" --query "{ ipAddress: ipAddress }" --out tsv`"
+rmFile "${tmpFile}"
+echo "${command}: - Gateway IP address is \"${xipAddr}\""
+return 0    
+}
+
 install()
 {
 rmFile "${tmpFile}"
@@ -82,6 +98,7 @@ echo "${command}: - create K8s system scoped to ${exIpAddr}..."
 (az aks create -n "${name}" -g $1 --network-plugin azure \
     --enable-managed-identity \
     --generate-ssh-keys \
+    --location "${2}" \
     --api-server-authorized-ip-ranges "${exIpAddr}/32","${authIps}") > ${tmpFile} 2>&1
 if [ $? -gt 0 ]; then
     cat "${tmpFile}"
@@ -116,6 +133,12 @@ fi
 install ${group} ${location}
 if [ $? -ne 0 ]; then
     echo "${command}: - Error: The installation of the controller failed"
+    exit 1
+fi
+
+getIp
+if [ $? -ne 0 ]; then
+    echo "${command}: - Error: Failed to get IP address"
     exit 1
 fi
 

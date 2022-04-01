@@ -16,6 +16,7 @@ repoUrl=
 namespace="ingress-basic"
 keep=0
 pwd="ThisIsADefaultPassword001"
+ssl=0
 
 rmFile()
 {
@@ -48,6 +49,7 @@ while [ $# -ne 0 ] ; do
                  shift 2;;
              -d | --delete) remove=1 ; shift;;
              -k | --keep) keep=1 ; shift;;
+             -ssl) ssl=1 ; shift;;
              --debug) set -xv ; shift;;
              -?*) show_usage ; break;;
              --) shift ; break;;
@@ -154,9 +156,17 @@ if [ $? -gt 0 ]; then
     fi
 fi
 
-(cf runtime install ${runtime} --context "${context}" --ingress-host http://${nginxIp} \
-    --silent --insecure-ingress-host \
-    --repo ${repoUrl} --git-token ${gitToken}) > "${tmpFile}" 2>&1
+if [ $ssl -gt 0 ]; then
+    echo "${command}: Deploying SSL..."
+    (cf runtime install ${runtime} --context "${context}" \
+        --ingress-host https://${nginxIp} \
+        --silent --repo ${repoUrl} \
+        --git-token ${gitToken}) > "${tmpFile}" 2>&1
+else    
+    (cf runtime install ${runtime} --context "${context}" --ingress-host http://${nginxIp} \
+        --silent --insecure-ingress-host \
+        --repo ${repoUrl} --git-token ${gitToken}) > "${tmpFile}" 2>&1
+fi
 if [ $? -gt 0 ]; then
     cat "${tmpFile}"
     rmFile "${tmpFile}"

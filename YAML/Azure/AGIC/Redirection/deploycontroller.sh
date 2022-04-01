@@ -12,6 +12,7 @@ location="ukwest"
 remove=0
 getIp=0
 tmpFile="/tmp/tmpFile$$.tmp"
+authIps=
 
 rmFile()
 {
@@ -36,6 +37,8 @@ while [ $# -ne 0 ] ; do
                  shift 2;;
              -d | --delete) remove=1 ; shift;;
              --getIp) getIp=1 ; shift;;
+             --authIps) authIps=$2
+                 shift 2;;
              --debug) set -xv ; shift;;
              -?*) show_usage ; break;;
              --) shift ; break;;
@@ -81,11 +84,20 @@ fi
 exIpAddr="`dig +short myip.opendns.com @resolver1.opendns.com`"
 ipAddr="`ipconfig getifaddr en0`"
 echo "${command}: - create K8s system scoped to ${exIpAddr}..."
+
+extIp="${exIpAddr}/32"
+
+if [ "x${authIps}" != "x" ]; then
+    extIp="${exIpAddr}/32,${authIps}"
+else
+    extIp="${exIpAddr}/32"
+fi
+
 (az aks create -n "${name}" -g $1 --network-plugin azure \
     --enable-managed-identity -a ingress-appgw \
     --appgw-name "${name}" --appgw-subnet-cidr "10.2.0.0/16" \
-    --generate-ssh-keys \
-    --api-server-authorized-ip-ranges "${exIpAddr}/32") > ${tmpFile} 2>&1
+    --generate-ssh-keys --location $2 \
+    --api-server-authorized-ip-ranges "${extIp}") > ${tmpFile} 2>&1
 if [ $? -gt 0 ]; then
     cat "${tmpFile}"
     rmFile "${tmpFile}"
