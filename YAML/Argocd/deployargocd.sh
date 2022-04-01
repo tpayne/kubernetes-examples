@@ -6,10 +6,12 @@ trap 'stty echo; echo "${command} aborted"; exit' 1 2 3 15
 #
 CWD=`pwd`
 namespace="argocd"
+namespace_wf="argo"
 remove=0
 tmpFile="/tmp/tmpFile$$.tmp"
 argoPwd=""
 argoIp=""
+argoWfIp=""
 
 rmFile()
 {
@@ -28,8 +30,10 @@ usage()
 
 while [ $# -ne 0 ] ; do
         case $1 in
-             -n | --namespace) namespace=$2
-                 shift 2;;             
+             -n-cd | --namespace-cd) namespace=$2
+                 shift 2;;
+             -n-wf | --namespace-wf) namespace_wf=$2
+                 shift 2;;                         
              --debug) set -xv ; shift;;
              -d | --delete) remove=1 ; shift;;                
              -?*) show_usage ; break;;
@@ -55,10 +59,14 @@ return $?
 
 getArgoIp()
 {
-while [ "x${argoIp}" = "x" ]
+while [ "x${argoIp}" = "x" -a "x${argoWfIp}" = "x" ]
 do
     sleep 20
     argoIp="`kubectl get svc argocd-server -n ${namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'`"
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+    argoWfIp="`kubectl get svc argo-server -n ${namespace_wf} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'`"
     if [ $? -ne 0 ]; then
         return 1
     fi
@@ -108,12 +116,21 @@ echo "${command}: Cleaning up Argocd..."
 (kubectl delete all --all -n "${namespace}" && \
  kubectl delete namespace "${namespace}") > /dev/null 2>&1
 
+if [ $? -gt 0 ]; then
+    return 1
+fi
+
+(kubectl delete all --all -n "${namespace_wf}" && \
+ kubectl delete namespace "${namespace_wf}") > /dev/null 2>&1
+
 return $?
 }
 
 install()
 {
 echo "${command}: Deploying Argocd..."
+echo "${command}: - Base Argocd..."
+
 rmFile "${tmpFile}"
 (kubectl create namespace "${namespace}" &&
  kubectl apply -n "${namespace}" \
@@ -126,7 +143,20 @@ if [ $? -gt 0 ]; then
     return 1
 fi
 
-(brew install argocd -q) > "${tmpFile}" 2>&1
+echo "${command}: - Base Argocd workflows..."
+rmFile "${tmpFile}"
+(kubectl create namespace "${namespace_wf}" &&
+ kubectl apply -n "${namespace_wf}" \
+     -f https://github.com/argoproj/argo-workflows/releases/download/v3.3.1/install.yaml) \
+    > "${tmpFile}" 2>&1
+
+if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
+    return 1
+fi
+
+(brew install argocd argo -q) > "${tmpFile}" 2>&1
 
 if [ $? -gt 0 ]; then
     cat "${tmpFile}"
@@ -137,6 +167,16 @@ fi
 # This will expose using LB, might not be preferred...
 # see https://argo-cd.readthedocs.io/en/stable/getting_started/
 (kubectl patch svc argocd-server -n "${namespace}" \
+    -p '{"spec": {"type": "LoadBalancer"}}') \
+    > "${tmpFile}" 2>&1
+
+if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
+    return 1
+fi
+
+(kubectl patch svc argo-server -n "${namespace_wf}" \
     -p '{"spec": {"type": "LoadBalancer"}}') \
     > "${tmpFile}" 2>&1
 
@@ -187,6 +227,7 @@ fi
 
 echo "${command}: - Argocd password = \"${argoPwd}\""
 echo "${command}: - Argocd server IP = \"${argoIp}\""
+echo "${command}: - Argo   server IP = \"${argoWfIp}\""
 
 argoLogin
 if [ $? -ne 0 ]; then
