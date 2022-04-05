@@ -137,7 +137,7 @@ if [ $? -gt 0 ]; then
 fi
 
 (kubectl create secret docker-registry docker-config \
-  --docker-server=$registryServer} \
+  --docker-server=${registryServer} \
   --docker-username=${userName} \
   --docker-password=${passwd} \
   --docker-email=${email} \
