@@ -6,6 +6,17 @@ Expand the name of the chart.
 {{- end }}
 
 {{/*
+Create the image path for the passed in image field
+*/}}
+{{- define "jenkinscd-framework-deployment.imagename" -}}
+{{- if eq (substr 0 7 .tag) "sha256:" -}}
+{{- printf "%s@%s" .repository .tag -}}
+{{- else -}}
+{{- printf "%s:%s" .repository .tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
