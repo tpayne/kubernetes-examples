@@ -3,9 +3,9 @@ entries:
   wsnodejs-b-deployment:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-04-11T10:09:28.820112+01:00"
+    created: "2022-04-11T10:11:39.516612+01:00"
     description: A Helm chart for Kubernetes
-    digest: 74b43874f6cdbee92795b398b12032a657dfd1d925c665c873f6ec65e9b7187e
+    digest: 61bb4d106918be0b5542bdff4a662218a0f811895d95579a51cc95e3ce520b95
     name: wsnodejs-b-deployment
     type: application
     urls:
@@ -14,7 +14,7 @@ entries:
   wsnodejs-deployment:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-04-11T10:09:28.821007+01:00"
+    created: "2022-04-11T10:11:39.517413+01:00"
     description: A Helm chart for Kubernetes
     digest: d174664db8e232184dd5238edb8ef50b71432fea0466d49ea611909ebcedf34e
     name: wsnodejs-deployment
@@ -22,4 +22,4 @@ entries:
     urls:
     - wsnodejs-deployment-0.1.0.tgz
     version: 0.1.0
-generated: "2022-04-11T10:09:28.819046+01:00"
+generated: "2022-04-11T10:11:39.514673+01:00"
