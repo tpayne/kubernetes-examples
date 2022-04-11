@@ -242,6 +242,7 @@ if [ $? -gt 0 -o $3 -gt 0 ]; then
     fi
 fi
 echo "${command}: Add Helm repo..."
+helm repo update > /dev/null 2>&1
 # Then add index.yaml raw URL, e.g.
 # https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/canary-deployment/index.yaml
 # helm repo add canary-deployment https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/canary-deployment/

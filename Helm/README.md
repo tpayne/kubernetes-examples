@@ -80,6 +80,8 @@ The following command for example will run a sequence of Helm commands to...
 (Note - You cannot run this command on this repo as you will be blocked from the git commit. The above
 is only provided as a sample).
 
+    ./helm_samples.sh -n wscs-b-deployment -u 
+
 Notes
 -----
 - https://helm.sh/docs/topics/charts/
