@@ -3,23 +3,12 @@ entries:
   wscs-b-deployment:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-04-11T10:05:33.931643+01:00"
+    created: "2022-04-11T10:25:11.206026+01:00"
     description: A Helm chart for Kubernetes
-    digest: d271ce447323cffa27ddd691d862c537ce659bdbdc8637d9adbb1921493dbf62
+    digest: a5e58be5a4c96d42051a658f71429a6df62548bf4613ef3defef614f9bd545ee
     name: wscs-b-deployment
     type: application
     urls:
     - wscs-b-deployment-0.1.0.tgz
     version: 0.1.0
-  wscs-deployment:
-  - apiVersion: v2
-    appVersion: 1.16.0
-    created: "2022-04-11T10:05:33.932805+01:00"
-    description: A Helm chart for Kubernetes
-    digest: 63d2b8078580e8515120f5e5bc0cec4d322344a4336cf44edc17fe552f2ffe4c
-    name: wscs-deployment
-    type: application
-    urls:
-    - wscs-deployment-0.1.0.tgz
-    version: 0.1.0
-generated: "2022-04-11T10:05:33.929849+01:00"
+generated: "2022-04-11T10:25:11.204372+01:00"
