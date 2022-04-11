@@ -3,12 +3,12 @@ entries:
   jenkinscd-framework-deployment:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-04-11T12:55:33.810801+01:00"
+    created: "2022-04-11T12:55:45.845054+01:00"
     description: A Helm chart for Kubernetes
-    digest: 7ccffea4d1eff179d9ede7109fe17cbfa6d7df6e221a3b064431f58452d94c22
+    digest: 1ed9577e8c23c8242480c12177d9532ce8b9d98da8705af780b3578dab2f06bc
     name: jenkinscd-framework-deployment
     type: application
     urls:
     - jenkinscd-framework-deployment-0.1.0.tgz
     version: 0.1.0
-generated: "2022-04-11T12:55:33.808637+01:00"
+generated: "2022-04-11T12:55:45.844115+01:00"
