@@ -13,3 +13,4 @@ wsnodejs-b-deployment:
 jenkinscd-framework-deployment:
   image:
     tag: "latest"
+    
