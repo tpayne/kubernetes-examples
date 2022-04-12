@@ -84,6 +84,52 @@ Helm charts sample(s)
     argocd app delete standard3tier-helm -y 
     argocd app list
 
+Helm pipeline sample(s)
+
+    kubectl apply -n argocd -f argocd/dev/project.pipeline-dev.yaml
+    kubectl apply -n argocd -f argocd/dev/app.pipeline-dev.yaml
+    argocd app get pipeline-dev
+    argocd app sync pipeline-dev
+    argocd app get pipeline-dev
+
+    kubectl apply -n argocd -f argocd/qa/project.pipeline-qa.yaml
+    kubectl apply -n argocd -f argocd/qa/app.pipeline-qa.yaml
+    argocd app get pipeline-qa
+    argocd app sync pipeline-qa
+    argocd app get pipeline-qa
+
+    kubectl apply -n argocd -f argocd/sit/project.pipeline-sit.yaml
+    kubectl apply -n argocd -f argocd/sit/app.pipeline-sit.yaml
+    argocd app get pipeline-sit
+    argocd app sync pipeline-sit
+    argocd app get pipeline-sit
+
+    kubectl apply -n argocd -f argocd/preprod/project.pipeline-preprod.yaml
+    kubectl apply -n argocd -f argocd/preprod/app.pipeline-preprod.yaml
+    argocd app get pipeline-preprod
+    argocd app sync pipeline-preprod
+    argocd app get pipeline-preprod
+
+    kubectl apply -n argocd -f argocd/prod/project.pipeline-prod.yaml
+    kubectl apply -n argocd -f argocd/prod/app.pipeline-prod.yaml
+    argocd app get pipeline-prod
+    argocd app sync pipeline-prod
+    argocd app get pipeline-prod
+
+    open "`argocd app get pipeline-dev | grep URL: | awk '{print $2}'`"
+    open "`argocd app get pipeline-qa | grep URL: | awk '{print $2}'`"
+    open "`argocd app get pipeline-sit | grep URL: | awk '{print $2}'`"
+    open "`argocd app get pipeline-preprod | grep URL: | awk '{print $2}'`"
+    open "`argocd app get pipeline-prod | grep URL: | awk '{print $2}'`"
+
+    argocd app delete pipeline-dev -y 
+    argocd app delete pipeline-qa -y 
+    argocd app delete pipeline-sit -y 
+    argocd app delete pipeline-preprod -y
+    argocd app delete pipeline-prod -y
+
+    argocd app list
+
 Kustomization sample(s)
 
     argocd app create postgress-kust --repo https://github.com/tpayne/kubernetes-examples \

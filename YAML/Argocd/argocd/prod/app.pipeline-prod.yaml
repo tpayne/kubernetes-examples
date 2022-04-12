@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pipeline-prod
+  labels:
+    app: pipeline-prod
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: prod  # required field - set to your CF Runtume namespace
+    name: in-cluster
+  project: pipeline-prod
+  source:
+    repoURL: https://github.com/tpayne/kubernetes-examples
+    targetRevision: main
+    path: ./YAML/Argocd/helm/prod  # Directory that contains the child apps
+    helm:
+      parameters:
+        - name: buildID
+          value: argocd
+      valueFiles:
+        - values.yaml
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true

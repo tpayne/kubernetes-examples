@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pipeline-sit
+  labels:
+    app: pipeline-sit
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: sit  # required field - set to your CF Runtume namespace
+    name: in-cluster
+  project: pipeline-sit
+  source:
+    repoURL: https://github.com/tpayne/kubernetes-examples
+    targetRevision: main
+    path: ./YAML/Argocd/helm/sit  # Directory that contains the child apps
+    helm:
+      parameters:
+        - name: buildID
+          value: argocd
+      valueFiles:
+        - values.yaml
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
