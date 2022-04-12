@@ -6,7 +6,8 @@ trap 'stty echo; echo "${command} aborted"; exit' 1 2 3 15
 #
 CWD=`pwd`
 namespace="argocd"
-namespace_wf="argo"
+namespace_evnt="argo-events"
+namespace_wf="${namespace_evnt}"
 remove=0
 tmpFile="/tmp/tmpFile$$.tmp"
 argoPwd=""
@@ -32,8 +33,6 @@ while [ $# -ne 0 ] ; do
         case $1 in
              -n-cd | --namespace-cd) namespace=$2
                  shift 2;;
-             -n-wf | --namespace-wf) namespace_wf=$2
-                 shift 2;;                         
              --debug) set -xv ; shift;;
              -d | --delete) remove=1 ; shift;;                
              -?*) show_usage ; break;;
@@ -113,17 +112,31 @@ cleanUp()
 {
 echo "${command}: Cleaning up Argocd..."
 
-(kubectl delete all --all -n "${namespace}" && \
- kubectl delete namespace "${namespace}") > /dev/null 2>&1
+echo "${command}: - Removing Argo events/senors/buses..."
+(kubectl delete all --all -n "${namespace_evnt}" && \
+ kubectl delete namespace "${namespace_evnt}") > /dev/null 2>&1
 
-if [ $? -gt 0 ]; then
+if [ $? -gt 0 -a ${1} -eq 0 ]; then
     return 1
 fi
 
+echo "${command}: - Removing Argo Workflows..."
 (kubectl delete all --all -n "${namespace_wf}" && \
  kubectl delete namespace "${namespace_wf}") > /dev/null 2>&1
 
-return $?
+if [ $? -gt 0 -a ${1} -eq 0 ]; then
+    return 1
+fi
+
+echo "${command}: - Removing ArgoCD..."
+(kubectl delete all --all -n "${namespace}" && \
+ kubectl delete namespace "${namespace}") > /dev/null 2>&1
+
+if [ $? -gt 0 -a ${1} -eq 0 ]; then
+    return 1
+fi
+
+return 0
 }
 
 install()
@@ -143,11 +156,27 @@ if [ $? -gt 0 ]; then
     return 1
 fi
 
-echo "${command}: - Base Argocd workflows..."
+echo "${command}: - Base Argo workflows..."
 rmFile "${tmpFile}"
 (kubectl create namespace "${namespace_wf}" &&
  kubectl apply -n "${namespace_wf}" \
      -f https://github.com/argoproj/argo-workflows/releases/download/v3.3.1/install.yaml) \
+    > "${tmpFile}" 2>&1
+
+if [ $? -gt 0 ]; then
+    cat "${tmpFile}"
+    rmFile "${tmpFile}"
+    return 1
+fi
+
+echo "${command}: - Base Argo events..."
+rmFile "${tmpFile}"
+(kubectl apply -n "${namespace_evnt}" \
+     -f https://raw.githubusercontent.com/argoproj/argo-events/stable/manifests/namespace-install.yaml && \
+ kubectl apply -n "${namespace_evnt}" \
+     -f https://raw.githubusercontent.com/argoproj/argo-events/stable/examples/eventbus/native.yaml && \
+  kubectl apply -n "${namespace_evnt}" \
+     -f https://raw.githubusercontent.com/argoproj/argo-events/stable/manifests/install-validating-webhook.yaml) \
     > "${tmpFile}" 2>&1
 
 if [ $? -gt 0 ]; then
@@ -198,7 +227,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-cleanUp
+cleanUp 1
 if [ $remove -gt 0 ]; then
     if [ $? -ne 0 ]; then
         echo "${command}: - Error: The cleanup of Argocd failed"

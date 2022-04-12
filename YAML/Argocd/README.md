@@ -18,8 +18,8 @@ Before you attempt this example, please ensure you have done the following: -
 - You have your Kubernetes' context set to a system that you have permission to deploy to
 - You have installed `brew` package manager
 
-Running the samples
--------------------
+Running the ArgoCD samples
+--------------------------
 To run the samples, please do the following steps.
 
 First, install ArgoCD...
@@ -40,8 +40,8 @@ This will run the synchronisation.
 
     argocd app get guestbook
 
-Installing custom samples
--------------------------
+Installing ArgoCD custom samples
+--------------------------------
 The following instructions can be used to install samples from this repo that will also work with ArgoCD and show more complex cases.
 
 Standard K8s sample(s)
@@ -108,6 +108,25 @@ The standard 3 tier sample should give you a deployment that looks something lik
 
 >![Standard 3 tier](https://github.com/tpayne/kubernetes-examples/blob/main/YAML/Argocd/images/ExampleDeployment.png)
 
+Running Argo Workflow samples
+-----------------------------
+To install a standard sample Argo Workflow, you can do...
+
+    argo submit -n argo --watch https://raw.githubusercontent.com/argoproj/argo-workflows/master/examples/hello-world.yaml
+
+To review the list of workflows you have you can use...
+
+    argo list -n argo
+
+To review the output of workflows you can use...
+
+    argo get -n argo @latest
+    argo logs -n argo @latest
+
+To delete a workflow you can use...
+
+    argo delete 
+
 Cleaning Up
 -----------
 To clean up the installation, do the following...
@@ -126,3 +145,5 @@ Notes
 - https://argo-cd.readthedocs.io/en/stable/operator-manual/webhook/
 - https://argoproj.github.io/argo-workflows/quick-start/
 - https://argoproj.github.io/argo-workflows/argo-server-sso/
+- https://github.com/argoproj/argo-workflows/blob/master/examples/README.md
+- https://argoproj.github.io/argo-events/

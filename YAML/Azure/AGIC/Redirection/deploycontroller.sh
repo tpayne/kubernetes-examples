@@ -13,6 +13,7 @@ remove=0
 getIp=0
 tmpFile="/tmp/tmpFile$$.tmp"
 authIps=
+context="${name}"
 
 rmFile()
 {
@@ -35,6 +36,8 @@ while [ $# -ne 0 ] ; do
                  shift 2;;
              -l | --location) location=$2
                  shift 2;;
+             -c | --context) context=$2
+                 shift 2;;            
              -d | --delete) remove=1 ; shift;;
              --getIp) getIp=1 ; shift;;
              --authIps) authIps=$2
@@ -105,7 +108,7 @@ if [ $? -gt 0 ]; then
 fi
 
 echo "${command}: - enable K8s system ${name} ${group}..."
-(az aks get-credentials -n "${name}" -g $1 --overwrite-existing) > ${tmpFile} 2>&1
+(az aks get-credentials -n "${name}" -g $1 --overwrite-existing --context "${context}") > ${tmpFile} 2>&1
 if [ $? -gt 0 ]; then
     cat "${tmpFile}"
     rmFile "${tmpFile}"

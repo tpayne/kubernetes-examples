@@ -1,0 +1,15 @@
+wscs-deployment:
+  image:
+    tag: "latest"
+wscs-b-deployment:
+  image:
+    tag: "latest"
+wsnodejs-deployment:
+  image:
+    tag: "master"
+wsnodejs-b-deployment:
+  image:
+    tag: "master"
+jenkinscd-framework-deployment:
+  image:
+    tag: "latest"
