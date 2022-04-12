@@ -86,32 +86,47 @@ Helm charts sample(s)
 
 Helm pipeline sample(s)
 
-    kubectl apply -n argocd -f argocd/dev/project.pipeline-dev.yaml
-    kubectl apply -n argocd -f argocd/dev/app.pipeline-dev.yaml
+Check syntax with...
+
+    kubectl apply -n argocd -f argocd/dev/project.pipeline.yaml --dry-run=client
+    kubectl apply -n argocd -f argocd/dev/app.pipeline.yaml --dry-run=client
+    kubectl apply -n argocd -f argocd/qa/project.pipeline.yaml --dry-run=client
+    kubectl apply -n argocd -f argocd/qa/app.pipeline.yaml --dry-run=client
+    kubectl apply -n argocd -f argocd/sit/project.pipeline.yaml --dry-run=client
+    kubectl apply -n argocd -f argocd/sit/app.pipeline.yaml --dry-run=client
+    kubectl apply -n argocd -f argocd/preprod/project.pipeline.yaml --dry-run=client
+    kubectl apply -n argocd -f argocd/preprod/app.pipeline.yaml --dry-run=client
+    kubectl apply -n argocd -f argocd/prod/project.pipeline.yaml --dry-run=client
+    kubectl apply -n argocd -f argocd/prod/app.pipeline.yaml --dry-run=client
+
+Run with...
+
+    kubectl apply -n argocd -f argocd/dev/project.pipeline.yaml
+    kubectl apply -n argocd -f argocd/dev/app.pipeline.yaml
     argocd app get pipeline-dev
     argocd app sync pipeline-dev
     argocd app get pipeline-dev
 
-    kubectl apply -n argocd -f argocd/qa/project.pipeline-qa.yaml
-    kubectl apply -n argocd -f argocd/qa/app.pipeline-qa.yaml
+    kubectl apply -n argocd -f argocd/qa/project.pipeline.yaml
+    kubectl apply -n argocd -f argocd/qa/app.pipeline.yaml
     argocd app get pipeline-qa
     argocd app sync pipeline-qa
     argocd app get pipeline-qa
 
-    kubectl apply -n argocd -f argocd/sit/project.pipeline-sit.yaml
-    kubectl apply -n argocd -f argocd/sit/app.pipeline-sit.yaml
+    kubectl apply -n argocd -f argocd/sit/project.pipeline.yaml
+    kubectl apply -n argocd -f argocd/sit/app.pipeline.yaml
     argocd app get pipeline-sit
     argocd app sync pipeline-sit
     argocd app get pipeline-sit
 
-    kubectl apply -n argocd -f argocd/preprod/project.pipeline-preprod.yaml
-    kubectl apply -n argocd -f argocd/preprod/app.pipeline-preprod.yaml
+    kubectl apply -n argocd -f argocd/preprod/project.pipeline.yaml
+    kubectl apply -n argocd -f argocd/preprod/app.pipeline.yaml
     argocd app get pipeline-preprod
     argocd app sync pipeline-preprod
     argocd app get pipeline-preprod
 
-    kubectl apply -n argocd -f argocd/prod/project.pipeline-prod.yaml
-    kubectl apply -n argocd -f argocd/prod/app.pipeline-prod.yaml
+    kubectl apply -n argocd -f argocd/prod/project.pipeline.yaml
+    kubectl apply -n argocd -f argocd/prod/app.pipeline.yaml
     argocd app get pipeline-prod
     argocd app sync pipeline-prod
     argocd app get pipeline-prod

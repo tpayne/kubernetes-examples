@@ -1,20 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: pipeline-qa
+  name: pipeline-preprod
   labels:
-    app: pipeline-qa
+    app: pipeline
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: qa  # required field - set to your CF Runtume namespace
+    namespace: preprod  # required field - set to your CF Runtume namespace
     name: in-cluster
-  project: pipeline-qa
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
-    path: ./YAML/Argocd/helm/qa  # Directory that contains the child apps
+    path: ./YAML/Argocd/helm/preprod  # Directory that contains the child apps
     helm:
       parameters:
         - name: buildID
