@@ -12,5 +12,5 @@ wsnodejs-b-deployment:
     tag: "master"
 jenkinscd-framework-deployment:
   image:
-    tag: "master"
+    tag: "latest"
     
