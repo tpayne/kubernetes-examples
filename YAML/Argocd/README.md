@@ -195,6 +195,32 @@ To run the UI you can use...
 
 Depending on where you have you workflow and events namespaced.
 
+You can monitor progress of job related events etc. with...
+
+    kubectl get events -n argo --watch
+
+Running Argo Workflow samples
+-----------------------------
+To run the CI/CD samples, you will need to first install some secrets via...
+
+    ./createsecrets.sh -u <DockerUser> -p <DockerPwd> \
+        -e <GitHubEmailAddr> \
+        -gt <gitHubToken>
+
+(Note - This script supports DockerHub by default, but can support other CR repos)
+
+Then do...
+
+    kubectl create -n argo -f WorkflowTemplates/ci-docker-template.yaml --dry-run=client
+    kubectl create -n argo -f WorkflowTemplates/ci-docker-template.yaml
+
+    kubectl create -f Workflows/ci-docker-build.yaml --dry-run=client
+    argo submit -n argo Workflows/ci-docker-build.yaml --watch \
+        -p IMAGE_NAME=<DockerUser>/<imageName>
+    argo list -n argo
+    argo logs -n argo @latest
+
+
 Cleaning Up
 -----------
 To clean up the installation, do the following...

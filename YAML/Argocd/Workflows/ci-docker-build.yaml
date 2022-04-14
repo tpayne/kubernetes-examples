@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ci-docker-build-
+spec:
+  volumes:
+    - name: docker-config
+      secret:
+        items:
+          - key: .dockerconfigjson
+            path: config.json
+        secretName: '{{ inputs.parameters.DOCKER_CONFIG_SECRET }}'
+  entrypoint: ci-tasks
+  arguments:
+    parameters:
+    - name: GIT_REPO_URL
+      value: https://github.com/tpayne/lang-examples.git
+    - name: IMAGE_NAME
+    - name: CONTEXT
+      value: nodejs/webapp/
+    - name: GIT_REVISION
+      value: master
+  templates:
+    - name: ci-tasks
+      metadata:
+        annotations:
+          argo-hub-template/description: 'Builds a docker image using Kaniko'
+      inputs:
+        parameters:
+          - name: GIT_REPO_URL
+          - name: IMAGE_NAME
+          - name: IMAGE_TAG
+            default: latest
+          - name: GIT_REVISION
+          - name: DOCKERFILE
+            default: Dockerfile
+          - name: GIT_TOKEN_SECRET
+            default: github-token # the name of the git secret token you applied to your cluster
+          - name: CONTEXT
+          - name: DOCKER_CONFIG_SECRET
+            default: docker-config  # the name of the registry-creds secret you created
+          - name: REGISTRY_CREDS_SECRET
+            default: registry-creds  # the name of the registry-creds secret you created
+      dag:
+        tasks:
+          - name: build-docker-image
+            templateRef:
+              name: argo-templates.kaniko.0.0.1
+              template: build
+            arguments:
+              parameters:
+                - name: REPO
+                  value: '{{ inputs.parameters.GIT_REPO_URL }}'
+                - name: REVISION
+                  value: '{{ inputs.parameters.GIT_REVISION }}'
+                - name: IMAGE_NAME
+                  value: '{{ inputs.parameters.IMAGE_NAME }}'
+                - name: GIT_TOKEN_SECRET
+                  value: '{{ inputs.parameters.GIT_TOKEN_SECRET }}'
+                - name: DOCKERFILE
+                  value: '{{ inputs.parameters.DOCKERFILE }}'
+                - name: CONTEXT
+                  value: '{{ inputs.parameters.CONTEXT }}'
+                - name: TAG
+                  value: '{{ inputs.parameters.IMAGE_TAG }}'
+
