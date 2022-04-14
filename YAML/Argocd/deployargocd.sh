@@ -6,8 +6,9 @@ trap 'stty echo; echo "${command} aborted"; exit' 1 2 3 15
 #
 CWD=`pwd`
 namespace="argocd"
+namespace_wf="argo"
 namespace_evnt="argo-events"
-namespace_wf="${namespace_evnt}"
+
 remove=0
 tmpFile="/tmp/tmpFile$$.tmp"
 argoPwd=""
@@ -34,6 +35,8 @@ while [ $# -ne 0 ] ; do
              -n-cd | --namespace-cd) namespace=$2
                  shift 2;;
              --debug) set -xv ; shift;;
+             -p| --password) argoPwd=$2
+                 shift 2;;
              -d | --delete) remove=1 ; shift;;                
              -?*) show_usage ; break;;
              --) shift ; break;;
@@ -52,8 +55,17 @@ return $?
 
 getPwd()
 {
-argoPwd="`kubectl -n ${namespace} get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo`"
-return $?
+argoPwd="`kubectl get secret argocd-initial-admin-secret -n ${namespace} -o jsonpath="{.data.password}" | base64 -d; echo`"
+if [ $? -ne 0 -o "x${argoPwd}" = "x" ]; then
+    return 1
+fi
+return 0
+}
+
+setPwd()
+{
+# Not supported atm
+return 0
 }
 
 getArgoIp()
@@ -112,14 +124,6 @@ cleanUp()
 {
 echo "${command}: Cleaning up Argocd..."
 
-echo "${command}: - Removing Argo events/senors/buses..."
-(kubectl delete all --all -n "${namespace_evnt}" && \
- kubectl delete namespace "${namespace_evnt}") > /dev/null 2>&1
-
-if [ $? -gt 0 -a ${1} -eq 0 ]; then
-    return 1
-fi
-
 echo "${command}: - Removing Argo Workflows..."
 (kubectl delete all --all -n "${namespace_wf}" && \
  kubectl delete namespace "${namespace_wf}") > /dev/null 2>&1
@@ -131,6 +135,14 @@ fi
 echo "${command}: - Removing ArgoCD..."
 (kubectl delete all --all -n "${namespace}" && \
  kubectl delete namespace "${namespace}") > /dev/null 2>&1
+
+if [ $? -gt 0 -a ${1} -eq 0 ]; then
+    return 1
+fi
+
+echo "${command}: - Removing Argo events/senors/buses..."
+(kubectl delete all --all -n "${namespace_evnt}" && \
+ kubectl delete namespace "${namespace_evnt}") > /dev/null 2>&1
 
 if [ $? -gt 0 -a ${1} -eq 0 ]; then
     return 1
@@ -171,13 +183,15 @@ fi
 
 echo "${command}: - Base Argo events..."
 rmFile "${tmpFile}"
-(kubectl apply -n "${namespace_evnt}" \
+(kubectl create namespace "${namespace_evnt}" &&
+ kubectl apply -n "${namespace_evnt}" \
      -f https://raw.githubusercontent.com/argoproj/argo-events/stable/manifests/namespace-install.yaml && \
  kubectl apply -n "${namespace_evnt}" \
-     -f https://raw.githubusercontent.com/argoproj/argo-events/stable/examples/eventbus/native.yaml && \
-  kubectl apply -n "${namespace_evnt}" \
-     -f https://raw.githubusercontent.com/argoproj/argo-events/stable/manifests/install-validating-webhook.yaml) \
+     -f https://raw.githubusercontent.com/argoproj/argo-events/stable/examples/eventbus/native.yaml) \
     > "${tmpFile}" 2>&1
+
+#  kubectl apply -n "${namespace_evnt}" \
+#     -f https://raw.githubusercontent.com/argoproj/argo-events/stable/manifests/install-validating-webhook.yaml) 
 
 if [ $? -gt 0 ]; then
     cat "${tmpFile}"

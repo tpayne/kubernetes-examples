@@ -173,7 +173,8 @@ Running Argo Workflow samples
 -----------------------------
 To install a standard sample Argo Workflow, you can do...
 
-    argo submit -n argo --watch https://raw.githubusercontent.com/argoproj/argo-workflows/master/examples/hello-world.yaml
+    argo submit -n argo --watch \
+        https://raw.githubusercontent.com/argoproj/argo-workflows/master/examples/hello-world.yaml
 
 To review the list of workflows you have you can use...
 
@@ -187,6 +188,12 @@ To review the output of workflows you can use...
 To delete a workflow you can use...
 
     argo delete 
+
+To run the UI you can use...
+
+    argo server --auth-mode server
+
+Depending on where you have you workflow and events namespaced.
 
 Cleaning Up
 -----------
@@ -208,3 +215,4 @@ Notes
 - https://argoproj.github.io/argo-workflows/argo-server-sso/
 - https://github.com/argoproj/argo-workflows/blob/master/examples/README.md
 - https://argoproj.github.io/argo-events/
+- https://github.com/argoproj/argo-workflows/tree/master/examples
