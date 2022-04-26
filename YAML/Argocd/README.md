@@ -86,6 +86,8 @@ Helm charts sample(s)
 
 Helm pipeline sample(s)
 
+This example also shows how to use aliasing to deploy the same chart 1..N times.
+
 Check syntax with...
 
     kubectl apply -n argocd -f argocd/dev/project.pipeline.yaml --dry-run=client
