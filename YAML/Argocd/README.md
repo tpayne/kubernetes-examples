@@ -103,35 +103,47 @@ Check syntax with...
 
 Run with...
 
+    # Safetly ignore...
+    argocd app delete pipeline-dev -y 
+    argocd app delete pipeline-qa -y 
+    argocd app delete pipeline-sit -y 
+    argocd app delete pipeline-preprod -y
+    argocd app delete pipeline-prod -y
+
     kubectl apply -n argocd -f argocd/dev/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/dev/app.pipeline.yaml
     argocd app get pipeline-dev
     argocd app sync pipeline-dev
     argocd app get pipeline-dev
-
+    sleep 90
+    
     kubectl apply -n argocd -f argocd/qa/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/qa/app.pipeline.yaml
     argocd app get pipeline-qa
     argocd app sync pipeline-qa
     argocd app get pipeline-qa
+    sleep 90
 
     kubectl apply -n argocd -f argocd/sit/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/sit/app.pipeline.yaml
     argocd app get pipeline-sit
     argocd app sync pipeline-sit
     argocd app get pipeline-sit
+    sleep 90
 
     kubectl apply -n argocd -f argocd/preprod/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/preprod/app.pipeline.yaml
     argocd app get pipeline-preprod
     argocd app sync pipeline-preprod
     argocd app get pipeline-preprod
+    sleep 90
 
     kubectl apply -n argocd -f argocd/prod/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/prod/app.pipeline.yaml
     argocd app get pipeline-prod
     argocd app sync pipeline-prod
     argocd app get pipeline-prod
+    sleep 90
 
     open "`argocd app get pipeline-dev | grep URL: | awk '{print $2}'`"
     open "`argocd app get pipeline-qa | grep URL: | awk '{print $2}'`"
