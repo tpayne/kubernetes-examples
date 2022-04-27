@@ -21,6 +21,7 @@ spec:
           value: argocd
       valueFiles:
         - values.yaml
+        - values-ds.yaml
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

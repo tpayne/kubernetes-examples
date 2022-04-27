@@ -14,6 +14,7 @@ tmpFile="/tmp/tmpFile$$.tmp"
 argoPwd=""
 argoIp=""
 argoWfIp=""
+login=0
 
 rmFile()
 {
@@ -38,6 +39,7 @@ while [ $# -ne 0 ] ; do
              -p| --password) argoPwd=$2
                  shift 2;;
              -d | --delete) remove=1 ; shift;;                
+             -l | --login) login=1; shift;;
              -?*) show_usage ; break;;
              --) shift ; break;;
              -|*) break;;
@@ -241,19 +243,21 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-cleanUp 1
-if [ $remove -gt 0 ]; then
+if [ $login -eq 0 ]; then
+    cleanUp 1
+    if [ $remove -gt 0 ]; then
+        if [ $? -ne 0 ]; then
+            echo "${command}: - Error: The cleanup of Argocd failed"
+            exit 1
+        fi
+        exit 0
+    fi
+
+    install
     if [ $? -ne 0 ]; then
-        echo "${command}: - Error: The cleanup of Argocd failed"
+        echo "${command}: - Error: The installation of Argocd failed"
         exit 1
     fi
-    exit 0
-fi
-
-install
-if [ $? -ne 0 ]; then
-    echo "${command}: - Error: The installation of Argocd failed"
-    exit 1
 fi
 
 getPwd
