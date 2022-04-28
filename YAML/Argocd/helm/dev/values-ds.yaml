@@ -1,12 +1,12 @@
 decision-service-a:
-  applicationName: {{ .Values.tenantName }}-dev
+  applicationName: decision-service-dev
   containerImage:
     repository: nginx
     tag: 1.14.2
   service:
     type: NodePort
 decision-service-b:
-  applicationName: {{ .Values.tenantName }}-test
+  applicationName: decision-service-test
   containerImage:
     repository: nginx
     tag: 1.14.2

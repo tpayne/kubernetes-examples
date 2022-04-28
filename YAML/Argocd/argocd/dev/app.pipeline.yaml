@@ -19,8 +19,6 @@ spec:
       parameters:
         - name: buildID
           value: argocd
-        - name: tenantName
-          value: ACME
       valueFiles:
         - values.yaml
         - values-ds.yaml
