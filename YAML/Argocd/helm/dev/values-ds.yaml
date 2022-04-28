@@ -1,5 +1,5 @@
 decision-service-a:
-  applicationName: {{ .Chart.tenantName }}-dev
+  applicationName: {{ .Values.tenantName }}-dev
   containerImage:
     repository: nginx
     tag: 1.14.2

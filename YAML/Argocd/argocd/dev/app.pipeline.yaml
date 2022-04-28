@@ -20,7 +20,7 @@ spec:
         - name: buildID
           value: argocd
         - name: tenantName
-          value: XXXTENANTXXX
+          value: ACME
       valueFiles:
         - values.yaml
         - values-ds.yaml
