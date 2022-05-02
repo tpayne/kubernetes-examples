@@ -116,6 +116,7 @@ Run with...
     argocd app sync pipeline-dev
     argocd app get pipeline-dev
     sleep 90
+    kubectl get all -n dev
     
     kubectl apply -n argocd -f argocd/qa/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/qa/app.pipeline.yaml
@@ -123,6 +124,7 @@ Run with...
     argocd app sync pipeline-qa
     argocd app get pipeline-qa
     sleep 90
+    kubectl get all -n qa
 
     kubectl apply -n argocd -f argocd/sit/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/sit/app.pipeline.yaml
@@ -130,6 +132,7 @@ Run with...
     argocd app sync pipeline-sit
     argocd app get pipeline-sit
     sleep 90
+    kubectl get all -n sit
 
     kubectl apply -n argocd -f argocd/preprod/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/preprod/app.pipeline.yaml
@@ -137,6 +140,7 @@ Run with...
     argocd app sync pipeline-preprod
     argocd app get pipeline-preprod
     sleep 90
+    kubectl get all -n preprod
 
     kubectl apply -n argocd -f argocd/prod/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/prod/app.pipeline.yaml
@@ -144,6 +148,7 @@ Run with...
     argocd app sync pipeline-prod
     argocd app get pipeline-prod
     sleep 90
+    kubectl get all -n prod
 
     open "`argocd app get pipeline-dev | grep URL: | awk '{print $2}'`"
     open "`argocd app get pipeline-qa | grep URL: | awk '{print $2}'`"
