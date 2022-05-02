@@ -86,7 +86,8 @@ Helm charts sample(s)
 
 Helm pipeline sample(s)
 
-This example also shows how to use aliasing to deploy the same chart 1..N times.
+This example also shows how to use aliasing to deploy the same chart 1..N times and how to make
+your code DRY compatible.
 
 Check syntax with...
 
