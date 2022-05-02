@@ -22,6 +22,7 @@ spec:
       valueFiles:
         - ../generic/values.yaml
         - ../generic/values-ds.yaml
+        - values-ds.yaml
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

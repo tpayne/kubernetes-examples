@@ -1,0 +1,6 @@
+decision-service-a:
+  containerImage:
+    tag: 1.14.2
+decision-service-b:
+  containerImage:
+    tag: 1.14.2
