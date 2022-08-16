@@ -57,8 +57,8 @@ return $?
 
 getPwd()
 {
-argoPwd="`kubectl get secret argocd-initial-admin-secret -n ${namespace} -o jsonpath="{.data.password}" | base64 -d; echo`"
-if [ $? -ne 0 -o "x${argoPwd}" = "x" ]; then
+argoPwd=$(kubectl get secret argocd-initial-admin-secret -n ${namespace} -o jsonpath="{.data.password}" | base64 -d; echo)
+if [ "x${argoPwd}" = "x" ]; then
     return 1
 fi
 return 0
@@ -201,12 +201,14 @@ if [ $? -gt 0 ]; then
     return 1
 fi
 
-(brew install argocd argo -q) > "${tmpFile}" 2>&1
-
+(argocd --help && argo --help) > /dev/null 2>&1
 if [ $? -gt 0 ]; then
-    cat "${tmpFile}"
-    rmFile "${tmpFile}"
-    return 1
+    (brew install argocd argo -q) > "${tmpFile}" 2>&1
+    if [ $? -gt 0 ]; then
+        cat "${tmpFile}"
+        rmFile "${tmpFile}"
+        return 1
+    fi
 fi
 
 # This will expose using LB, might not be preferred...

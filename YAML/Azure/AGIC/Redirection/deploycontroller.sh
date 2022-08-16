@@ -98,7 +98,7 @@ fi
 
 (az aks create -n "${name}" -g $1 --network-plugin azure \
     --enable-managed-identity -a ingress-appgw \
-    --appgw-name "${name}" --appgw-subnet-cidr "10.2.0.0/16" \
+    --appgw-name "${name}" --appgw-subnet-cidr "10.225.0.0/16" \
     --generate-ssh-keys --location $2 \
     --api-server-authorized-ip-ranges "${extIp}") > ${tmpFile} 2>&1
 if [ $? -gt 0 ]; then
