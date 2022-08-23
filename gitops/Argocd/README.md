@@ -187,7 +187,7 @@ Kustomization sample(s)
 
 The standard 3 tier sample should give you a deployment that looks something like this...
 
->![Standard 3 tier](https://github.com/tpayne/kubernetes-examples/blob/main/YAML/Argocd/images/ExampleDeployment.png)
+>![Standard 3 tier](https://github.com/tpayne/kubernetes-examples/blob/main/gitops/Argocd/images/ExampleDeployment.png)
 
 Running Argo Workflow samples
 -----------------------------
