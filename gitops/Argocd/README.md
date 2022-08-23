@@ -28,8 +28,11 @@ First, install ArgoCD...
 
 Install the ArgoCD default sample apps repo and an application using CLI (can do it with UI as well)...
 
-    argocd app create guestbook --repo https://github.com/argoproj/argocd-example-apps.git \
-        --path guestbook --dest-server https://kubernetes.default.svc --dest-namespace default
+    argocd app create guestbook \
+        --repo https://github.com/argoproj/argocd-example-apps.git \
+        --path guestbook \
+        --dest-server https://kubernetes.default.svc \
+        --dest-namespace default
     argocd app get guestbook
 
 Bring the app just created into synch with the latest repo state by using...
@@ -46,8 +49,10 @@ The following instructions can be used to install samples from this repo that wi
 
 Standard K8s sample(s)
 
-    argocd app create canarydeploy --repo https://github.com/tpayne/kubernetes-examples \
-        --path YAML/CanaryDeployments --dest-server https://kubernetes.default.svc
+    argocd app create canarydeploy \
+        --repo https://github.com/tpayne/kubernetes-examples \
+        --path YAML/CanaryDeployments \
+        --dest-server https://kubernetes.default.svc
     argocd app get canarydeploy
     argocd app sync canarydeploy
     argocd app get canarydeploy
@@ -55,8 +60,10 @@ Standard K8s sample(s)
     argocd app delete canarydeploy -y 
     argocd app list
 
-    argocd app create daemonsets --repo https://github.com/tpayne/kubernetes-examples \
-        --path YAML/DaemonSets --dest-server https://kubernetes.default.svc
+    argocd app create daemonsets \
+        --repo https://github.com/tpayne/kubernetes-examples \
+        --path YAML/DaemonSets \
+        --dest-server https://kubernetes.default.svc
     argocd app get daemonsets
     argocd app sync daemonsets
     argocd app get daemonsets
@@ -66,8 +73,10 @@ Standard K8s sample(s)
 
 Helm charts sample(s)
 
-    argocd app create canarydeploy-helm --repo https://github.com/tpayne/kubernetes-examples \
-        --path Helm/canary-deployment --dest-server https://kubernetes.default.svc
+    argocd app create canarydeploy-helm \
+        --repo https://github.com/tpayne/kubernetes-examples \
+        --path Helm/canary-deployment \
+        --dest-server https://kubernetes.default.svc
     argocd app get canarydeploy-helm
     argocd app sync canarydeploy-helm
     argocd app get canarydeploy-helm
@@ -75,8 +84,10 @@ Helm charts sample(s)
     argocd app delete canarydeploy-helm -y 
     argocd app list
 
-    argocd app create standard3tier-helm --repo https://github.com/tpayne/kubernetes-examples \
-        --path Helm/standard3tier-deployment --dest-server https://kubernetes.default.svc
+    argocd app create standard3tier-helm \
+        --repo https://github.com/tpayne/kubernetes-examples \
+        --path Helm/standard3tier-deployment \
+        --dest-server https://kubernetes.default.svc
     argocd app get standard3tier-helm
     argocd app sync standard3tier-helm
     argocd app get standard3tier-helm
@@ -91,6 +102,7 @@ your code DRY compatible.
 
 Check syntax with...
 
+    cd examples/simple
     kubectl apply -n argocd -f argocd/dev/project.pipeline.yaml --dry-run=client
     kubectl apply -n argocd -f argocd/dev/app.pipeline.yaml --dry-run=client
     kubectl apply -n argocd -f argocd/qa/project.pipeline.yaml --dry-run=client
@@ -105,6 +117,7 @@ Check syntax with...
 Run with...
 
     # Safetly ignore...
+    cd examples/simple
     argocd app delete pipeline-dev -y 
     argocd app delete pipeline-qa -y 
     argocd app delete pipeline-sit -y 
@@ -167,8 +180,10 @@ Run with...
 
 Kustomization sample(s)
 
-    argocd app create postgress-kust --repo https://github.com/tpayne/kubernetes-examples \
-        --path YAML/use-cases/postgres --dest-server https://kubernetes.default.svc
+    argocd app create postgress-kust \
+        --repo https://github.com/tpayne/kubernetes-examples \
+        --path YAML/use-cases/postgres \
+        --dest-server https://kubernetes.default.svc
     argocd app get postgress-kust
     argocd app sync postgress-kust
     argocd app get postgress-kust
@@ -176,8 +191,10 @@ Kustomization sample(s)
     argocd app delete postgress-kust -y 
     argocd app list
 
-    argocd app create standard3tier-kust --repo https://github.com/tpayne/kubernetes-examples \
-        --path YAML/use-cases/standard3tier --dest-server https://kubernetes.default.svc
+    argocd app create standard3tier-kust \
+        --repo https://github.com/tpayne/kubernetes-examples \
+        --path YAML/use-cases/standard3tier \
+        --dest-server https://kubernetes.default.svc
     argocd app get standard3tier-kust
     argocd app sync standard3tier-kust
     argocd app get standard3tier-kust
