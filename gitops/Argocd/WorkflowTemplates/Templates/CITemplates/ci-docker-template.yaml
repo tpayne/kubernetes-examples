@@ -1,0 +1,128 @@
+#
+# This Workflow Template can be used to build your docker image
+#
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: dockerbuild
+spec:
+  onExit: workflow-handler
+  templates:
+    - name: build
+      inputs:
+        artifacts:
+          - name: repo
+            path: /tmp/repo
+            git:
+              repo: '{{ inputs.parameters.REPO }}'
+              revision: '{{ inputs.parameters.REVISION }}'
+              usernameSecret:
+                name: '{{ inputs.parameters.GIT_TOKEN_SECRET }}'
+                key: token
+        parameters:
+          - name: REPO
+          - name: REVISION
+            default: 'main'
+          - name: GIT_TOKEN_SECRET
+          - name: DOCKERFILE
+            default: Dockerfile
+          - name: IMAGE_NAME
+          - name: TAG
+            default: latest
+          - name: CONTEXT
+            default: .
+      container:
+        image: gcr.io/kaniko-project/executor:v1.7.0
+        workingDir: '{{ inputs.artifacts.repo.path }}'
+        command: ["/kaniko/executor"]
+        args:
+          - --cache
+          - --cache-copy-layers
+          - --cache-repo={{ inputs.parameters.IMAGE_NAME }}-cache
+          - --reproducible
+          - --context={{ inputs.parameters.CONTEXT }}
+          - --dockerfile={{ inputs.parameters.DOCKERFILE }}
+          - --destination={{ inputs.parameters.IMAGE_NAME }}:{{ inputs.parameters.TAG }}
+        volumeMounts:
+          - mountPath: /kaniko/.docker/
+            name: docker-config
+
+
+#
+# Exit handler related templates
+# After the completion of the entrypoint template, the status of the
+# workflow is made available in the global variable {{workflow.status}}.
+# {{workflow.status}} will be one of: Succeeded, Failed, Error
+#
+    - name: workflow-handler
+      steps:
+      - - name: wfh-success
+          template: workflow-success
+          when: "{{workflow.status}} == Succeeded"
+        - name: wfh-fail
+          template: workflow-fail
+          when: "{{workflow.status}} == Failed"
+        - name: wfh-error
+          template: workflow-error
+          when: "{{workflow.status}} == Error"
+        - name: ms-notifications
+          templateRef:
+            name: msteams-notifications-template
+            template: failure-notification
+          arguments:
+            parameters:
+            - name: TEAMSWEBHOOK
+              value: "nil"
+            - name: JOBNAME
+              value: "{{workflow.name}}"
+            - name: JOBSTATUS
+              value: "{{workflow.status}}"
+            - name: JOBRUNDATETIME
+              value: "{{workflow.creationTimestamp}}"
+            - name: JOBDURATION
+              value: "{{workflow.duration}}"
+            - name: JOBOUTPUT
+              value: "{{workflow.failures}}"
+            - name: MODULE_RESULT
+              value: "{{workflow.outputs.parameters.module-result}}"
+          when: ({{workflow.status}} == Failed || {{workflow.status}} == Error)
+
+
+    # This template is a default handler for successful builds
+    - name: workflow-success
+      script:
+        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        command: [ bash ]
+        source: |
+          echo "Success: {{workflow.name}} {{workflow.status}} {{workflow.duration}}"
+
+    # This template is a default handler for failed builds
+    - name: workflow-fail
+      script:
+        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        command: [ bash ]
+        source: |
+          # Tip: {{workflow.failures}} is a JSON list. If you're using bash to read it, we recommend using jq to manipulate
+          # it. For example:
+          #
+          # echo "{{workflow.failures}}" | jq -r '.[] | "Failed Step: \(.displayName)\tMessage: \(.message)"'
+          #
+          # Will print a list of all the failed steps and their messages. For more info look up the jq docs.
+          echo "Failed: {{workflow.name}} {{workflow.status}} {{workflow.duration}}"
+          echo '{{workflow.failures}}'
+
+    # This template is a default handler for error builds
+    - name: workflow-error
+      script:
+        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        command: [ bash ]
+        source: |
+          # Tip: {{workflow.failures}} is a JSON list. If you're using bash to read it, we recommend using jq to manipulate
+          # it. For example:
+          #
+          # echo "{{workflow.failures}}" | jq -r '.[] | "Failed Step: \(.displayName)\tMessage: \(.message)"'
+          #
+          # Will print a list of all the failed steps and their messages. For more info look up the jq docs.
+          echo "Error: {{workflow.name}} {{workflow.status}} {{workflow.duration}}"
+          echo '{{workflow.failures}}'

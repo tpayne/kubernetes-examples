@@ -1,0 +1,160 @@
+#
+# This Workflow Template is used to store modules for the test process
+#
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: test-ops
+spec:
+  arguments:
+    parameters:
+      - name: ENVIRONMENT
+      - name: GIT_TOKEN_SECRET
+      - name: GIT_TEST_REPO
+      - name: TEST_TOKEN
+      - name: COMMAND_OPTS
+      - name: xtraceOption
+        value: "-o"
+
+  templates:
+    # This template is for default testing and should use anchor override where necessary
+    - name: all-tests
+      serviceAccountName: &serviceAccountName argo-hub.argocd.0.0.1
+      script: &script
+        image: ghcr.io/targetb/gitops-controller/test-runtime-environment:latest
+        env:
+          # Secrets needed for Git usage
+          - name: GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
+                key: token
+          - name: GITUSER
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
+                key: user
+          - name: GITEMAIL
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
+                key: email
+          # Secrets needed for test environment
+          - name: BROKERUSER
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.TEST_TOKEN}}"
+                key: brokeruser
+          - name: BROKERPASSWD
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.TEST_TOKEN}}"
+                key: brokerpassword
+          - name: OKTAUSER
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.TEST_TOKEN}}"
+                key: user
+          - name: OKTAPASSWD
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.TEST_TOKEN}}"
+                key: password
+          - name: OKTACLIENTID
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.TEST_TOKEN}}"
+                key: clientid
+          - name: OKTACLIENTIDSECRET
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.TEST_TOKEN}}"
+                key: clientidsecret
+          - name: BROWSERSTACKKEY
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.TEST_TOKEN}}"
+                key: browserstackkey
+        command: ["sh", "{{inputs.parameters.xtraceOption}}", "xtrace"]
+        source: |
+          testEnv="{{ inputs.parameters.ENVIRONMENT }}"
+          if [ "x${testEnv}" = "xnil" ]; then
+            testEnv="dev"
+          fi
+
+          echo "================================================================"
+          echo " Running tests for ${testEnv} at `date`"
+          echo "================================================================"
+          echo
+
+          echo "-------------------------"
+          echo "Printing tool versions..."
+          gradle --version
+          javac --version
+          java --version
+          echo "-------------------------"
+
+          echo
+          echo "Running ${testEnv} tests"
+          echo
+
+          logFile="/tmp/logfile.log"
+          resultsFile="/tmp/resultsfile.log"
+          resultsZip="/tmp/test-results.zip"
+
+          echo "UNKNOWN" > "${logFile}"
+
+          # Run tests...
+          /usr/local/bin/runtests.sh \
+                   -tr "{{ inputs.parameters.GIT_TEST_REPO }}" \
+                   -gu "${GITUSER}" \
+                   -gt "${GITHUB_TOKEN}" \
+                   -te "${testEnv}" \
+                   --broker-user "${BROKERUSER}" \
+                   --broker-password "${BROKERPASSWD}" \
+                   -oktau "${OKTAUSER}" \
+                   -oktap "${OKTAPASSWD}" \
+                   -oktacid "${OKTACLIENTID}" \
+                   -oktacidst "${OKTACLIENTIDSECRET}" \
+                   --log-file "${resultsFile}" \
+                   --browserstack-key "${BROWSERSTACKKEY}" \
+                   {{ inputs.parameters.COMMAND_OPTS }}
+
+          # Save state...
+          retStat=$?
+          echo "Tests returned ${retStat}"
+
+          # Check log...
+          if [ -f "${resultsFile}" ]; then
+            ls -l "${resultsFile}"
+            if [ -s "${resultsFile}" ]; then
+              cp "${resultsFile}" "${logFile}"
+            fi
+          fi
+
+          if [ -f "${resultsZip}" ]; then
+            ls -l "${resultsZip}"
+          fi
+
+          echo
+          echo "================================================================"
+          echo "Testing done `date`"
+          echo "================================================================"
+          exit ${retStat}
+      inputs: &inputs
+        parameters:
+          - name: ENVIRONMENT
+          - name: GIT_TOKEN_SECRET
+          - name: GIT_TEST_REPO
+          - name: TEST_TOKEN
+          - name: COMMAND_OPTS
+          - name: xtraceOption
+            default: "+o"
+      outputs: &outputs
+        parameters:
+          - name: result
+            valueFrom:
+              default: "Unknown"
+              path: /tmp/logfile.log
+            globalName: module-result

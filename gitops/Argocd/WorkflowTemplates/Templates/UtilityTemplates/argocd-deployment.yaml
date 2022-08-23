@@ -1,0 +1,478 @@
+#
+# This Workflow Template is used to store modules for argocd processes
+#
+
+# This template is based on the argocd version from the Argohub
+# However, it is intended to be enhanced with MH specific functionality
+# as and when needed.
+#
+# The default template is very basic in the checks that it can be doing on
+# deployed state and not building in any auto rollback mechanism. This version
+# will be enhanced to do this.
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: argocd-deploy-ops
+
+spec:
+  # default arguments
+  arguments:
+    parameters:
+      # The app to run the argo command against
+      - name: app
+        value: ""
+      # Flags specific to the command you are running (i.e. -l "my-label")
+      - name: flags
+        value: ""
+      # The url for communicating with the ArgoCD server
+      # i.e. argocd-server.<namespace>.svc.cluster.local
+      - name: serverUrl
+        value: ""
+      # Global command line options to pass to the ArgoCD CLI
+      - name: opts
+        value: ""
+      # The Kubernetes secret with the token to communicate with ArgoCD
+      - name: tokenSecret
+        value: "argocd-token"
+      # The key name in the Kubernetes secret with the token to communicate with ArgoCD
+      - name: tokenSecretKey
+        value: "token"
+      # The Kubernetes 'Kind' to use with argo app actions command
+      - name: appKind
+        value: "Rollout"
+      # The ID to roll back to if performing a rollback
+      - name: rollbackId
+        value: ""
+      # Set xtrace or not (echo the command before running it). Valid options are -o (xtrace on) and +o (xtrace off). default is -o
+      - name: xtraceOption
+        value: "-o"
+
+  templates:
+    # ArgoCD app sync
+    # Cannot just anchor the whole list item because overrides will not function properlc
+    - name: sync
+      serviceAccountName: &serviceAccountName argo-hub.argocd.0.0.1
+      metadata:
+        annotations: &annotations
+          argo-hub-template/description: "Sync an application in ArgoCD"
+          argo-hub-template/icon_url: "https://cdn.jsdelivr.net/gh/codefresh-io/argo-hub@main/workflows/argocd/assets/icon.svg"
+          argo-hub-template/icon_background: "#f4f4f4"
+      # Container info
+      script: &script
+        image: ghcr.io/targetb/gitops-controller/argo-env:latest
+        # xtrace
+        command: ["sh", "{{inputs.parameters.xtraceOption}}", "xtrace"]
+        source: |
+          echo "=================================================="
+          echo "Running a sync op for {{inputs.parameters.app}}..."
+          echo "=================================================="
+          echo ""
+          echo "(Note: This may take a while for completely new deploys...)"
+          echo ""
+
+          # Too much output, pushing it to a file...
+          argocd app sync {{inputs.parameters.app}} --prune {{inputs.parameters.flags}}  2>&1 | \
+            tee /tmp/app.result > /dev/null
+          exit $?
+        env:
+          # URL to communicate with ArgoCD
+          - name: ARGOCD_SERVER
+            value: "{{inputs.parameters.serverUrl}}"
+          # Token to use to communicate with ArgoCD
+          - name: ARGOCD_AUTH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.tokenSecret}}"
+                key: "{{inputs.parameters.tokenSecretKey}}"
+          # CLI falgs to use
+          - name: ARGOCD_OPTS
+            value: "{{inputs.parameters.opts}}"
+      # Parameters users can set/override
+      inputs: &inputs
+        parameters:
+          # The app to run the argo command against
+          - name: app
+            default: ""
+          # Flags specific to the command you are running (i.e. -l "my-label")
+          - name: flags
+            default: ""
+          # The url for communicating with the ArgoCD server
+          # i.e. argocd-server.<namespace>.svc.cluster.local
+          - name: serverUrl
+          # Global command line options to pass to the ArgoCD CLI
+          - name: opts
+            default: ""
+          # The Kubernetes secret with the token to communicate with ArgoCD
+          - name: tokenSecret
+            default: "argocd-token"
+          # The key name in the Kubernetes secret with the token to communicate with ArgoCD
+          - name: tokenSecretKey
+            default: "token"
+          # The Kubernetes 'Kind' to use with argo app actions command
+          - name: appKind
+            default: "Rollout"
+          # The ID to roll back to if performing a rollback
+          - name: rollbackId
+            default: ""
+          # Set xtrace or not (echo the command before running it). Valid options are -o (xtrace on) and +o (xtrace off). default is -o
+          - name: xtraceOption
+            default: "+o"
+      outputs: &outputs
+        parameters:
+          - name: result
+            valueFrom:
+              path: /tmp/app.result
+            globalName: module-result
+
+    # Wait for an app status
+    - name: wait
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Wait for an application to get into a desired state in ArgoCD"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Waiting for {{inputs.parameters.app}}"
+          echo "=================================================="
+
+          echo ""
+          echo "(Note: This may take a while for completely new deploys...)"
+          echo ""
+
+          argocd app wait {{inputs.parameters.app}} {{inputs.parameters.flags}} 2>&1 | \
+            tee /tmp/app.result > /dev/null
+          if [ $? -gt 0 ]; then
+            echo "-- The operation failed" >> /tmp/app.result
+          fi
+
+          # Need to return 0
+          exit 0
+      inputs:
+        <<: *inputs
+      outputs:
+        <<: *outputs
+
+    # Delete an app
+    - name: delete-app
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Delete the ArgoCD app"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Deleting {{inputs.parameters.app}}"
+          echo "=================================================="
+          argocd app delete {{inputs.parameters.app}} -y {{inputs.parameters.flags}} > /tmp/app.result
+          exit $?
+      inputs:
+        <<: *inputs
+      outputs:
+        <<: *outputs
+
+    # Rollback an app
+    - name: rollback
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Rollback an application to a given ID in ArgoCD"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Rolling back {{inputs.parameters.app}}"
+          echo "=================================================="
+          echo "false" > /tmp/app.terminate
+
+          argocd app rollback {{inputs.parameters.app}} \
+            {{inputs.parameters.rollbackId}} {{inputs.parameters.flags}} 2>&1 | \
+            tee /tmp/app.result > /dev/null
+          retStat=$?
+          grep "should have at least" /tmp/app.result > /dev/null
+          if [ $? -gt 0 ]; then
+            :
+          else
+            echo "-- Rollback failed. Will attempt to terminate the deployment..."
+            echo "true" > /tmp/app.terminate
+          fi
+          if [ $retStat -gt 0 ]; then
+            echo "-- Rollback failed. Will attempt to terminate the deployment..."
+            echo "true" > /tmp/app.terminate
+          fi
+          exit 0
+      inputs:
+        <<: *inputs
+      outputs:
+        parameters:
+          - name: result
+            valueFrom:
+              path: /tmp/app.result
+            globalName: module-result
+          - name: terminate
+            valueFrom:
+              path: /tmp/app.terminate
+
+    - name: terminate
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Terminate an application using ArgoCD"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Terminating {{inputs.parameters.app}}"
+          echo "=================================================="
+
+          argocd app terminate-op {{inputs.parameters.app}} {{inputs.parameters.flags}} | tee /tmp/app.result
+          exit $?
+      inputs:
+        <<: *inputs
+      outputs:
+        <<: *outputs
+
+    # Actions
+    # ==============================================================================================================================
+    # https://argoproj.github.io/argo-rollouts/FAQ/#can-we-run-the-argo-rollouts-kubectl-plugin-commands-via-argo-cd
+    # https://argoproj.github.io/argo-rollouts/features/restart/
+    #
+    # Actions available to rollout:
+    # $ argocd app actions list demo
+    # argoproj.io  Rollout  simple-rollout  abort         true
+    # argoproj.io  Rollout  simple-rollout  promote-full  true
+    # argoproj.io  Rollout  simple-rollout  restart       false
+    # argoproj.io  Rollout  simple-rollout  resume        true
+    # argoproj.io  Rollout  simple-rollout  retry         true
+
+    # Abort a rollout
+    - name: action-abort
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Run the abort action against an application (rollout) in ArgoCD"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Aborting deployment for {{inputs.parameters.app}}"
+          echo "=================================================="
+          argocd app actions run {{inputs.parameters.app}} abort --kind {{inputs.parameters.appKind}} \
+            {{inputs.parameters.flags}} | tee /tmp/app.result
+          exit $?
+      inputs:
+        <<: *inputs
+      outputs:
+        <<: *outputs
+
+    # Promote-full a rollout
+    - name: action-promote-full
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Run the promote-full action against an application (rollout) in ArgoCD"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Promote deployment for {{inputs.parameters.app}}"
+          echo "=================================================="
+          argocd app actions run {{inputs.parameters.app}} promote-full --kind {{inputs.parameters.appKind}} \
+            {{inputs.parameters.flags}} | tee /tmp/app.result
+          exit $?
+      inputs:
+        <<: *inputs
+      outputs:
+        <<: *outputs
+
+    # Restart a rollout
+    - name: action-restart
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Run the restart action against an application in ArgoCD"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Restarting deployment for {{inputs.parameters.app}}"
+          echo "=================================================="
+          argocd app actions run {{inputs.parameters.app}} restart --kind {{inputs.parameters.appKind}} \
+            {{inputs.parameters.flags}} | tee /tmp/app.result
+          exit $?
+      inputs:
+        <<: *inputs
+      outputs:
+        <<: *outputs
+
+    # Resume a rollout
+    - name: action-resume
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Run the resume action against an application (rollout) in ArgoCD"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Resuming deployment for {{inputs.parameters.app}}"
+          echo "=================================================="
+          argocd app actions run {{inputs.parameters.app}} resume --kind {{inputs.parameters.appKind}} \
+            {{inputs.parameters.flags}} | tee /tmp/app.result
+          exit $?
+      inputs:
+        <<: *inputs
+      outputs:
+        <<: *outputs
+
+    # Retry a rollout
+    - name: action-retry
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Run the retry action against an application (rollout) in ArgoCD"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Retrying deployment for {{inputs.parameters.app}}"
+          echo "=================================================="
+          echo "false" > /tmp/app.terminate
+          argocd app actions run {{inputs.parameters.app}} retry --kind {{inputs.parameters.appKind}} \
+            {{inputs.parameters.flags}} | tee /tmp/app.result
+          exit $?
+      inputs:
+        <<: *inputs
+      outputs:
+        <<: *outputs
+
+    # Status check
+    - name: app-status
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Check the status of an app"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Getting deployment status for {{inputs.parameters.app}}"
+          echo "=================================================="
+
+          echo "NA" > /tmp/app.status
+          echo "NA" > /tmp/app.health
+          echo "NA" > /tmp/app.degraded
+          echo "NA" > /tmp/app.progressing
+
+
+          argocd app get {{inputs.parameters.app}} --refresh {{inputs.parameters.flags}} > /tmp/app.status 2>&1
+          retstat=$?
+          if [ ${retstat} -gt 0 ]; then
+            echo "ERROR" > /tmp/app.status
+            echo "ERROR" > /tmp/app.health
+            echo "ERROR" > /tmp/app.degraded
+            echo "ERROR" > /tmp/app.progressing
+          else
+            grep 'Health Status:' /tmp/app.status | awk '{ print $3 }' |\
+              awk '{$1=$1;print}' > /tmp/app.health
+            if [ $? -gt 0 ]; then
+              echo "ERROR" > /tmp/app.health
+            fi
+            grep 'Degraded' /tmp/app.health > /dev/null 2>&1
+            if [ $? -eq 0 ]; then
+              # Lets list what we think is degraded...
+              echo "-- Health is degraded..."
+              cat /tmp/app.health
+              echo "NOTE - The following resources appear to be unhealthy (degraded)..." > /tmp/app.degraded
+              echo "NOTE - The following resources appear to be unhealthy (progressing)..." > /tmp/app.progressing
+              cat /tmp/app.status | grep Degraded | sort -u >> /tmp/app.degraded
+              cat /tmp/app.status | grep Progressing | sort -u >> /tmp/app.progressing
+            fi
+          fi
+          exit 0
+      inputs:
+        <<: *inputs
+      outputs:
+        parameters:
+          - name: status
+            valueFrom:
+              default: "Unknown"
+              path: /tmp/app.status
+            globalName: module-result
+          - name: health
+            valueFrom:
+              default: "Unknown"
+              path: /tmp/app.health
+          - name: degraded
+            valueFrom:
+              default: "Unknown"
+              path: /tmp/app.degraded
+          - name: progressing
+            valueFrom:
+              default: "Unknown"
+              path: /tmp/app.progressing
+
+    # List applications
+    - name: list
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "List applications in ArgoCD"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Listing deployments"
+          echo "=================================================="
+          argocd app list {{inputs.parameters.flags}} | tee /tmp/app.list
+          exit $?
+      inputs:
+        <<: *inputs
+      outputs:
+        parameters:
+          - name: apps
+            valueFrom:
+              path: /tmp/app.list
+            globalName: module-result
+
+    # ==============================================================================================================================
+
+    # Get application history
+    - name: history
+      serviceAccountName: *serviceAccountName
+      metadata:
+        annotations:
+          argo-hub-template/description: "Show an application's history in ArgoCD"
+          <<: *annotations
+      script:
+        <<: *script
+        source: |
+          echo "=================================================="
+          echo "Getting deployment history for {{inputs.parameters.app}}"
+          echo "=================================================="
+
+          argocd app history {{inputs.parameters.app}} {{inputs.parameters.flags}} 2>&1 | \
+            tee /tmp/app.history > /dev/null
+          exit $?
+      inputs:
+        <<: *inputs
+      outputs:
+        parameters:
+          - name: history
+            valueFrom:
+              path: /tmp/app.history
+            globalName: module-result-history
