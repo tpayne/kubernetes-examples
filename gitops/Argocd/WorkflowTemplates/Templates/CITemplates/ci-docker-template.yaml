@@ -92,7 +92,7 @@ spec:
     # This template is a default handler for successful builds
     - name: workflow-success
       script:
-        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        image: ghcr.io/account/gitopsaccount/cd-promote:latest
         command: [ bash ]
         source: |
           echo "Success: {{workflow.name}} {{workflow.status}} {{workflow.duration}}"
@@ -100,7 +100,7 @@ spec:
     # This template is a default handler for failed builds
     - name: workflow-fail
       script:
-        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        image: ghcr.io/account/gitopsaccount/cd-promote:latest
         command: [ bash ]
         source: |
           # Tip: {{workflow.failures}} is a JSON list. If you're using bash to read it, we recommend using jq to manipulate
@@ -115,7 +115,7 @@ spec:
     # This template is a default handler for error builds
     - name: workflow-error
       script:
-        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        image: ghcr.io/account/gitopsaccount/cd-promote:latest
         command: [ bash ]
         source: |
           # Tip: {{workflow.failures}} is a JSON list. If you're using bash to read it, we recommend using jq to manipulate

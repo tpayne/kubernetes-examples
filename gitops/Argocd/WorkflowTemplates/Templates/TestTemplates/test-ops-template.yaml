@@ -22,7 +22,7 @@ spec:
     - name: all-tests
       serviceAccountName: &serviceAccountName argo-hub.argocd.0.0.1
       script: &script
-        image: ghcr.io/targetb/gitops-controller/test-runtime-environment:latest
+        image: ghcr.io/account/gitopsaccount/test-runtime-environment:latest
         env:
           # Secrets needed for Git usage
           - name: GITHUB_TOKEN

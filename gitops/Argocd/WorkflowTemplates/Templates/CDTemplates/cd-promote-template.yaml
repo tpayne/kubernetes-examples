@@ -151,7 +151,7 @@ spec:
               - name: GIT_TOKEN_SECRET
                 value: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
               - name: GIT_TEST_REPO
-                value: "https://github.com/targetb/e2e-tests.git"
+                value: "https://github.com/account/e2e-tests.git"
               - name: TEST_TOKEN
                 value: "testing-env-secret"
               - name: COMMAND_OPTS
@@ -280,7 +280,7 @@ spec:
           - name: ARGOCD_APP
           - name: APP_HEALTH
       script:
-        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        image: ghcr.io/account/gitopsaccount/cd-promote:latest
         command: [ bash ]
         source: |
           echo "================================================="
@@ -399,7 +399,7 @@ spec:
     # This template is a default handler for successful builds
     - name: workflow-success
       script:
-        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        image: ghcr.io/account/gitopsaccount/cd-promote:latest
         command: [ bash ]
         source: |
           echo "Success: {{workflow.name}} {{workflow.status}} {{workflow.duration}}"
@@ -407,7 +407,7 @@ spec:
     # This template is a default handler for failed builds
     - name: workflow-fail
       script:
-        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        image: ghcr.io/account/gitopsaccount/cd-promote:latest
         command: [ bash ]
         source: |
           # Tip: {{workflow.failures}} is a JSON list. If you're using bash to read it, we recommend using jq to manipulate
@@ -422,7 +422,7 @@ spec:
     # This template is a default handler for error builds
     - name: workflow-error
       script:
-        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        image: ghcr.io/account/gitopsaccount/cd-promote:latest
         command: [ bash ]
         source: |
           # Tip: {{workflow.failures}} is a JSON list. If you're using bash to read it, we recommend using jq to manipulate

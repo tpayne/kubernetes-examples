@@ -34,7 +34,7 @@ spec:
     - name: failure-notification
       serviceAccountName: &serviceAccountName argo-hub.argocd.0.0.1
       script: &script
-        image: ghcr.io/targetb/gitops-controller/cd-promote:latest
+        image: ghcr.io/account/gitopsaccount/cd-promote:latest
         env:
           - name: MSWEBHOOK
             valueFrom:
@@ -83,7 +83,7 @@ spec:
                                 "items": [
                                   {
                                     "type": "Image",
-                                    "url": "https://raw.githubusercontent.com/targetb/github-actions/main/images/JobIcon.png",
+                                    "url": "https://raw.githubusercontent.com/account/github-actions/main/images/JobIcon.png",
                                     "altText": "CD job notification",
                                     "size": "small",
                                     "style": "person"

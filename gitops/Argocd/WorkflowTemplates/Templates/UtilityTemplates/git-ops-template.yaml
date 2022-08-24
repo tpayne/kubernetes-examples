@@ -25,7 +25,7 @@ spec:
     - name: update-image-tag
       serviceAccountName: &serviceAccountName argo-hub.argocd.0.0.1
       script: &script
-        image: ghcr.io/account/gitops-controller/cd-promote:latest
+        image: ghcr.io/account/gitopsaccount/cd-promote:latest
         env:
           - name: GITHUB_TOKEN
             valueFrom:
@@ -56,7 +56,7 @@ spec:
 
           retStat=0
 
-          repoName="https://github.com/account/gitops-controller.git"
+          repoName="https://github.com/account/gitopsaccount.git"
           promoteType="{{ inputs.parameters.PROMOTION_TYPE }}"
           tenantName={{ inputs.parameters.TENANT_NAME }}
           envName={{ inputs.parameters.ENVIRONMENT }}
