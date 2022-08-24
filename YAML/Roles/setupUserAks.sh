@@ -27,13 +27,12 @@ EOF
 
 kubectl certificate james approve
 
-kubectl get csr james-o jsonpath='{.status.certificate}' | base64 -d > james.pem
+kubectl get csr james-o jsonpath='{.status.certificate}' | base64 -d >james.pem
 
 # kubectl config set-credentials kubeuser/foo.kubernetes.com --username=kubeuser --password=kubepassword
 kubectl config set-credentials james \
-    --client-certificate=james.pem \
-    --client-key=james.pem
+	--client-certificate=james.pem \
+	--client-key=james.pem
 
 kubectl config set-context james-context \
-    --cluster=kubernetes --user=james-context
-
+	--cluster=kubernetes --user=james-context
