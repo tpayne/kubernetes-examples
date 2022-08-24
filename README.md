@@ -59,8 +59,8 @@ The following examples show example methods for implementing `GitOps` using Kube
 >| ------- | ----------- |
 >| [gitops/azurearc/](https://github.com/tpayne/kubernetes-examples/tree/main/gitops/azurearc) | This sample will use Helm and Arc to setup GitOps in Azure |
 >| [gitops/gcp/](https://github.com/tpayne/kubernetes-examples/tree/main/gitops/gcp) | This sample will use Cloud Build and Kubectl to setup GitOps in GCP |
->| [YAML/Argocd/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/Argocd) | This sample will use ArgoCD to deploy infrastructure to Kubernetes |
->| [YAML/CodeFresh/](https://github.com/tpayne/kubernetes-examples/tree/main/YAML/CodeFresh) | This sample will use CodeFresh to deploy infrastructure to Kubernetes |
+>| [gitops/Argocd/](https://github.com/tpayne/kubernetes-examples/tree/main/gitops/Argocd) | This sample will use ArgoCD to deploy infrastructure to Kubernetes |
+>| [gitops/CodeFresh/](https://github.com/tpayne/kubernetes-examples/tree/main/gitops/CodeFresh) | This sample will use CodeFresh to deploy infrastructure to Kubernetes |
 
 These samples will only run on GCP and Azure appropriately.
 
