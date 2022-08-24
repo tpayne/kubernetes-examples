@@ -60,7 +60,7 @@ spec:
           argo-hub-template/icon_background: "#f4f4f4"
       # Container info
       script: &script
-        image: ghcr.io/targetb/gitops-controller/argo-env:latest
+        image: ghcr.io/account/gitops-controller/argo-env:latest
         # xtrace
         command: ["sh", "{{inputs.parameters.xtraceOption}}", "xtrace"]
         source: |
