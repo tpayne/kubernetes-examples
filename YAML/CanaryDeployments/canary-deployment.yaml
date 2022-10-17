@@ -36,7 +36,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: logicapp-prod
-  name: logicapp-canary
+  name: logicapp-cndep
 spec:
   replicas: 1
   selector:
@@ -46,7 +46,7 @@ spec:
     metadata:
       labels:
         app: logicapp-deployment # the label for the pods and the deployments
-        env: canary
+        env: can
       annotations:
         imagerepo: DockerHub
     spec:
