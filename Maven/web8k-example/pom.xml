@@ -130,7 +130,7 @@
         <plugin>
           <groupId>com.microsoft.azure</groupId>
           <artifactId>azure-webapp-maven-plugin</artifactId>
-          <version>1.8.0</version>
+          <version>1.16.1</version>
           <configuration>
             <schemaVersion>V2</schemaVersion>
             <resourceGroup>${azure.resourceGroup}</resourceGroup>
