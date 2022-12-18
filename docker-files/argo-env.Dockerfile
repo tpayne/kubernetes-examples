@@ -1,6 +1,6 @@
 # This image is used for running Argo CLI
 
-FROM alpine:3
+FROM alpine:20221110
 
 # Set up APK repositories and upgrade
 RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main git \
