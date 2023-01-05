@@ -60,7 +60,7 @@ The following command will show the expanded syntax
 
 Helper Script
 -------------
-The helper script wraps the majority of the Helm commands and allows many commands to be sequenced together 
+The helper script wraps the majority of the Helm commands and allows many commands to be sequenced together
 to achieve a CI/CD flow. The script has been developed to support specific command flows and git repo locations
 as such, if you wish to use the script outside of this context, please review and modify it as appropriate.
 
@@ -80,7 +80,27 @@ The following command for example will run a sequence of Helm commands to...
 (Note - You cannot run this command on this repo as you will be blocked from the git commit. The above
 is only provided as a sample).
 
-    ./helm_samples.sh -n wscs-b-deployment -u 
+    ./helm_samples.sh -n wscs-b-deployment -u
+
+Signing Packages
+----------------
+To sign a package for use with `verify` you can do the following...
+
+```console
+    brew install gnupg && brew autoremove && brew cleanup
+    # Generate and list keys...
+    gpg --full-generate-key
+    gpg --list-secret-keys
+    gpg --list-keys
+    # Export the private key...
+    gpg --export-secret-key <keyId> <email> > <path>
+    # Export the public key...
+    gpg --export-key <keyId> <email> > <path>
+    # Sign package
+    helm package --sign <chartDir> --key <keyId> --keyring ~/.gnupg/pubring.gpg
+    # Verify package
+    helm verify <chartDir>
+```
 
 Notes
 -----
