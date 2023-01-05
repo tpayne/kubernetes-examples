@@ -32,6 +32,7 @@ List available regions to you and select a region...
     az account list-locations --query [].name
     az configure --defaults location=<region>
     az config set extension.use_dynamic_install=yes_without_prompt
+    az config get
 
 Create the Kubernetes resources for the demo...
 
@@ -39,6 +40,7 @@ Create the Kubernetes resources for the demo...
     az provider register --namespace Microsoft.KubernetesConfiguration
     az provider register --namespace Microsoft.ExtendedLocation
     az group create -n rg_001
+    az config set defaults.group=rg_001
     az aks create -n k8gitops -g rg_001
     az aks get-credentials -n k8gitops -g rg_001 --overwrite-existing
     az connectedk8s connect -n k8gitops -g rg_001
@@ -55,7 +57,7 @@ Create the Kubernetes resources for the demo...
         --ssh-private-key '' --ssh-private-key-file '' --https-user '' --https-key '' \
         --ssh-known-hosts '' --ssh-known-hosts-file ''
     az k8s-configuration show -n demo-app -c k8gitops -g rg_001 --cluster-type connectedClusters
-    
+
 This will deploy a canary release to the cluster based on the configuration in the `releases/prod` directory.
 
 Creating Helm Templates
@@ -91,4 +93,3 @@ Notes
 - https://docs.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-configurations
 - https://www.mytechramblings.com/posts/gitops-with-azure-devops-helm-acr-flux-and-k8s/
 - https://docs.microsoft.com/en-gb/azure/governance/policy/concepts/policy-for-kubernetes
-
