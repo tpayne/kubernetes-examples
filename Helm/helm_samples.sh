@@ -166,6 +166,7 @@ helmCreate() {
 # This will expand a chart to show what the expanded text looks like
 helmTemplate() {
 	echo "${command}: Running template..."
+	# --name-template will override release-name
 	helm template $1 --name-template=$1 --dry-run >"${tmpFile}" 2>&1
 	retStat=$?
 	if [ $expand -gt 0 -a $retStat -eq 0 ]; then
