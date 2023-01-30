@@ -40,7 +40,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/cd-promote
 
       - name: Build and Push CD Promote Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: docker-files/
           file: docker-files/cd-promote.Dockerfile
@@ -55,7 +55,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/argo-env
 
       - name: Build and Push Argo Environment Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: docker-files/
           file: docker-files/argo-env.Dockerfile
@@ -70,7 +70,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/argo-env-github
 
       - name: Build and Push GitHub Argo Environment Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: docker-files/
           file: docker-files/argo-env-github.Dockerfile
