@@ -1,6 +1,6 @@
 # This image is used for running cd-promote pipeline shell commands
 
-FROM alpine:3
+FROM alpine:20230208
 
 # Set up APK repositories and upgrade
 RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main git \
