@@ -10,7 +10,7 @@ spec:
   destination:
     namespace: preprod  # required field - set to your CF Runtume namespace
     name: in-cluster
-  project: pipeline
+  project: pipeline-preprod
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
