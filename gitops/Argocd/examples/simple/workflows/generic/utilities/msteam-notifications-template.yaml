@@ -32,7 +32,7 @@ spec:
     - name: failure-notification
       serviceAccountName: &serviceAccountName argo-hub.argocd.0.0.1
       script: &script
-        image: ghcr.io/tpayne/gitops/cd-promote:latest
+        image: ghcr.io/tpayne/kubernetes-examples/cd-promote:latest
         env:
           - name: MSWEBHOOK
             valueFrom:

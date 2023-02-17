@@ -25,7 +25,7 @@ spec:
     - name: update-image-tag
       serviceAccountName: &serviceAccountName argo-hub.argocd.0.0.1
       script: &script
-        image: ghcr.io/tpayne/gitops/cd-promote:latest
+        image: ghcr.io/tpayne/kubernetes-examples/cd-promote:latest
         env:
           - name: GITHUB_TOKEN
             valueFrom:
