@@ -14,7 +14,7 @@ spec:
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
-    path: ./gitops/Argocd/helm/sit  # Directory that contains the child apps
+    path: ./gitops/Argocd/examples/simple/helm/sit  # Directory that contains the child apps
     helm:
       parameters:
         - name: buildID
