@@ -2,24 +2,24 @@ wscs-deployment:
   image:
     tag: "latest"
   service:
-    type: "ClusterIP"
+    type: ClusterIP
 wscs-b-deployment:
   image:
     tag: "latest"
   service:
-    type: "ClusterIP"
+    type: ClusterIP
 wsnodejs-deployment:
   image:
     tag: "master"
   service:
-    type: "ClusterIP"
+    type: ClusterIP
 wsnodejs-b-deployment:
   image:
     tag: "master"
   service:
-    type: "ClusterIP"
+    type: ClusterIP
 jenkinscd-framework-deployment:
   image:
     tag: "latest"
   service:
-    type: "ClusterIP"
+    type: ClusterIP
