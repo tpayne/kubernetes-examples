@@ -12,6 +12,7 @@ location="ukwest"
 remove=0
 getIp=0
 tmpFile="/tmp/tmpFile$$.tmp"
+logFile="/tmp/AGICInstall$$.tmp"
 authIps=
 context="${name}"
 
@@ -88,7 +89,7 @@ cleanUp() {
 		return 0
 	fi
 
-	(az group delete -n $1 -y) >/dev/null 2>&1
+	(az group delete -n $1 -y && az group delete -n NetworkWatcherRG -y) >/dev/null 2>&1
 	return $?
 }
 
@@ -125,6 +126,8 @@ install() {
 		return 1
 	fi
 
+	cat "${tmpFile}" > "${logFile}"
+
 	echo "${command}: - enable K8s system ${name} ${group}..."
 	(az aks get-credentials -n "${name}" -g $1 --overwrite-existing --context "${context}") >${tmpFile} 2>&1
 	if [ $? -gt 0 ]; then
@@ -132,6 +135,7 @@ install() {
 		rmFile "${tmpFile}"
 		return 1
 	fi
+	cat "${tmpFile}" >> "${logFile}"
 
 	return 0
 }
@@ -139,7 +143,7 @@ install() {
 getFrontEndIp() {
 	echo "${command}: Getting gateway ip address for ${name} ${group}..."
 	rmFile "${tmpFile}"
-	appgw="$(az aks show -g \"${1}\" -n \"${name}\" | grep effectiveApplicationGatewayId | gawk '{print $2}' | sed 's/.$//')"
+	appgw="$(az aks show -g ${1} -n ${name} | grep effectiveApplicationGatewayId | gawk '{print $2}' | sed 's/.$//')"
 
 	# For some reason, this seems to be the only way to get the shell to protect the quotes correctly...
 	echo "(az network application-gateway show --id \"${appgw}\" --query 'frontendIpConfigurations[].publicIpAddress.id' -o tsv)" |
@@ -175,7 +179,8 @@ if [ $? -ne 0 ]; then
 fi
 
 # Sleep to give the resources time to spin up...
-sleep 180
-getFrontEndIp ${group}
+#sleep 180
+#getFrontEndIp ${group}
 
+echo "${command}: Log file is in ${logFile}"
 exit 0
