@@ -1,0 +1,146 @@
+#
+# This Workflow Template is used to promote your sit CD pipeline. It is a wrapper to a more generic pipeline
+#
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: cd-promote-sit
+spec:
+  entrypoint: sit-promote
+  onExit: workflow-handler
+  synchronization:
+    mutex:
+      name:  lockforexec-cd-sit
+
+  podGC:
+    # Pod GC strategy must be one of the following:
+    # * OnPodCompletion - delete pods immediately when pod is completed (including errors/failures)
+    # * OnPodSuccess - delete pods immediately when pod is successful
+    # * OnWorkflowCompletion - delete pods when workflow is completed
+    # * OnWorkflowCompletion - delete pods when workflow is successful
+    strategy: OnWorkflowCompletion
+
+  templates:
+    - name: sit-promote
+      inputs:
+        parameters:
+          # i.e. express-stage
+          - name: ARGOCD_APP
+          - name: ARGOCD_SERVER
+            default: argocd-server
+          - name: REPO
+          - name: REVISION
+            value: 'main'
+          - name: GIT_TOKEN_SECRET
+          - name: PROMOTION_TYPE
+          - name: TENANT_NAME
+          - name: ENVIRONMENT
+            value: "sit"
+          - name: PROMOTE_TO
+            value: "preprod"
+          - name: COMMAND_OPTS
+      steps:
+      - - name: run-process
+          templateRef:
+            name: cd-promote
+            template: deploy-and-promote
+          arguments:
+            parameters:
+              - name: ARGOCD_APP
+                value: "{{inputs.parameters.ARGOCD_APP}}"
+              - name: ARGOCD_SERVER
+                value: "{{inputs.parameters.ARGOCD_SERVER}}"
+              - name: REPO
+                value: "{{inputs.parameters.REPO}}"
+              - name: REVISION
+                value: "{{inputs.parameters.REVISION}}"
+              - name: GIT_TOKEN_SECRET
+                value: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
+              - name: PROMOTION_TYPE
+                value: "{{inputs.parameters.PROMOTION_TYPE}}"
+              - name: TENANT_NAME
+                value: "{{inputs.parameters.TENANT_NAME}}"
+              - name: ENVIRONMENT
+                value: "{{inputs.parameters.ENVIRONMENT}}"
+              - name: PROMOTE_TO
+                value: "{{inputs.parameters.PROMOTE_TO}}"
+              - name: COMMAND_OPTS
+                value: "{{inputs.parameters.COMMAND_OPTS}}"
+
+#
+# Exit handler related templates
+# After the completion of the entrypoint template, the status of the
+# workflow is made available in the global variable {{workflow.status}}.
+# {{workflow.status}} will be one of: Succeeded, Failed, Error
+#
+    - name: workflow-handler
+      steps:
+      - - name: wfh-success
+          template: workflow-success
+          when: "{{workflow.status}} == Succeeded"
+        - name: wfh-fail
+          template: workflow-fail
+          when: "{{workflow.status}} == Failed"
+        - name: wfh-error
+          template: workflow-error
+          when: "{{workflow.status}} == Error"
+        - name: ms-notifications
+          templateRef:
+            name: msteams-notifications-template
+            template: failure-notification
+          arguments:
+            parameters:
+            - name: TEAMSWEBHOOK
+              value: "nil"
+            - name: JOBNAME
+              value: "{{workflow.name}}"
+            - name: JOBSTATUS
+              value: "{{workflow.status}}"
+            - name: JOBRUNDATETIME
+              value: "{{workflow.creationTimestamp}}"
+            - name: JOBDURATION
+              value: "{{workflow.duration}}"
+            - name: JOBOUTPUT
+              value: "{{workflow.failures}}"
+            - name: MODULE_RESULT
+              value: "{{workflow.outputs.parameters.module-result}}"
+          when: ({{workflow.status}} == Failed || {{workflow.status}} == Error)
+
+    # This template is a default handler for successful builds
+    - name: workflow-success
+      script:
+        image: ghcr.io/tpayne/gitops/cd-promote:latest
+        command: [ bash ]
+        source: |
+          echo "Success: {{workflow.name}} {{workflow.status}} {{workflow.duration}}"
+
+    # This template is a default handler for failed builds
+    - name: workflow-fail
+      script:
+        image: ghcr.io/tpayne/gitops/cd-promote:latest
+        command: [ bash ]
+        source: |
+          # Tip: {{workflow.failures}} is a JSON list. If you're using bash to read it, we recommend using jq to manipulate
+          # it. For example:
+          #
+          # echo "{{workflow.failures}}" | jq -r '.[] | "Failed Step: \(.displayName)\tMessage: \(.message)"'
+          #
+          # Will print a list of all the failed steps and their messages. For more info look up the jq docs.
+          echo "Failed: {{workflow.name}} {{workflow.status}} {{workflow.duration}}"
+          echo '{{workflow.failures}}'
+
+    # This template is a default handler for error builds
+    - name: workflow-error
+      script:
+        image: ghcr.io/tpayne/gitops/cd-promote:latest
+        command: [ bash ]
+        source: |
+          # Tip: {{workflow.failures}} is a JSON list. If you're using bash to read it, we recommend using jq to manipulate
+          # it. For example:
+          #
+          # echo "{{workflow.failures}}" | jq -r '.[] | "Failed Step: \(.displayName)\tMessage: \(.message)"'
+          #
+          # Will print a list of all the failed steps and their messages. For more info look up the jq docs.
+          echo "Error: {{workflow.name}} {{workflow.status}} {{workflow.duration}}"
+          echo '{{workflow.failures}}'
