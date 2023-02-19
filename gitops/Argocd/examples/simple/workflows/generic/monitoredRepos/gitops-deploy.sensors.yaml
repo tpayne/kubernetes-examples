@@ -1,0 +1,589 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: gitops-deploy-dev
+spec:
+  template:
+    serviceAccountName: argo-server
+  eventBusName: monitoredrepo-eventbus
+  dependencies:
+    - name: github-dev
+      eventName: github-dev
+      eventSourceName: gitops-deploy
+      filters:
+        data:
+          - path: body.X-GitHub-Event
+            value:
+              - push
+            type: string
+          - path: body.ref
+            template: '{{ (split "/" .Input)._1 }}'
+            value:
+              - heads
+            type: string
+          - path: body.ref
+            comparator: '='
+            template: '{{ trimPrefix "refs/heads/" .Input }}'
+            type: string
+            value:
+              - main
+          - path: >-
+              {body.commits.#.modified,body.commits.#.added,body.commits.#.removed}
+            comparator: "="
+            template: >-
+              {{ contains
+              "\"gitops/Argocd/examples/simple/helm/dev/"
+              .Input }}
+            type: string
+            value:
+              - "true"
+  triggers:
+    - template:
+        name: cd-promote-dev
+        conditions: github-dev
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: WorkflowTemplate
+              metadata:
+                generateName: gitops-deploy-cd-promote-dev-
+              spec:
+                arguments:
+                  parameters:
+                    - name: TENANT_NAME
+                      value: ""
+                    - name: ARGOCD_APP
+                      value: ""
+                    - name: ARGOCD_SERVER
+                      value: ""
+                    - name: REPO
+                      value: ""
+                    - name: REVISION
+                      value: main
+                    - name: GIT_TOKEN_SECRET
+                      value: ""
+                    - name: PROMOTION_TYPE
+                      value: ""
+                    - name: ENVIRONMENT
+                      value: dev
+                    - name: PROMOTE_TO
+                      value: nil
+                    - name: COMMAND_OPTS
+                      value: ""
+                workflowTemplateRef:
+                  name: cd-promote-dev
+          parameters:
+            - dest: spec.arguments.parameters.0.value
+              src:
+                dependencyName: github-dev
+                dataTemplate: nil
+            - dest: spec.arguments.parameters.1.value
+              src:
+                dependencyName: github-dev
+                dataTemplate: dev-pipeline
+            - dest: spec.arguments.parameters.2.value
+              src:
+                dependencyName: github-dev
+                dataTemplate: argocd-server
+            - dest: spec.arguments.parameters.3.value
+              src:
+                dependencyName: github-dev
+                dataTemplate: "{{ .Input.body.repository.clone_url }}"
+            - dest: spec.arguments.parameters.4.value
+              src:
+                dependencyName: github-dev
+                dataTemplate: main
+            - dest: spec.arguments.parameters.5.value
+              src:
+                dependencyName: github-dev
+                dataTemplate: github-token
+            - dest: spec.arguments.parameters.6.value
+              src:
+                dependencyName: github-dev
+                dataTemplate: environment
+            - dest: spec.arguments.parameters.7.value
+              src:
+                dependencyName: github-dev
+                dataTemplate: dev
+            - dest: spec.arguments.parameters.8.value
+              src:
+                dependencyName: github-dev
+                dataTemplate: qa
+            - dest: spec.arguments.parameters.9.value
+              src:
+                dependencyName: github-dev
+                dataTemplate:
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: gitops-deploy-qa
+spec:
+  template:
+    serviceAccountName: argo-server
+  eventBusName: monitoredrepo-eventbus
+  dependencies:
+    - name: github-qa
+      eventName: github-qa
+      eventSourceName: gitops-deploy
+      filters:
+        data:
+          - path: body.X-GitHub-Event
+            value:
+              - push
+            type: string
+          - path: body.ref
+            template: '{{ (split "/" .Input)._1 }}'
+            value:
+              - heads
+            type: string
+          - path: body.ref
+            comparator: '='
+            template: '{{ trimPrefix "refs/heads/" .Input }}'
+            type: string
+            value:
+              - main
+          - path: >-
+              {body.commits.#.modified,body.commits.#.added,body.commits.#.removed}
+            comparator: "="
+            template: >-
+              {{ contains
+              "\"gitops/Argocd/examples/simple/helm/qa/"
+              .Input }}
+            type: string
+            value:
+              - "true"
+  triggers:
+    - template:
+        name: cd-promote-qa
+        conditions: github-qa
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: WorkflowTemplate
+              metadata:
+                generateName: gitops-deploy-cd-promote-qa-
+              spec:
+                arguments:
+                  parameters:
+                    - name: TENANT_NAME
+                      value: ""
+                    - name: ARGOCD_APP
+                      value: ""
+                    - name: ARGOCD_SERVER
+                      value: ""
+                    - name: REPO
+                      value: ""
+                    - name: REVISION
+                      value: main
+                    - name: GIT_TOKEN_SECRET
+                      value: ""
+                    - name: PROMOTION_TYPE
+                      value: ""
+                    - name: ENVIRONMENT
+                      value: qa
+                    - name: PROMOTE_TO
+                      value: sit
+                    - name: COMMAND_OPTS
+                      value: ""
+                workflowTemplateRef:
+                  name: cd-promote-qa
+          parameters:
+            - dest: spec.arguments.parameters.0.value
+              src:
+                dependencyName: github-qa
+                dataTemplate: nil
+            - dest: spec.arguments.parameters.1.value
+              src:
+                dependencyName: github-qa
+                dataTemplate: dev-pipeline
+            - dest: spec.arguments.parameters.2.value
+              src:
+                dependencyName: github-qa
+                dataTemplate: argocd-server
+            - dest: spec.arguments.parameters.3.value
+              src:
+                dependencyName: github-qa
+                dataTemplate: "{{ .Input.body.repository.clone_url }}"
+            - dest: spec.arguments.parameters.4.value
+              src:
+                dependencyName: github-qa
+                dataTemplate: main
+            - dest: spec.arguments.parameters.5.value
+              src:
+                dependencyName: github-qa
+                dataTemplate: github-token
+            - dest: spec.arguments.parameters.6.value
+              src:
+                dependencyName: github-qa
+                dataTemplate: environment
+            - dest: spec.arguments.parameters.7.value
+              src:
+                dependencyName: github-qa
+                dataTemplate: qa
+            - dest: spec.arguments.parameters.8.value
+              src:
+                dependencyName: github-qa
+                dataTemplate: sit
+            - dest: spec.arguments.parameters.9.value
+              src:
+                dependencyName: github-qa
+                dataTemplate:
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: gitops-deploy-sit
+spec:
+  template:
+    serviceAccountName: argo-server
+  eventBusName: monitoredrepo-eventbus
+  dependencies:
+    - name: github-sit
+      eventName: github-sit
+      eventSourceName: gitops-deploy
+      filters:
+        data:
+          - path: body.X-GitHub-Event
+            value:
+              - push
+            type: string
+          - path: body.ref
+            template: '{{ (split "/" .Input)._1 }}'
+            value:
+              - heads
+            type: string
+          - path: body.ref
+            comparator: '='
+            template: '{{ trimPrefix "refs/heads/" .Input }}'
+            type: string
+            value:
+              - main
+          - path: >-
+              {body.commits.#.modified,body.commits.#.added,body.commits.#.removed}
+            comparator: "="
+            template: >-
+              {{ contains
+              "\"gitops/Argocd/examples/simple/helm/sit/"
+              .Input }}
+            type: string
+            value:
+              - "true"
+  triggers:
+    - template:
+        name: cd-promote-sit
+        conditions: github-sit
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: WorkflowTemplate
+              metadata:
+                generateName: gitops-deploy-cd-promote-sit-
+              spec:
+                arguments:
+                  parameters:
+                    - name: TENANT_NAME
+                      value: ""
+                    - name: ARGOCD_APP
+                      value: ""
+                    - name: ARGOCD_SERVER
+                      value: ""
+                    - name: REPO
+                      value: ""
+                    - name: REVISION
+                      value: main
+                    - name: GIT_TOKEN_SECRET
+                      value: ""
+                    - name: PROMOTION_TYPE
+                      value: ""
+                    - name: ENVIRONMENT
+                      value: sit
+                    - name: PROMOTE_TO
+                      value: preprod
+                    - name: COMMAND_OPTS
+                      value: ""
+                workflowTemplateRef:
+                  name: cd-promote-sit
+          parameters:
+            - dest: spec.arguments.parameters.0.value
+              src:
+                dependencyName: github-sit
+                dataTemplate: nil
+            - dest: spec.arguments.parameters.1.value
+              src:
+                dependencyName: github-sit
+                dataTemplate: sit-pipeline
+            - dest: spec.arguments.parameters.2.value
+              src:
+                dependencyName: github-sit
+                dataTemplate: argocd-server
+            - dest: spec.arguments.parameters.3.value
+              src:
+                dependencyName: github-sit
+                dataTemplate: "{{ .Input.body.repository.clone_url }}"
+            - dest: spec.arguments.parameters.4.value
+              src:
+                dependencyName: github-sit
+                dataTemplate: main
+            - dest: spec.arguments.parameters.5.value
+              src:
+                dependencyName: github-sit
+                dataTemplate: github-token
+            - dest: spec.arguments.parameters.6.value
+              src:
+                dependencyName: github-sit
+                dataTemplate: environment
+            - dest: spec.arguments.parameters.7.value
+              src:
+                dependencyName: github-sit
+                dataTemplate: sit
+            - dest: spec.arguments.parameters.8.value
+              src:
+                dependencyName: github-sit
+                dataTemplate: preprod
+            - dest: spec.arguments.parameters.9.value
+              src:
+                dependencyName: github-sit
+                dataTemplate:
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: gitops-deploy-preprod
+spec:
+  template:
+    serviceAccountName: argo-server
+  eventBusName: monitoredrepo-eventbus
+  dependencies:
+    - name: github-preprod
+      eventName: github-preprod
+      eventSourceName: gitops-deploy
+      filters:
+        data:
+          - path: body.X-GitHub-Event
+            value:
+              - push
+            type: string
+          - path: body.ref
+            template: '{{ (split "/" .Input)._1 }}'
+            value:
+              - heads
+            type: string
+          - path: body.ref
+            comparator: '='
+            template: '{{ trimPrefix "refs/heads/" .Input }}'
+            type: string
+            value:
+              - main
+          - path: >-
+              {body.commits.#.modified,body.commits.#.added,body.commits.#.removed}
+            comparator: "="
+            template: >-
+              {{ contains
+              "\"gitops/Argocd/examples/simple/helm/preprod/"
+              .Input }}
+            type: string
+            value:
+              - "true"
+  triggers:
+    - template:
+        name: cd-promote-preprod
+        conditions: github-preprod
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: WorkflowTemplate
+              metadata:
+                generateName: gitops-deploy-cd-promote-preprod-
+              spec:
+                arguments:
+                  parameters:
+                    - name: TENANT_NAME
+                      value: ""
+                    - name: ARGOCD_APP
+                      value: ""
+                    - name: ARGOCD_SERVER
+                      value: ""
+                    - name: REPO
+                      value: ""
+                    - name: REVISION
+                      value: main
+                    - name: GIT_TOKEN_SECRET
+                      value: ""
+                    - name: PROMOTION_TYPE
+                      value: ""
+                    - name: ENVIRONMENT
+                      value: preprod
+                    - name: PROMOTE_TO
+                      value: prod
+                    - name: COMMAND_OPTS
+                      value: ""
+                workflowTemplateRef:
+                  name: cd-promote-preprod
+          parameters:
+            - dest: spec.arguments.parameters.0.value
+              src:
+                dependencyName: github-preprod
+                dataTemplate: nil
+            - dest: spec.arguments.parameters.1.value
+              src:
+                dependencyName: github-preprod
+                dataTemplate: preprod-pipeline
+            - dest: spec.arguments.parameters.2.value
+              src:
+                dependencyName: github-preprod
+                dataTemplate: argocd-server
+            - dest: spec.arguments.parameters.3.value
+              src:
+                dependencyName: github-preprod
+                dataTemplate: "{{ .Input.body.repository.clone_url }}"
+            - dest: spec.arguments.parameters.4.value
+              src:
+                dependencyName: github-preprod
+                dataTemplate: main
+            - dest: spec.arguments.parameters.5.value
+              src:
+                dependencyName: github-preprod
+                dataTemplate: github-token
+            - dest: spec.arguments.parameters.6.value
+              src:
+                dependencyName: github-preprod
+                dataTemplate: environment
+            - dest: spec.arguments.parameters.7.value
+              src:
+                dependencyName: github-preprod
+                dataTemplate: preprod
+            - dest: spec.arguments.parameters.8.value
+              src:
+                dependencyName: github-preprod
+                dataTemplate: prod
+            - dest: spec.arguments.parameters.9.value
+              src:
+                dependencyName: github-preprod
+                dataTemplate:
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: gitops-deploy-prod
+spec:
+  template:
+    serviceAccountName: argo-server
+  eventBusName: monitoredrepo-eventbus
+  dependencies:
+    - name: github-prod
+      eventName: github-prod
+      eventSourceName: gitops-deploy
+      filters:
+        data:
+          - path: body.X-GitHub-Event
+            value:
+              - push
+            type: string
+          - path: body.ref
+            template: '{{ (split "/" .Input)._1 }}'
+            value:
+              - heads
+            type: string
+          - path: body.ref
+            comparator: '='
+            template: '{{ trimPrefix "refs/heads/" .Input }}'
+            type: string
+            value:
+              - main
+          - path: >-
+              {body.commits.#.modified,body.commits.#.added,body.commits.#.removed}
+            comparator: "="
+            template: >-
+              {{ contains
+              "\"gitops/Argocd/examples/simple/helm/prod/"
+              .Input }}
+            type: string
+            value:
+              - "true"
+  triggers:
+    - template:
+        name: cd-promote-prod
+        conditions: github-prod
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: WorkflowTemplate
+              metadata:
+                generateName: gitops-deploy-cd-promote-prod-
+              spec:
+                arguments:
+                  parameters:
+                    - name: TENANT_NAME
+                      value: ""
+                    - name: ARGOCD_APP
+                      value: ""
+                    - name: ARGOCD_SERVER
+                      value: ""
+                    - name: REPO
+                      value: ""
+                    - name: REVISION
+                      value: main
+                    - name: GIT_TOKEN_SECRET
+                      value: ""
+                    - name: PROMOTION_TYPE
+                      value: ""
+                    - name: ENVIRONMENT
+                      value: prod
+                    - name: PROMOTE_TO
+                      value: nil
+                    - name: COMMAND_OPTS
+                      value: ""
+                workflowTemplateRef:
+                  name: cd-promote-prod
+          parameters:
+            - dest: spec.arguments.parameters.0.value
+              src:
+                dependencyName: github-prod
+                dataTemplate: nil
+            - dest: spec.arguments.parameters.1.value
+              src:
+                dependencyName: github-prod
+                dataTemplate: prod-pipeline
+            - dest: spec.arguments.parameters.2.value
+              src:
+                dependencyName: github-prod
+                dataTemplate: argocd-server
+            - dest: spec.arguments.parameters.3.value
+              src:
+                dependencyName: github-prod
+                dataTemplate: "{{ .Input.body.repository.clone_url }}"
+            - dest: spec.arguments.parameters.4.value
+              src:
+                dependencyName: github-prod
+                dataTemplate: main
+            - dest: spec.arguments.parameters.5.value
+              src:
+                dependencyName: github-prod
+                dataTemplate: github-token
+            - dest: spec.arguments.parameters.6.value
+              src:
+                dependencyName: github-prod
+                dataTemplate: environment
+            - dest: spec.arguments.parameters.7.value
+              src:
+                dependencyName: github-prod
+                dataTemplate: prod
+            - dest: spec.arguments.parameters.8.value
+              src:
+                dependencyName: github-prod
+                dataTemplate: nil
+            - dest: spec.arguments.parameters.9.value
+              src:
+                dependencyName: github-prod
+                dataTemplate:
