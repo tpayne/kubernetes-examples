@@ -236,6 +236,35 @@ You can monitor progress of job related events etc. with...
 
     kubectl get events -n argo --watch
 
+Running Advanced Argo Workflow samples
+--------------------------------------
+To run the CI/CD samples, you will need to first install the samples project and pipeline manifests
+
+However, before you do this you will need to modify the host alias used for
+ingress access.
+
+```console
+    workflows/generic/monitoredRepos/gitops-deploy.event-source.yaml
+    workflows/generic/monitoredRepos/gitops-deploy-workflow-templates.ingress.yaml
+```
+
+Once the above files are modified and committed to the repo, you can then run the following.
+
+```console
+    cd examples/simple
+    kubectl apply -n argocd -f argocd/dev/project.pipeline.yaml
+    kubectl apply -n argocd -f argocd/dev/app.pipeline.yaml
+    kubectl apply -n argocd -f argocd/qa/project.pipeline.yaml
+    kubectl apply -n argocd -f argocd/qa/app.pipeline.yaml
+    kubectl apply -n argocd -f argocd/sit/project.pipeline.yaml
+    kubectl apply -n argocd -f argocd/sit/app.pipeline.yaml
+    kubectl apply -n argocd -f argocd/preprod/project.pipeline.yaml
+    kubectl apply -n argocd -f argocd/preprod/app.pipeline.yaml
+    kubectl apply -n argocd -f argocd/prod/project.pipeline.yaml
+    kubectl apply -n argocd -f argocd/prod/app.pipeline.yaml
+    kubectl apply -n argocd -f workflows/monitor-app.yaml
+```
+
 Running Argo Workflow samples
 -----------------------------
 To run the CI/CD samples, you will need to first install some secrets via...

@@ -1,0 +1,23 @@
+domain: github.actions.io
+layout:
+- go.kubebuilder.io/v3
+plugins:
+  manifests.sdk.operatorframework.io/v2: {}
+  scorecard.sdk.operatorframework.io/v2: {}
+projectName: crdoperators
+repo: github.com/tpayne/kubernetes-examples
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: github.actions.io
+  group: github.actions.io
+  kind: GitHubActions
+  path: github.com/tpayne/kubernetes-examples/api/v1alpha1
+  plural: ghactions
+  version: v1alpha1
+  webhooks:
+    conversion: true
+    webhookVersion: v1
+version: "3"

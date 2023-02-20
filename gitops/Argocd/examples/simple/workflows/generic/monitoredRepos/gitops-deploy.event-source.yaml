@@ -23,7 +23,8 @@ spec:
         method: POST
         endpoint: >-
           /webhooks/gitops-deploy/github-reposrc
-        url: http://IpAddrss
+        # You will need to customise this as appropriate
+        url: https://api.argodemorestapi.contino.com
       active: true
       insecure: false
       contentType: json
