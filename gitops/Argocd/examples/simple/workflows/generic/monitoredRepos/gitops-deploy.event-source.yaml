@@ -19,7 +19,7 @@ spec:
             - lang-examples
             - kubernetes-examples
       webhook:
-        port: '80'
+        port: "80"
         method: POST
         endpoint: >-
           /webhooks/gitops-deploy/github-reposrc
