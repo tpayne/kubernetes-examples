@@ -7,7 +7,7 @@ spec:
     serviceAccountName: argo-server
   eventBusName: monitoredrepo-eventbus
   dependencies:
-    - name: github-reposrc
+    - name: github-dev
       eventName: github-reposrc
       eventSourceName: gitops-deploy
       filters:
@@ -125,7 +125,7 @@ spec:
     serviceAccountName: argo-server
   eventBusName: monitoredrepo-eventbus
   dependencies:
-    - name: github-reposrc
+    - name: github-qa
       eventName: github-reposrc
       eventSourceName: gitops-deploy
       filters:
@@ -243,7 +243,7 @@ spec:
     serviceAccountName: argo-server
   eventBusName: monitoredrepo-eventbus
   dependencies:
-    - name: github-reposrc
+    - name: github-sit
       eventName: github-reposrc
       eventSourceName: gitops-deploy
       filters:
@@ -361,7 +361,7 @@ spec:
     serviceAccountName: argo-server
   eventBusName: monitoredrepo-eventbus
   dependencies:
-    - name: github-reposrc
+    - name: github-preprod
       eventName: github-reposrc
       eventSourceName: gitops-deploy
       filters:
@@ -479,7 +479,7 @@ spec:
     serviceAccountName: argo-server
   eventBusName: monitoredrepo-eventbus
   dependencies:
-    - name: github-reposrc
+    - name: github-prod
       eventName: github-reposrc
       eventSourceName: gitops-deploy
       filters:
