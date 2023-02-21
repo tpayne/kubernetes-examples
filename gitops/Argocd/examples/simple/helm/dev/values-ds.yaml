@@ -1,4 +1,4 @@
-# Template values
+# Template values for dev
 decision-service-a:
   containerImage:
     tag: 1.14.2
