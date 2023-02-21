@@ -26,7 +26,7 @@ spec:
         # You will need to customise this as appropriate
         url: https://argorestapi.ukwest.cloudapp.azure.com
       active: true
-      insecure: false
+      insecure: true
       contentType: json
       deleteHookOnFinish: true
       apiToken:
