@@ -24,7 +24,7 @@ spec:
         endpoint: >-
           /webhooks/gitops-deploy/github-reposrc
         # You will need to customise this as appropriate
-        url: https://api.argodemorestapi.contino.com
+        url: https://argorestapi.ukwest.cloudapp.azure.com
       active: true
       insecure: false
       contentType: json

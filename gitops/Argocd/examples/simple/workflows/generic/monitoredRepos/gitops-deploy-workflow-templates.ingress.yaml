@@ -17,4 +17,4 @@ spec:
                   number: 80
             pathType: Prefix
       # You will need to customise this as appropriate
-      host: api.argodemorestapi.contino.com
+      host: argorestapi.ukwest.cloudapp.azure.com
