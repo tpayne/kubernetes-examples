@@ -64,6 +64,171 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: dev-apps-monitor
+  labels:
+    app: dev-apps-monitor
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: argocd
+    name: in-cluster
+  project: pipeline-dev
+  source:
+    repoURL: https://github.com/tpayne/kubernetes-examples
+    targetRevision: main
+    path: ./gitops/Argocd/examples/simple/argocd/dev  # Directory that contains the child apps
+    directory:
+      recurse: true
+      include: '*.yaml'
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false # Allows deleting all application resources during automatic syncing ( false by default ).
+    retry:
+      limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+      backoff:
+        duration: 10s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+        factor: 2 # a factor to multiply the base duration after each failed retry
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: qa-apps-monitor
+  labels:
+    app: qa-apps-monitor
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: argocd
+    name: in-cluster
+  project: pipeline-qa
+  source:
+    repoURL: https://github.com/tpayne/kubernetes-examples
+    targetRevision: main
+    path: ./gitops/Argocd/examples/simple/argocd/qa  # Directory that contains the child apps
+    directory:
+      recurse: true
+      include: '*.yaml'
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false # Allows deleting all application resources during automatic syncing ( false by default ).
+    retry:
+      limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+      backoff:
+        duration: 10s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+        factor: 2 # a factor to multiply the base duration after each failed retry
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sit-apps-monitor
+  labels:
+    app: sit-apps-monitor
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: argocd
+    name: in-cluster
+  project: pipeline-sit
+  source:
+    repoURL: https://github.com/tpayne/kubernetes-examples
+    targetRevision: main
+    path: ./gitops/Argocd/examples/simple/argocd/sit  # Directory that contains the child apps
+    directory:
+      recurse: true
+      include: '*.yaml'
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false # Allows deleting all application resources during automatic syncing ( false by default ).
+    retry:
+      limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+      backoff:
+        duration: 10s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+        factor: 2 # a factor to multiply the base duration after each failed retry
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: preprod-apps-monitor
+  labels:
+    app: preprod-apps-monitor
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: argocd
+    name: in-cluster
+  project: pipeline-preprod
+  source:
+    repoURL: https://github.com/tpayne/kubernetes-examples
+    targetRevision: main
+    path: ./gitops/Argocd/examples/simple/argocd/preprod  # Directory that contains the child apps
+    directory:
+      recurse: true
+      include: '*.yaml'
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false # Allows deleting all application resources during automatic syncing ( false by default ).
+    retry:
+      limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+      backoff:
+        duration: 10s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+        factor: 2 # a factor to multiply the base duration after each failed retry
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prod-apps-monitor
+  labels:
+    app: prod-apps-monitor
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: argocd
+    name: in-cluster
+  project: pipeline-prod
+  source:
+    repoURL: https://github.com/tpayne/kubernetes-examples
+    targetRevision: main
+    path: ./gitops/Argocd/examples/simple/argocd/prod  # Directory that contains the child apps
+    directory:
+      recurse: true
+      include: '*.yaml'
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false # Allows deleting all application resources during automatic syncing ( false by default ).
+    retry:
+      limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+      backoff:
+        duration: 10s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+        factor: 2 # a factor to multiply the base duration after each failed retry
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: dev-workflow-monitor
   labels:
     app: dev-workflow-monitor
