@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: pipeline-generic
+  name: pipeline
   namespace: argocd
   # Finalizer that ensures that project is not deleted until it is not referenced by any application
   finalizers:
@@ -40,7 +40,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-generic
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
@@ -73,7 +73,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-dev
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
@@ -106,7 +106,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-qa
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
@@ -139,7 +139,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-sit
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
@@ -172,7 +172,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-preprod
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
@@ -205,7 +205,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-prod
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
@@ -238,7 +238,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-dev
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
@@ -271,7 +271,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-qa
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
@@ -304,7 +304,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-sit
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
@@ -337,7 +337,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-preprod
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
@@ -370,7 +370,7 @@ spec:
   destination:
     namespace: argocd
     name: in-cluster
-  project: pipeline-prod
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main

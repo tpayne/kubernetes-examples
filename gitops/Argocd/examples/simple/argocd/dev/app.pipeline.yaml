@@ -10,7 +10,7 @@ spec:
   destination:
     namespace: dev
     name: in-cluster
-  project: pipeline-dev
+  project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
