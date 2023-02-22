@@ -10,12 +10,6 @@ dependencies:
   - name: wsnodejs-deployment
     version: "0.1.0"
     repository: "https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/wsnodejs-deployment"
-  - name: wscs-b-deployment
-    version: "0.1.0"
-    repository: "https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/wscs-b-deployment"
-  - name: wsnodejs-b-deployment
-    version: "0.1.0"
-    repository: "https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/wsnodejs-b-deployment"
   - alias: decision-service-a
     name: k8s-service
     version: "0.2.12"

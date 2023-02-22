@@ -3,19 +3,10 @@ wscs-deployment:
     tag: "latest"
   service:
     type: ClusterIP
-wscs-b-deployment:
-  image:
-    tag: "latest"
-  service:
-    type: ClusterIP
 wsnodejs-deployment:
   image:
     tag: "master"
   service:
     type: ClusterIP
-wsnodejs-b-deployment:
-  image:
-    tag: "master"
-  service:
-    type: ClusterIP
+
 
