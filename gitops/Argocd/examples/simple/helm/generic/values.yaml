@@ -18,8 +18,4 @@ wsnodejs-b-deployment:
     tag: "master"
   service:
     type: ClusterIP
-jenkinscd-framework-deployment:
-  image:
-    tag: "latest"
-  service:
-    type: ClusterIP
+

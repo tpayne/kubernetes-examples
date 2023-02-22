@@ -16,9 +16,6 @@ dependencies:
   - name: wsnodejs-b-deployment
     version: "0.1.0"
     repository: "https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/wsnodejs-b-deployment"
-  - name: jenkinscd-framework-deployment
-    version: "0.1.0"
-    repository: "https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/jenkinscd-framework-deployment"
   - alias: decision-service-a
     name: k8s-service
     version: "0.2.12"
