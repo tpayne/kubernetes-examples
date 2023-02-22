@@ -252,13 +252,20 @@ Once the above files are modified and committed to the repo, you can then run th
 
 ```console
     cd examples/simple
+    kubectl delete -n argocd -f workflows/monitor-app.yaml
+    kubectl delete -n argocd -f argocd/dev/project.pipeline.yaml
+    kubectl delete -n argocd -f argocd/qa/project.pipeline.yaml
+    kubectl delete -n argocd -f argocd/sit/project.pipeline.yaml
+    kubectl delete -n argocd -f argocd/preprod/project.pipeline.yaml
+    kubectl delete -n argocd -f argocd/prod/project.pipeline.yaml
+
     kubectl apply -n argocd -f argocd/dev/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/qa/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/sit/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/preprod/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/prod/project.pipeline.yaml
     kubectl apply -n argocd -f workflows/monitor-app.yaml
-    kubectl delete 
+
 ```
 
 Running Argo Workflow samples
