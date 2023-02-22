@@ -4,9 +4,10 @@ metadata:
   name: gitops-deploy
 spec:
   eventBusName: monitoredrepo-eventbus
-  service:
-    ports:
-      - port: 80
+  # This is supposedly only for testing
+  #service:
+  #  ports:
+  #    - port: 80
   template:
     serviceAccountName: argo-server
   github:

@@ -103,15 +103,10 @@ your code DRY compatible.
 Check syntax with...
 
     cd examples/simple
-    kubectl apply -n argocd -f argocd/dev/project.pipeline.yaml --dry-run=client
     kubectl apply -n argocd -f argocd/dev/app.pipeline.yaml --dry-run=client
-    kubectl apply -n argocd -f argocd/qa/project.pipeline.yaml --dry-run=client
     kubectl apply -n argocd -f argocd/qa/app.pipeline.yaml --dry-run=client
-    kubectl apply -n argocd -f argocd/sit/project.pipeline.yaml --dry-run=client
     kubectl apply -n argocd -f argocd/sit/app.pipeline.yaml --dry-run=client
-    kubectl apply -n argocd -f argocd/preprod/project.pipeline.yaml --dry-run=client
     kubectl apply -n argocd -f argocd/preprod/app.pipeline.yaml --dry-run=client
-    kubectl apply -n argocd -f argocd/prod/project.pipeline.yaml --dry-run=client
     kubectl apply -n argocd -f argocd/prod/app.pipeline.yaml --dry-run=client
 
 Run with...
@@ -124,7 +119,6 @@ Run with...
     argocd app delete pipeline-preprod -y
     argocd app delete pipeline-prod -y
 
-    kubectl apply -n argocd -f argocd/dev/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/dev/app.pipeline.yaml
     argocd app get pipeline-dev
     argocd app sync pipeline-dev
@@ -132,7 +126,6 @@ Run with...
     sleep 90
     kubectl get all -n dev
     
-    kubectl apply -n argocd -f argocd/qa/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/qa/app.pipeline.yaml
     argocd app get pipeline-qa
     argocd app sync pipeline-qa
@@ -140,7 +133,6 @@ Run with...
     sleep 90
     kubectl get all -n qa
 
-    kubectl apply -n argocd -f argocd/sit/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/sit/app.pipeline.yaml
     argocd app get pipeline-sit
     argocd app sync pipeline-sit
@@ -148,7 +140,6 @@ Run with...
     sleep 90
     kubectl get all -n sit
 
-    kubectl apply -n argocd -f argocd/preprod/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/preprod/app.pipeline.yaml
     argocd app get pipeline-preprod
     argocd app sync pipeline-preprod
@@ -156,7 +147,6 @@ Run with...
     sleep 90
     kubectl get all -n preprod
 
-    kubectl apply -n argocd -f argocd/prod/project.pipeline.yaml
     kubectl apply -n argocd -f argocd/prod/app.pipeline.yaml
     argocd app get pipeline-prod
     argocd app sync pipeline-prod
@@ -253,19 +243,7 @@ Once the above files are modified and committed to the repo, you can then run th
 ```console
     cd examples/simple
     kubectl delete -n argocd -f workflows/monitor-app.yaml
-    kubectl delete -n argocd -f argocd/dev/project.pipeline.yaml
-    kubectl delete -n argocd -f argocd/qa/project.pipeline.yaml
-    kubectl delete -n argocd -f argocd/sit/project.pipeline.yaml
-    kubectl delete -n argocd -f argocd/preprod/project.pipeline.yaml
-    kubectl delete -n argocd -f argocd/prod/project.pipeline.yaml
-
-    kubectl apply -n argocd -f argocd/dev/project.pipeline.yaml
-    kubectl apply -n argocd -f argocd/qa/project.pipeline.yaml
-    kubectl apply -n argocd -f argocd/sit/project.pipeline.yaml
-    kubectl apply -n argocd -f argocd/preprod/project.pipeline.yaml
-    kubectl apply -n argocd -f argocd/prod/project.pipeline.yaml
     kubectl apply -n argocd -f workflows/monitor-app.yaml
-
 ```
 
 Running Argo Workflow samples
