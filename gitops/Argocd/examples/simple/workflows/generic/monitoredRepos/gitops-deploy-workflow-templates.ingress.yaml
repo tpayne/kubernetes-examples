@@ -19,4 +19,4 @@ spec:
                 port:
                   number: 80
       # You will need to customise this as appropriate
-      #host: argorestapi.ukwest.cloudapp.azure.com
+      host: argorestapi.ukwest.cloudapp.azure.com
