@@ -12,11 +12,11 @@ spec:
     - http:
         paths:
           - path: /webhooks/gitops-deploy/github-reposrc
+            pathType: Prefix
             backend:
               service:
                 name: gitops-deploy-eventsource-svc
                 port:
                   number: 80
-            pathType: Prefix
       # You will need to customise this as appropriate
-      host: argorestapi.ukwest.cloudapp.azure.com
+      #host: argorestapi.ukwest.cloudapp.azure.com
