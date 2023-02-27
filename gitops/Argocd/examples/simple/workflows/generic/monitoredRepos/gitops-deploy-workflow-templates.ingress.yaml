@@ -5,8 +5,8 @@ metadata:
   name: gitops-workflow-templates
   namespace: argocd
   annotations:
-    kubernetes.io/ingress.class: azure/application-gateway
-    appgw.ingress.kubernetes.io/use-private-ip: "false"
+    #appgw.ingress.kubernetes.io/use-private-ip: "false" 
+    kubernetes.io/ingress.class: nginx
 spec:
   rules:
     - http:
@@ -19,4 +19,4 @@ spec:
                 port:
                   number: 80
       # You will need to customise this as appropriate
-      host: argorestapi.ukwest.cloudapp.azure.com
+      host: 51.142.176.74
