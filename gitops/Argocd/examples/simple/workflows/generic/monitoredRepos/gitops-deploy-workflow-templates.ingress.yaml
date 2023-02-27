@@ -7,7 +7,6 @@ metadata:
   annotations:
     {}
 spec:
-  ingressClassName: nginx  
   rules:
     - http:
         paths:
