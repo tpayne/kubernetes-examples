@@ -23,7 +23,7 @@ spec:
   templates:
     # This template is the default for promotion
     - name: update-image-tag
-      serviceAccountName: &serviceAccountName argo-hub.argocd.0.0.1
+      serviceAccountName: &serviceAccountName argorunner
       script: &script
         image: ghcr.io/tpayne/kubernetes-examples/cd-promote:latest
         env:

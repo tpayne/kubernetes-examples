@@ -30,7 +30,7 @@ spec:
 
   templates:
     - name: failure-notification
-      serviceAccountName: &serviceAccountName argo-hub.argocd.0.0.1
+      serviceAccountName: &serviceAccountName argorunner
       script: &script
         image: ghcr.io/tpayne/kubernetes-examples/cd-promote:latest
         env:

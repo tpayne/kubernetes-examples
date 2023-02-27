@@ -52,7 +52,7 @@ spec:
     # ArgoCD app sync
     # Cannot just anchor the whole list item because overrides will not function properlc
     - name: sync
-      serviceAccountName: &serviceAccountName argo-hub.argocd.0.0.1
+      serviceAccountName: &serviceAccountName argorunner
       metadata:
         annotations: &annotations
           argo-hub-template/description: "Sync an application in ArgoCD"
