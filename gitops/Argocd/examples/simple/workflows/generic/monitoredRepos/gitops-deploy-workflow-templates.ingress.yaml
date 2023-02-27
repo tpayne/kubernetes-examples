@@ -19,4 +19,4 @@ spec:
                 port:
                   number: 80
       # You will need to customise this as appropriate
-      host: 51.142.176.74
+      host: restapi..ukwest.cloudapp.azure.com
