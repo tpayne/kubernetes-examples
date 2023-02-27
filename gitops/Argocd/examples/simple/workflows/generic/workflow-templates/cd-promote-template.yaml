@@ -141,27 +141,11 @@ spec:
                 value: "--insecure --plaintext"
             when: "{{ inputs.parameters.ENVIRONMENT }} != 'nil'"
 
-          - name: do-tests
-            template: run-tests
-            depends: app-history
-            arguments:
-              parameters:
-              - name: ENVIRONMENT
-                value: "{{inputs.parameters.ENVIRONMENT}}"
-              - name: GIT_TOKEN_SECRET
-                value: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
-              - name: GIT_TEST_REPO
-                value: "https://github.com/account/e2e-tests.git"
-              - name: TEST_TOKEN
-                value: "testing-env-secret"
-              - name: COMMAND_OPTS
-                value: "{{inputs.parameters.COMMAND_OPTS}}"
-
           - name: update-tag
             templateRef:
               name: git-ops
               template: update-image-tag
-            depends: do-tests
+            depends: app-history
             arguments:
               parameters:
               - name: REPO
