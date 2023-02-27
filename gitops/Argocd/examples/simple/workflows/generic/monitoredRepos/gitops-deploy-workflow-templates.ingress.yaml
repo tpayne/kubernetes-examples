@@ -5,7 +5,8 @@ metadata:
   name: gitops-workflow-templates
   namespace: argocd
   annotations:
-    kubernetes.io/ingress.class: addon-http-application-routingspec
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
   rules:
     - http:
         paths:
