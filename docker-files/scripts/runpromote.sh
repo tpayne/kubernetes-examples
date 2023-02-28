@@ -391,9 +391,9 @@ pushRepo() {
 # Process environment promotion...
 processEnv() {
 	echo "${command}: - Promoting the environment chart..."
-	if [ -f "GitOps-Deployments/helm/tenants/${1}/environments/${2}/${releaseFile}" ]; then
-		cp GitOps-Deployments/helm/tenants/${1}/environments/${2}/${releaseFile} \
-			GitOps-Deployments/helm/tenants/${1}/environments/${3}/${releaseFile}
+	if [ -f "gitops/Argocd/examples/simple/helm/${2}/${releaseFile}" ]; then
+		cp gitops/Argocd/examples/simple/helm/${2}/${releaseFile} \
+			gitops/Argocd/examples/simple/helm/${3}/${releaseFile}
 	else
 		echo "${command}: No release file detected"
 		return 1
@@ -409,10 +409,10 @@ processChartList() {
 	echo ${1} | sed -n 1'p' | tr ',' '\n' | while read word; do
 		echo "${command}: - Processing ${word} to ${4}..."
 		IMAGE_TAG=$(yq eval ".${word}.containerImage.tag" \
-			GitOps-Deployments/helm/tenants/${2}/environments/${4}/${releaseFile})
+			gitops/Argocd/examples/simple/helm/${4}/${releaseFile})
 		echo "${command}: -- Updating tag ${IMAGE_TAG}"
 		yq eval --inplace ".${word}.containerImage.tag=\"$IMAGE_TAG\"" \
-			GitOps-Deployments/helm/tenants/${2}/environments/${4}/${releaseFile}
+			gitops/Argocd/examples/simple/helm/${4}/${releaseFile}
 		if [ $? -gt 0 ]; then
 			echo "${command}: Error promoting chart"
 			touch /tmp/processChartList.err
@@ -470,7 +470,7 @@ processTag() {
 
 		# Yes, the yq syntax here is weird, but it works...
 		yq eval "del( .[] | select(.containerImage.tag != \"${tag}\")) | keys" \
-			GitOps-Deployments/helm/tenants/${2}/environments/${3}/${releaseFile} |
+			gitops/Argocd/examples/simple/helm/${3}/${releaseFile} |
 			grep -v '#' | grep '\S' | cut -c 3- |
 			sort -u >${tmpFile} 2>&1
 
@@ -487,10 +487,10 @@ processTag() {
 				break
 			fi
 			newTag=$(yq eval ".${word}.containerImage.tag" \
-				GitOps-Deployments/helm/tenants/${2}/environments/${3}/${releaseFile})
+				gitops/Argocd/examples/simple/helm/${3}/${releaseFile})
 			echo "${command}: - Processing \"${word}\" to ${newTag}..."
 			yq eval --inplace ".${word}.containerImage.tag=\"${newTag}\"" \
-				GitOps-Deployments/helm/tenants/${2}/environments/${4}/${releaseFile}
+				gitops/Argocd/examples/simple/helm/${4}/${releaseFile}
 			if [ $? -gt 0 ]; then
 				echo "${command}: Error promoting tag"
 				touch /tmp/processTag.err
