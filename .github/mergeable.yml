@@ -1,0 +1,21 @@
+### Configuration for Mergeable (https://probot.github.io/apps/mergeable) ###
+version: 2
+mergeable:
+  - when: pull_request.*
+    validate:
+      - do: title
+        must_exclude:
+          regex: 'wont fix|wip'
+          message: A title that prevents merging is set
+      - do: description
+        no_empty:
+          enabled: true
+          message: A description must be provided
+      - do: changeset
+        no_empty:
+          enabled: true
+          message: At least one change must be included
+      - do: label
+        must_exclude:
+          regex: 'wont fix|wip'
+          message: A label that prevents merging is set

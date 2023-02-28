@@ -1,0 +1,7 @@
+### Configuration for Auto-Assign (https://github.com/apps/auto-assign) ###
+
+# Enable adding assignees
+numberOfAssignees: 1
+
+# Set the PR author as the assignee
+addAssignees: author
