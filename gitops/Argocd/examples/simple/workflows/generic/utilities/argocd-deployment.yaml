@@ -79,8 +79,8 @@ spec:
           exit $?
         env:
           # URL to communicate with ArgoCD
-          - name: ARGOCD_SERVER
-            value: "{{inputs.parameters.serverUrl}}"
+          #- name: ARGOCD_SERVER
+          #  value: "{{inputs.parameters.serverUrl}}"
           # Token to use to communicate with ArgoCD
           - name: ARGOCD_AUTH_TOKEN
             valueFrom:
