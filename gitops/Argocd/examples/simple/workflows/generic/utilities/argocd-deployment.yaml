@@ -78,15 +78,14 @@ spec:
           echo "Get version..."
           argocd version
           echo "Try and list"
-          argocd app list
+          argocd app list {{inputs.parameters.flags}}
           echo "Try and run"
           argocd app sync {{inputs.parameters.app}} --prune {{inputs.parameters.flags}}
           exit $?
         env:
           # URL to communicate with ArgoCD
           - name: ARGOCD_SERVER
-          #  value: "{{inputs.parameters.serverUrl}}"
-            value: "argocd-server.argocd.svc.cluster.local"
+            value: "{{inputs.parameters.serverUrl}}"
           # Token to use to communicate with ArgoCD
           - name: ARGOCD_AUTH_TOKEN
             valueFrom:
