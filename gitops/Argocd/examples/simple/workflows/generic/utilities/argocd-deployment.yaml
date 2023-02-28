@@ -78,7 +78,7 @@ spec:
           echo "Get version..."
           argocd version
           echo "Try and list"
-          argocd app list
+          argocd app list --insecure
           echo "Try and run"
           argocd app sync {{inputs.parameters.app}} --prune {{inputs.parameters.flags}}
           exit $?
