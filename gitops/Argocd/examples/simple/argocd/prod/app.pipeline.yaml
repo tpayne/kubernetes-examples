@@ -22,6 +22,8 @@ spec:
       valueFiles:
         - ../generic/values.yaml
         - ../generic/values-ds.yaml
+        - ../generic/values-releaseversions.yaml
+        - values-releaseversions.yaml
         - values-ds.yaml
   syncPolicy:
     syncOptions:

@@ -1,0 +1,13 @@
+decision-service-a:
+  containerImage:
+    tag: "1.14.2"
+decision-service-b:
+  containerImage:
+    tag: "1.14.2"
+wscs-deployment:
+  containerImage:
+    tag: "latest"
+wsnodejs-deployment:
+  containerImage:
+    tag: "latest"
+

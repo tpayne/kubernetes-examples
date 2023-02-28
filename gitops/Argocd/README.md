@@ -265,7 +265,13 @@ Once the above files are modified and committed to the repo, you can then run th
       --from-literal=token=${ARGOCD_TOKEN} \
       --dry-run=client \
       --save-config -o yaml | kubectl apply -f - -n argocd
-    
+    kubectl create secret \
+      generic github-token \
+      --from-literal=token=<PAT> \
+      --from-literal=user=<ghuser> \
+      --from-literal=email=<ghemail> \
+      --dry-run=client \
+      --save-config -o yaml | kubectl apply -f - -n argocd    
 ```
 
 Running Argo Workflow samples
