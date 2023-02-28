@@ -1,4 +1,4 @@
-# Release stack to deploy
+# Release stack to deploy on target
 decision-service-a:
   containerImage:
     tag: "1.14.2"
