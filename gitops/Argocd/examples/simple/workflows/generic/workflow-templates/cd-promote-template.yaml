@@ -52,7 +52,7 @@ spec:
               - name: serverUrl
                 value: "{{inputs.parameters.ARGOCD_SERVER}}"
               - name: flags
-                value: "--insecure --plaintext"
+                value: "--insecure"
             when: "{{ inputs.parameters.ENVIRONMENT }} != 'nil'"
 
           # Get the deployment status
@@ -68,7 +68,7 @@ spec:
               - name: serverUrl
                 value: "{{inputs.parameters.ARGOCD_SERVER}}"
               - name: flags
-                value: "--insecure --plaintext"
+                value: "--insecure"
             when: "{{ inputs.parameters.ENVIRONMENT }} != 'nil'"
 
           # Wait fpr the process to finish if needed
@@ -84,7 +84,7 @@ spec:
               - name: serverUrl
                 value: "{{inputs.parameters.ARGOCD_SERVER}}"
               - name: flags
-                value: "--health --timeout 900 --insecure --plaintext" # Wait for progress ops to finish
+                value: "--health --timeout 900 --insecure" # Wait for progress ops to finish
             when: >-
                 ( '{{ inputs.parameters.ENVIRONMENT }}' != 'nil' ) &&
                 ( '{{ tasks.argocd-status-check.outputs.parameters.health }}' == 'Progressing' )
@@ -102,7 +102,7 @@ spec:
               - name: serverUrl
                 value: "{{inputs.parameters.ARGOCD_SERVER}}"
               - name: flags
-                value: "--insecure --plaintext"
+                value: "--insecure"
             when: "{{ inputs.parameters.ENVIRONMENT }} != 'nil'"
 
           # Check the deployment status - if !="healthy" then bomb out
@@ -138,7 +138,7 @@ spec:
               - name: serverUrl
                 value: "{{inputs.parameters.ARGOCD_SERVER}}"
               - name: flags
-                value: "--insecure --plaintext"
+                value: "--insecure"
             when: "{{ inputs.parameters.ENVIRONMENT }} != 'nil'"
 
           - name: update-tag
@@ -200,7 +200,7 @@ spec:
               - name: serverUrl
                 value: "{{inputs.parameters.ARGOCD_SERVER}}"
               - name: flags
-                value: "--insecure --plaintext"
+                value: "--insecure"
           - name: health-check
             templateRef:
               name: argocd-deploy-ops
@@ -213,7 +213,7 @@ spec:
               - name: serverUrl
                 value: "{{inputs.parameters.ARGOCD_SERVER}}"
               - name: flags
-                value: "--insecure --plaintext"
+                value: "--insecure"
           - name: deployment-terminate
             templateRef:
               name: argocd-deploy-ops
@@ -226,7 +226,7 @@ spec:
               - name: serverUrl
                 value: "{{inputs.parameters.ARGOCD_SERVER}}"
               - name: flags
-                value: "--insecure --plaintext"
+                value: "--insecure"
             when: >-
               (( '{{ tasks.deployment-rollback.outputs.parameters.terminate }}' == 'true' )
                ||
@@ -247,7 +247,7 @@ spec:
               - name: serverUrl
                 value: "{{inputs.parameters.ARGOCD_SERVER}}"
               - name: flags
-                value: "--insecure --plaintext"
+                value: "--insecure"
           - name: deployment-error
             template: deployment-error-handler
             depends: deployment-history
