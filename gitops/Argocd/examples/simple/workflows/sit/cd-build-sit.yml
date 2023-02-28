@@ -9,7 +9,7 @@ spec:
   arguments:
     parameters:
       - name: ARGOCD_APP
-        value: sit-pipeline
+        value: pipeline-sit
       - name: ARGOCD_SERVER
         value: argocd-server
       - name: REPO

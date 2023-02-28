@@ -200,7 +200,7 @@ spec:
             - dest: spec.arguments.parameters.1.value
               src:
                 dependencyName: github-qa
-                dataTemplate: dev-pipeline
+                dataTemplate: pipeline-qa
             - dest: spec.arguments.parameters.2.value
               src:
                 dependencyName: github-qa
@@ -318,7 +318,7 @@ spec:
             - dest: spec.arguments.parameters.1.value
               src:
                 dependencyName: github-sit
-                dataTemplate: sit-pipeline
+                dataTemplate: pipeline-sit
             - dest: spec.arguments.parameters.2.value
               src:
                 dependencyName: github-sit
@@ -436,7 +436,7 @@ spec:
             - dest: spec.arguments.parameters.1.value
               src:
                 dependencyName: github-preprod
-                dataTemplate: preprod-pipeline
+                dataTemplate: pipeline-preprod
             - dest: spec.arguments.parameters.2.value
               src:
                 dependencyName: github-preprod
@@ -554,7 +554,7 @@ spec:
             - dest: spec.arguments.parameters.1.value
               src:
                 dependencyName: github-prod
-                dataTemplate: prod-pipeline
+                dataTemplate: pipeline-prod
             - dest: spec.arguments.parameters.2.value
               src:
                 dependencyName: github-prod

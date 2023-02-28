@@ -9,7 +9,7 @@ spec:
   arguments:
     parameters:
       - name: ARGOCD_APP
-        value: qa-pipeline
+        value: pipeline-qa
       - name: ARGOCD_SERVER
         value: argocd-server
       - name: REPO

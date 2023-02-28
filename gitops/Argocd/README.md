@@ -228,7 +228,16 @@ You can monitor progress of job related events etc. with...
 
 Running Advanced Argo Workflow samples
 --------------------------------------
-To run the CI/CD samples, you will need to first install the samples project and pipeline manifests
+To run the CI/CD samples, you will need to first install the samples project and pipeline manifests.
+
+You will also need to have the following Argo components installed in your namespace: -
+- Argo events
+- Argo workflows
+- ArgoCD
+- An Autopilot repo is provided "github.com/tpayne/argocd-autopilot" that will do this for you
+
+This example assumes that you have installed the namespace from "github.com/tpayne/argocd-autopilot".
+As such, you may need to adjust the demo as appropriate.
 
 However, before you do this you will need to modify the host alias used for
 ingress access.
@@ -241,9 +250,22 @@ ingress access.
 Once the above files are modified and committed to the repo, you can then run the following.
 
 ```console
+    # Start up argocd if needed
+    kubectl port-forward -n argocd svc/argocd-server 8080:80
+```
+
+```console
     cd examples/simple
     kubectl delete -n argocd -f workflows/monitor-app.yaml
     kubectl apply -n argocd -f workflows/monitor-app.yaml
+    argocd account generate-token --account argorunner
+    export ARGOCD_TOKEN=<yourArgoCdToken>
+    kubectl create secret \
+      generic argocd-token \
+      --from-literal=token=${ARGOCD_TOKEN} \
+      --dry-run=client \
+      --save-config -o yaml | kubectl apply -f - -n argocd
+    
 ```
 
 Running Argo Workflow samples
