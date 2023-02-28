@@ -72,8 +72,10 @@ spec:
           echo ""
 
           # Too much output, pushing it to a file...
-          argocd app sync {{inputs.parameters.app}} --prune {{inputs.parameters.flags}}  2>&1 | \
-            tee /tmp/app.result > /dev/null
+          #argocd app sync {{inputs.parameters.app}} --prune {{inputs.parameters.flags}}  2>&1 | \
+          #  tee /tmp/app.result > /dev/null
+          env
+          argocd app sync {{inputs.parameters.app}} --prune {{inputs.parameters.flags}}
           exit $?
         env:
           # URL to communicate with ArgoCD
