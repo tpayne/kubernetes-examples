@@ -165,7 +165,7 @@ spec:
               - name: COMMAND_OPTS
                 value: "{{inputs.parameters.COMMAND_OPTS}}"
               - name: CONTROLLED_ENVS   # Controlled environments are ones requiring manual approval. This can be a CSV list
-                value: "sit"
+                value: "prod"
               when: "{{ inputs.parameters.PROMOTE_TO }} != 'nil'"
 
 ###################################################################################
