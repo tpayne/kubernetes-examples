@@ -82,7 +82,7 @@ spec:
             - dest: spec.arguments.parameters.1.value
               src:
                 dependencyName: github-dev
-                dataTemplate: dev-pipeline
+                dataTemplate: pipeline-dev
             - dest: spec.arguments.parameters.2.value
               src:
                 dependencyName: github-dev
