@@ -74,7 +74,16 @@ spec:
           # Too much output, pushing it to a file...
           argocd app sync {{inputs.parameters.app}} --prune {{inputs.parameters.flags}}  2>&1 | \
             tee /tmp/app.result > /dev/null
-          exit $?
+          retStat=$?
+          # Check status as do not trust argocd return codes - not always correct...
+          if [ $retStat -gt 0 ]; then
+            exit $retStat
+          fi
+          grep "fatal msg" /tmp/app.result > /dev/null
+          if [ $? -eq 0 ]; then
+            exit 1
+          fi
+          exit $retStat
         env:
           # URL to communicate with ArgoCD
           - name: ARGOCD_SERVER
@@ -147,6 +156,12 @@ spec:
             tee /tmp/app.result > /dev/null
           if [ $? -gt 0 ]; then
             echo "-- The operation failed" >> /tmp/app.result
+          fi
+
+          # Check status as do not trust argocd return codes - not always correct...
+          grep "fatal msg" /tmp/app.result > /dev/null
+          if [ $? -eq 0 ]; then
+            exit 1
           fi
 
           # Need to return 0
