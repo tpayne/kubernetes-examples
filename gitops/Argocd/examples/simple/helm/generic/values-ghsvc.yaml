@@ -11,7 +11,8 @@ github-service:
     type: ClusterIP
     ports:
       app:
-        port: 8080
+        port: 8088
+        targetPort: http
 
   shutdownDelay: 5
 
