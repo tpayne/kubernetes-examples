@@ -5,27 +5,27 @@ github-service:
 
   containerPorts:
     http:
-      port: 9050
+      port: 8080
 
   service:
     type: ClusterIP
     ports:
       app:
-        port: 9050
+        port: 8080
 
   shutdownDelay: 5
 
   livenessProbe:
     httpGet:
       path: /api/test/version
-      port: 9050
+      port: 8080
     initialDelaySeconds: 5
     periodSeconds: 10
 
   readinessProbe:
     httpGet:
       path: /api/test/version
-      port: 9050
+      port: 8080
     initialDelaySeconds: 15
     periodSeconds: 20
 
