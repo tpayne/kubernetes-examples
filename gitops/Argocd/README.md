@@ -57,7 +57,7 @@ Standard K8s sample(s)
     argocd app sync canarydeploy
     argocd app get canarydeploy
     open "`argocd app get canarydeploy | grep URL: | awk '{print $2}'`"
-    argocd app delete canarydeploy -y 
+    argocd app delete canarydeploy -y
     argocd app list
 
     argocd app create daemonsets \
@@ -68,7 +68,7 @@ Standard K8s sample(s)
     argocd app sync daemonsets
     argocd app get daemonsets
     open "`argocd app get daemonsets | grep URL: | awk '{print $2}'`"
-    argocd app delete daemonsets -y 
+    argocd app delete daemonsets -y
     argocd app list
 
 Helm charts sample(s)
@@ -81,7 +81,7 @@ Helm charts sample(s)
     argocd app sync canarydeploy-helm
     argocd app get canarydeploy-helm
     open "`argocd app get canarydeploy-helm | grep URL: | awk '{print $2}'`"
-    argocd app delete canarydeploy-helm -y 
+    argocd app delete canarydeploy-helm -y
     argocd app list
 
     argocd app create standard3tier-helm \
@@ -92,7 +92,7 @@ Helm charts sample(s)
     argocd app sync standard3tier-helm
     argocd app get standard3tier-helm
     open "`argocd app get standard3tier-helm | grep URL: | awk '{print $2}'`"
-    argocd app delete standard3tier-helm -y 
+    argocd app delete standard3tier-helm -y
     argocd app list
 
 Helm pipeline sample(s)
@@ -113,9 +113,9 @@ Run with...
 
     # Safetly ignore...
     cd examples/simple
-    argocd app delete pipeline-dev -y 
-    argocd app delete pipeline-qa -y 
-    argocd app delete pipeline-sit -y 
+    argocd app delete pipeline-dev -y
+    argocd app delete pipeline-qa -y
+    argocd app delete pipeline-sit -y
     argocd app delete pipeline-preprod -y
     argocd app delete pipeline-prod -y
 
@@ -125,7 +125,7 @@ Run with...
     argocd app get pipeline-dev
     sleep 90
     kubectl get all -n dev
-    
+
     kubectl apply -n argocd -f argocd/qa/app.pipeline.yaml
     argocd app get pipeline-qa
     argocd app sync pipeline-qa
@@ -160,9 +160,9 @@ Run with...
     open "`argocd app get pipeline-preprod | grep URL: | awk '{print $2}'`"
     open "`argocd app get pipeline-prod | grep URL: | awk '{print $2}'`"
 
-    argocd app delete pipeline-dev -y 
-    argocd app delete pipeline-qa -y 
-    argocd app delete pipeline-sit -y 
+    argocd app delete pipeline-dev -y
+    argocd app delete pipeline-qa -y
+    argocd app delete pipeline-sit -y
     argocd app delete pipeline-preprod -y
     argocd app delete pipeline-prod -y
 
@@ -178,7 +178,7 @@ Kustomization sample(s)
     argocd app sync postgress-kust
     argocd app get postgress-kust
     open "`argocd app get postgress-kust | grep URL: | awk '{print $2}'`"
-    argocd app delete postgress-kust -y 
+    argocd app delete postgress-kust -y
     argocd app list
 
     argocd app create standard3tier-kust \
@@ -189,7 +189,7 @@ Kustomization sample(s)
     argocd app sync standard3tier-kust
     argocd app get standard3tier-kust
     open "`argocd app get standard3tier-kust | grep URL: | awk '{print $2}'`"
-    argocd app delete standard3tier-kust -y 
+    argocd app delete standard3tier-kust -y
     argocd app list
 
 The standard 3 tier sample should give you a deployment that looks something like this...
@@ -214,7 +214,7 @@ To review the output of workflows you can use...
 
 To delete a workflow you can use...
 
-    argo delete 
+    argo delete
 
 To run the UI you can use...
 
@@ -274,7 +274,7 @@ Once the above files are modified and committed to the repo, you can then run th
       --from-literal=user=<ghuser> \
       --from-literal=email=<ghemail> \
       --dry-run=client \
-      --save-config -o yaml | kubectl apply -f - -n argocd    
+      --save-config -o yaml | kubectl apply -f - -n argocd
 ```
 
 Running Argo Workflow samples
@@ -312,6 +312,7 @@ Notes
 - These scripts are only for demo purposes and have not been vetted for production use
 - The script was developed on Mac and may not work on other OSs
 - https://argo-cd.readthedocs.io/en/stable/getting_started/
+- https://github.com/argoproj/argo-events/tree/master/examples/event-sources
 - https://github.com/argoproj/argocd-example-apps
 - https://argo-cd.readthedocs.io/en/stable/
 - https://argo-cd.readthedocs.io/en/stable/operator-manual/webhook/
