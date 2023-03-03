@@ -15,5 +15,5 @@ github-service:
      type: LoadBalancer
      ports:
       app:
-        port: 9001
+        port: 8080
         targetPort: http
