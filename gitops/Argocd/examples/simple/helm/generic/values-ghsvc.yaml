@@ -1,9 +1,14 @@
 github-service:
+  applicationName: github-service
+  containerImage:
+    repository: tpayne666/webrestapi
+
   containerPorts:
     http:
-      port: 8080
+      port: 8081
 
   service:
+    type: NodePort
     ports:
       app:
         port: 8081

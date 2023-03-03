@@ -4,9 +4,3 @@ decision-service-a:
     repository: nginx
   service:
     type: NodePort
-github-service:
-  applicationName: github-service
-  containerImage:
-    repository: tpayne666/webrestapi
-  service:
-    type: NodePort
