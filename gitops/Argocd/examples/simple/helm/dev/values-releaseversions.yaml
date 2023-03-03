@@ -6,6 +6,8 @@ decision-service-a:
 github-service:
   containerImage:
     tag: "latest"
+  image:
+    tag: -tgs
 wscs-deployment:
   containerImage:
     tag: "latest"
