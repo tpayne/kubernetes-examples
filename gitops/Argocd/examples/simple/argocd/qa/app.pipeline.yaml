@@ -6,15 +6,22 @@ metadata:
     app: pipeline
   finalizers:
     - resources-finalizer.argocd.argoproj.io
+  annotations:
+    # For more info, see
+    # - https://argocd-notifications.readthedocs.io/en/stable/catalog/
+    # - https://argocd-notifications.readthedocs.io/en/stable/triggers/
+    #notifications.argoproj.io/subscribe.on-sync-succeeded.teams: "CI-Notifications"
+    #notifications.argoproj.io/subscribe.on-sync-failed.teams: "CI-Notifications"
+    #notifications.argoproj.io/subscribe.on-health-degraded.teams: "CI-Notifications"
 spec:
   destination:
-    namespace: qa  # required field - set to your CF Runtume namespace
+    namespace: qa # required field - set to your CF Runtume namespace
     name: in-cluster
   project: pipeline
   source:
     repoURL: https://github.com/tpayne/kubernetes-examples
     targetRevision: main
-    path: ./gitops/Argocd/examples/simple/helm/qa  # Directory that contains the child apps
+    path: ./gitops/Argocd/examples/simple/helm/qa # Directory that contains the child apps
     helm:
       parameters:
         - name: buildID
@@ -24,9 +31,16 @@ spec:
         - ../generic/values-ghsvc.yaml
         - ../generic/values-ds.yaml
         - values-releaseversions.yaml
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jqPathExpressions:
+        - .spec.replicas
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
-    automated:
-      prune: true
-      selfHeal: false
+      - PruneLast=true
+      - RespectIgnoreDifferences=true
+#    automated:
+#      prune: true
+#      selfHeal: true
