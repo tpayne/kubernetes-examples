@@ -1,13 +1,12 @@
 decision-service-a:
   containerImage:
     tag: "1.14.2"
-decision-service-b:
+github-service:
   containerImage:
-    tag: "1.14.2"
+    tag: "latest"
 wscs-deployment:
   containerImage:
     tag: "latest"
 wsnodejs-deployment:
   containerImage:
     tag: "latest"
-

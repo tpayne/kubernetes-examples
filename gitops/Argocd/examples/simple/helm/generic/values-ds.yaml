@@ -4,9 +4,9 @@ decision-service-a:
     repository: nginx
   service:
     type: NodePort
-decision-service-b:
-  applicationName: decision-service-test
+github-service:
+  applicationName: github-service
   containerImage:
-    repository: nginx
+    repository: tpayne666/webrestapi
   service:
-    type: NodePort
+    type: LoadBalancer

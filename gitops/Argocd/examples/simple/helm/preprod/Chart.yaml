@@ -14,7 +14,7 @@ dependencies:
     name: k8s-service
     version: "0.2.12"
     repository: "https://helmcharts.gruntwork.io"
-  - alias: decision-service-b
+  - alias: github-service
     name: k8s-service
     version: "0.2.12"
     repository: "https://helmcharts.gruntwork.io"

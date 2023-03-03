@@ -1,7 +1,7 @@
-# Template values for this env 
+# Template values for this env
 decision-service-a:
   containerImage:
     tag: 1.14.2
-decision-service-b:
+github-service:
   containerImage:
-    tag: 1.14.2
+    tag: "latest"
