@@ -20,10 +20,10 @@ spec:
         - name: buildID
           value: argocd
       valueFiles:
-        - values-releaseversions.yaml
         - values-ds.yaml      
         - ../generic/values.yaml
         - ../generic/values-ds.yaml
+        - values-releaseversions.yaml
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
