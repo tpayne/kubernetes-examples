@@ -8,7 +8,12 @@ github-service:
   applicationName: github-service
   containerImage:
     repository: tpayne666/webrestapi
+  containerPorts:
+    http:
+      port: 90
   service:
-    type: LoadBalancer
-    port: 9001
-    targetPort: 90
+     type: LoadBalancer
+     ports:
+      app:
+        port: 9001
+        targetPort: http
