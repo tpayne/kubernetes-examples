@@ -10,3 +10,5 @@ github-service:
     repository: tpayne666/webrestapi
   service:
     type: LoadBalancer
+    port: 9001
+    targetPort: 80
