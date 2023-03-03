@@ -250,7 +250,7 @@ ingress access.
 Once the above files are modified and committed to the repo, you can then run the following.
 
 ```console
-    # Start up argocd if needed - https://localhost:8080/
+    # Start up argocd if needed - https://localhost:8080/ 
     kubectl port-forward -n argocd svc/argocd-server 8080:80
     
     # Start up the argo workflow gui if needed - https://localhost:2746/
