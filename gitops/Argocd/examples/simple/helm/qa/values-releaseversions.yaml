@@ -1,11 +1,10 @@
 # Release stack to deploy on target
-# - Updated Wed  1 Mar 2023 11:55:33 GMT
 decision-service-a:
   containerImage:
     tag: "1.14.2"
 github-service:
   containerImage:
-    tag: "latest"
+    tag: "08bdc29"
 wscs-deployment:
   containerImage:
     tag: "latest"
