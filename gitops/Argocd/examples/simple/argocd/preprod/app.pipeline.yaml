@@ -21,6 +21,7 @@ spec:
           value: argocd
       valueFiles:
         - ../generic/values.yaml
+        - ../generic/values-ghsvc.yaml
         - ../generic/values-ds.yaml
         - values-releaseversions.yaml
   syncPolicy:
