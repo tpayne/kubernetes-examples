@@ -10,10 +10,10 @@ github-service:
     repository: tpayne666/webrestapi
   containerPorts:
     http:
-      port: 80
+      port: 1024
   service:
      type: LoadBalancer
      ports:
       app:
-        port: 8080
+        port: 8090
         targetPort: http
