@@ -8,3 +8,6 @@ github-service:
 wsnodejs-deployment:
   containerImage:
     tag: "latest"
+wscs-deployment:
+  containerImage:
+    tag: "latest"
