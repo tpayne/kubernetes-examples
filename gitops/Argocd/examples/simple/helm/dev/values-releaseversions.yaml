@@ -4,7 +4,7 @@ decision-service-a:
     tag: "1.14.2"
 github-service:
   containerImage:
-    tag: "08bdc29"
+    tag: "1b8aec0"
 wscs-deployment:
   containerImage:
     tag: "latest"
