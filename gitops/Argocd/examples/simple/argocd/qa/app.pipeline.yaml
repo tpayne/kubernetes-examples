@@ -10,9 +10,9 @@ metadata:
     # For more info, see
     # - https://argocd-notifications.readthedocs.io/en/stable/catalog/
     # - https://argocd-notifications.readthedocs.io/en/stable/triggers/
-    #notifications.argoproj.io/subscribe.on-sync-succeeded.teams: "CI-Notifications"
-    #notifications.argoproj.io/subscribe.on-sync-failed.teams: "CI-Notifications"
-    #notifications.argoproj.io/subscribe.on-health-degraded.teams: "CI-Notifications"
+    notifications.argoproj.io/subscribe.on-sync-succeeded.gmail: "contino.argobot.notifications@gmail.com"
+    notifications.argoproj.io/subscribe.on-sync-failed.gmail: "contino.argobot.notifications@gmail.com"
+    notifications.argoproj.io/subscribe.on-health-degraded.gmail: "contino.argobot.notifications@gmail.com"
 spec:
   destination:
     namespace: qa # required field - set to your CF Runtume namespace
