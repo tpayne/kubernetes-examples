@@ -10,7 +10,7 @@ github-service:
   service:
     ports:
       app:
-        port: 9050
+        port: 80
         targetPort: http
 
   ingress:
