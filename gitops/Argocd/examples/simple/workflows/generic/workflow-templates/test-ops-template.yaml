@@ -29,7 +29,7 @@ spec:
             testEnv="dev"
           fi
 
-          repoUrl="http://{{ inputs.parameters.INGRESS_ENDPOINT }}/{{ inputs.parameters.ENVIRONMENT }}/api/repo/repostring"
+          repoUrl="{{ inputs.parameters.INGRESS_ENDPOINT }}/{{ inputs.parameters.ENVIRONMENT }}/api/repo/repostring"
 
           echo "================================================================"
           echo " Running tests for ${testEnv} at `date`"
