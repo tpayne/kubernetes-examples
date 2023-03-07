@@ -46,3 +46,6 @@ github-service:
     limits:
       memory: 300Mi
       cpu: 400m
+
+  minAvailable: 1
+  replicaCount: 1
