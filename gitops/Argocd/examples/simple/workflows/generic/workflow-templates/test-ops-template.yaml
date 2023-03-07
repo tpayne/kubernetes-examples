@@ -11,6 +11,7 @@ spec:
     parameters:
       - name: ENVIRONMENT
       - name: INGRESS_ENDPOINT
+        value: ""
       - name: COMMAND_OPTS
       - name: xtraceOption
         value: "-o"
@@ -66,6 +67,7 @@ spec:
         parameters:
           - name: ENVIRONMENT
           - name: INGRESS_ENDPOINT
+            default: "http://localhost:8080"
           - name: COMMAND_OPTS
           - name: xtraceOption
             default: "+o"
