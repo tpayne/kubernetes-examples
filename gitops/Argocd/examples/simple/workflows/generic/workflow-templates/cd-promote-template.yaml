@@ -141,11 +141,23 @@ spec:
                 value: "--insecure"
             when: "{{ inputs.parameters.ENVIRONMENT }} != 'nil'"
 
+          - name: do-tests
+            template: run-tests
+            depends: app-history
+            arguments:
+              parameters:
+              - name: ENVIRONMENT
+                value: "{{inputs.parameters.ENVIRONMENT}}"
+              - name: INGRESS_ENDPOINT
+                value: "http://restapi.ukwest.cloudapp.azure.com"
+              - name: COMMAND_OPTS
+                value: "{{inputs.parameters.COMMAND_OPTS}}"
+
           - name: update-tag
             templateRef:
               name: git-ops
               template: update-image-tag
-            depends: app-history
+            depends: do-tests
             arguments:
               parameters:
               - name: REPO
@@ -357,7 +369,7 @@ spec:
         - name: wfh-error
           template: workflow-error
           when: "{{workflow.status}} == Error"
- 
+
     # This template is a default handler for successful builds
     - name: workflow-success
       script:

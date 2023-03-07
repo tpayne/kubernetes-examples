@@ -1,0 +1,78 @@
+#
+# This Workflow Template is used to store modules for the test process
+#
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: test-ops
+spec:
+  arguments:
+    parameters:
+      - name: ENVIRONMENT
+      - name: INGRESS_ENDPOINT
+      - name: COMMAND_OPTS
+      - name: xtraceOption
+        value: "-o"
+
+  templates:
+    # This template is for default testing and should use anchor override where necessary
+    - name: all-tests
+      serviceAccountName: &serviceAccountName argorunner
+      script: &script
+        image: ghcr.io/targetb/gitops-controller/test-runtime-environment:latest
+        command: ["sh", "{{inputs.parameters.xtraceOption}}", "xtrace"]
+        source: |
+          testEnv="{{ inputs.parameters.ENVIRONMENT }}"
+          if [ "x${testEnv}" = "xnil" ]; then
+            testEnv="dev"
+          fi
+
+          echo "================================================================"
+          echo " Running tests for ${testEnv} at `date`"
+          echo "================================================================"
+          echo
+
+          echo "-------------------------"
+          echo "Printing tool versions..."
+          gradle --version
+          javac --version
+          java --version
+          curl --version
+          echo "-------------------------"
+
+          echo
+          echo "Running ${testEnv} tests"
+          echo
+
+          logFile="/tmp/logfile.log"
+
+          echo "UNKNOWN" > "${logFile}"
+
+          # Run tests...
+          curl {{ inputs.parameters.INGRESS_ENDPOINT }}/{{ inputs.parameters.ENVIRONMENT }}/api/repo/repostring \
+              > "${logFile}" 2>&1
+
+          # Save state...
+          retStat=$?
+          echo "Tests returned ${retStat}"
+
+          echo
+          echo "================================================================"
+          echo "Testing done `date`"
+          echo "================================================================"
+          exit ${retStat}
+      inputs: &inputs
+        parameters:
+          - name: ENVIRONMENT
+          - name: INGRESS_ENDPOINT
+          - name: COMMAND_OPTS
+          - name: xtraceOption
+            default: "+o"
+      outputs: &outputs
+        parameters:
+          - name: result
+            valueFrom:
+              default: "Unknown"
+              path: /tmp/logfile.log
+            globalName: module-result
