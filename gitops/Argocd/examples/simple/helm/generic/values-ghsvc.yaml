@@ -21,6 +21,7 @@ github-service:
       - restapi.ukwest.cloudapp.azure.com
     annotations:
       kubernetes.io/ingress.class: addon-http-application-routing
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
 
   shutdownDelay: 5
 
