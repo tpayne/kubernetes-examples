@@ -22,7 +22,7 @@ github-service:
     annotations:
       kubernetes.io/ingress.class: addon-http-application-routing
       nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/rewrite-target: /$1
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
 
   shutdownDelay: 5
 
