@@ -29,6 +29,8 @@ spec:
             testEnv="dev"
           fi
 
+          repoUrl="http://{{ inputs.parameters.INGRESS_ENDPOINT }}/{{ inputs.parameters.ENVIRONMENT }}/api/repo/repostring"
+
           echo "================================================================"
           echo " Running tests for ${testEnv} at `date`"
           echo "================================================================"
@@ -51,8 +53,8 @@ spec:
           echo "UNKNOWN" > "${logFile}"
 
           # Run tests...
-          curl {{ inputs.parameters.INGRESS_ENDPOINT }}/{{ inputs.parameters.ENVIRONMENT }}/api/repo/repostring \
-              > "${logFile}" 2>&1
+          echo "Testing ${repoUrl}..."
+          curl ${repoUrl} > "${logFile}" 2>&1
 
           # Save state...
           retStat=$?
