@@ -14,6 +14,15 @@ github-service:
         port: 8088
         targetPort: http
 
+  ingress:
+    enabled: true
+    pathType: Prefix
+    servicePort: app
+    hosts:
+      - restapi.ukwest.cloudapp.azure.com
+    annotations:
+      kubernetes.io/ingress.class: addon-http-application-routing
+
   shutdownDelay: 5
 
   livenessProbe:
