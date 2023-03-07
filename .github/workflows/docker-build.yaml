@@ -37,7 +37,7 @@ jobs:
         uses: docker/metadata-action@v4
         id: metatst
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/test-runtime-environment:latest
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/test-runtime-environment
 
       - name: Build and Push testenv image
         uses: docker/build-push-action@v4
@@ -45,7 +45,7 @@ jobs:
           context: docker-files/
           file: docker-files/test-runtime-env.Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/terraform-kubectl-env:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/test-runtime-environment:latest
           labels: ${{ steps.metatst.outputs.labels }}
 
       - name: Extract image tags and labels - terraform and k8s
