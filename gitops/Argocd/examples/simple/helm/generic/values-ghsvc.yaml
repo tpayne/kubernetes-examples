@@ -8,10 +8,9 @@ github-service:
       port: 8080
 
   service:
-    type: ClusterIP
     ports:
       app:
-        port: 8088
+        port: 9050
         targetPort: http
 
   ingress:
