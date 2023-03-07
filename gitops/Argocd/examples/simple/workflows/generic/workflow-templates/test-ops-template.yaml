@@ -18,10 +18,10 @@ spec:
 
   templates:
     # This template is for default testing and should use anchor override where necessary
-    - name: all-tests
+    - name: default-tests
       serviceAccountName: &serviceAccountName argorunner
       script: &script
-        image: ghcr.io/targetb/gitops-controller/test-runtime-environment:latest
+        image: ghcr.io/tpayne/kubernetes-examples/test-runtime-environment:latest
         command: ["sh", "{{inputs.parameters.xtraceOption}}", "xtrace"]
         source: |
           testEnv="{{ inputs.parameters.ENVIRONMENT }}"

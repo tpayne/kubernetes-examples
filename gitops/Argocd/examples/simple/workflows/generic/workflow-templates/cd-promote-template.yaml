@@ -142,7 +142,9 @@ spec:
             when: "{{ inputs.parameters.ENVIRONMENT }} != 'nil'"
 
           - name: do-tests
-            template: run-tests
+            templateRef:
+              name: test-ops
+              template: default-tests
             depends: app-history
             arguments:
               parameters:
@@ -276,7 +278,7 @@ spec:
           - name: ARGOCD_APP
           - name: APP_HEALTH
       script:
-        image: ghcr.io/account/gitopsaccount/cd-promote:latest
+        image: ghcr.io/tpayne/kubernetes-examples/cd-promote:latest
         command: [ bash ]
         source: |
           echo "================================================="
@@ -284,73 +286,6 @@ spec:
           echo "{{inputs.parameters.ARGOCD_APP}} is \"{{inputs.parameters.APP_HEALTH}}\""
           echo "================================================="
           exit 1
-
-#
-# This template is for running tests
-#
-    - name: run-tests
-      inputs:
-        parameters:
-          - name: ENVIRONMENT
-          - name: GIT_TOKEN_SECRET
-          - name: GIT_TEST_REPO
-          - name: TEST_TOKEN
-          - name: COMMAND_OPTS
-      steps:
-      - - name: run-dev-tests
-          templateRef:
-            name: test-ops
-            template: all-tests
-          arguments:
-            parameters:
-            - name: ENVIRONMENT
-              value: "{{inputs.parameters.ENVIRONMENT}}"
-            - name: GIT_TOKEN_SECRET
-              value: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
-            - name: GIT_TEST_REPO
-              value: "{{inputs.parameters.GIT_TEST_REPO}}"
-            - name: TEST_TOKEN
-              value: "{{inputs.parameters.TEST_TOKEN}}"
-            - name: COMMAND_OPTS
-              value: "{{inputs.parameters.COMMAND_OPTS}}"
-          when: >-
-              ( '{{ inputs.parameters.ENVIRONMENT }}' == 'nil' ) ||
-              ( '{{ inputs.parameters.ENVIRONMENT }}' == 'dev' )
-        - name: run-qa-tests
-          templateRef:
-            name: test-ops
-            template: all-tests
-          arguments:
-            parameters:
-            - name: ENVIRONMENT
-              value: "{{inputs.parameters.ENVIRONMENT}}"
-            - name: GIT_TOKEN_SECRET
-              value: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
-            - name: GIT_TEST_REPO
-              value: "{{inputs.parameters.GIT_TEST_REPO}}"
-            - name: TEST_TOKEN
-              value: "{{inputs.parameters.TEST_TOKEN}}"
-            - name: COMMAND_OPTS
-              value: "{{inputs.parameters.COMMAND_OPTS}}"
-          when: "{{ inputs.parameters.ENVIRONMENT }} == 'qa'"
-        - name: run-sit-tests
-          templateRef:
-            name: test-ops
-            template: all-tests
-          arguments:
-            parameters:
-            - name: ENVIRONMENT
-              value: "{{inputs.parameters.ENVIRONMENT}}"
-            - name: GIT_TOKEN_SECRET
-              value: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
-            - name: GIT_TEST_REPO
-              value: "{{inputs.parameters.GIT_TEST_REPO}}"
-            - name: TEST_TOKEN
-              value: "{{inputs.parameters.TEST_TOKEN}}"
-            - name: COMMAND_OPTS
-              value: "{{inputs.parameters.COMMAND_OPTS}}"
-          when: "{{ inputs.parameters.ENVIRONMENT }} == 'sit'"
-
 
 #
 # Exit handler related templates
@@ -373,7 +308,7 @@ spec:
     # This template is a default handler for successful builds
     - name: workflow-success
       script:
-        image: ghcr.io/account/gitopsaccount/cd-promote:latest
+        image: ghcr.io/tpayne/kubernetes-examples/cd-promote:latest
         command: [ bash ]
         source: |
           echo "Success: {{workflow.name}} {{workflow.status}} {{workflow.duration}}"
@@ -381,7 +316,7 @@ spec:
     # This template is a default handler for failed builds
     - name: workflow-fail
       script:
-        image: ghcr.io/account/gitopsaccount/cd-promote:latest
+        image: ghcr.io/tpayne/kubernetes-examples/cd-promote:latest
         command: [ bash ]
         source: |
           # Tip: {{workflow.failures}} is a JSON list. If you're using bash to read it, we recommend using jq to manipulate
@@ -396,7 +331,7 @@ spec:
     # This template is a default handler for error builds
     - name: workflow-error
       script:
-        image: ghcr.io/account/gitopsaccount/cd-promote:latest
+        image: ghcr.io/tpayne/kubernetes-examples/cd-promote:latest
         command: [ bash ]
         source: |
           # Tip: {{workflow.failures}} is a JSON list. If you're using bash to read it, we recommend using jq to manipulate

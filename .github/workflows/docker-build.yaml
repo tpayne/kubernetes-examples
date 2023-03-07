@@ -33,6 +33,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
+      - name: Extract image tags and labels - tester image
+        uses: docker/metadata-action@v4
+        id: metatst
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/test-runtime-environment:latest
+
+      - name: Build and Push testenv image
+        uses: docker/build-push-action@v4
+        with:
+          context: docker-files/
+          file: docker-files/test-runtime-env.Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/terraform-kubectl-env:latest
+          labels: ${{ steps.metatst.outputs.labels }}
+
       - name: Extract image tags and labels - terraform and k8s
         uses: docker/metadata-action@v4
         id: metatf
