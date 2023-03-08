@@ -8,11 +8,21 @@ github-service:
       port: 8080
 
   service:
-    type: ClusterIP
     ports:
       app:
-        port: 8088
+        port: 80
         targetPort: http
+
+  ingress:
+    enabled: true
+    pathType: Prefix
+    servicePort: app
+    hosts:
+      - restapi.ukwest.cloudapp.azure.com
+    annotations:
+      kubernetes.io/ingress.class: addon-http-application-routing
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
 
   shutdownDelay: 5
 
@@ -37,3 +47,6 @@ github-service:
     limits:
       memory: 300Mi
       cpu: 400m
+
+  minAvailable: 1
+  replicaCount: 1
