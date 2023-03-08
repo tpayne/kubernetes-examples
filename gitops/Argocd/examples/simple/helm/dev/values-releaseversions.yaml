@@ -5,7 +5,7 @@ decision-service-a:
     tag: "1.14.2"
 github-service:
   containerImage:
-    tag: "a2d5546"
+    tag: "4cb2143"
 wsnodejs-deployment:
   containerImage:
     tag: "latest"
