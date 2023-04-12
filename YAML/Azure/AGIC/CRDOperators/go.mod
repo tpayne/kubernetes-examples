@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/onsi/ginkgo/v2 v2.9.0
 	github.com/onsi/gomega v1.27.2
-	k8s.io/apimachinery v0.26.2
+	k8s.io/apimachinery v0.27.0
 	k8s.io/client-go/v11/v12 v12.0.0
 	sigs.k8s.io/controller-runtime v0.14.5
 )
