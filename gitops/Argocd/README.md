@@ -274,8 +274,8 @@ Once the above files are modified and committed to the repo, you can then run th
       --from-literal=user=<ghuser> \
       --from-literal=email=<ghemail> \
       --dry-run=client \
-      --save-config -o yaml | kubectl apply -f - -n argocd```
-
+      --save-config -o yaml | kubectl apply -f - -n argocd
+```
 You will then need to setup an email account (gmail) and edit the `argocd-notifications-secret`
 secret to add the following...
 - `email-username=<email.addr>`
