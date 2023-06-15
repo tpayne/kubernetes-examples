@@ -1,6 +1,0 @@
-decision-service-a:
-  applicationName: decision-service-dev
-  containerImage:
-    repository: nginx
-  service:
-    type: NodePort

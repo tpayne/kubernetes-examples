@@ -1,7 +1,0 @@
-# Lets first create an application namespace to use...
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ .Values.namespaces.benamespace }}
----
-

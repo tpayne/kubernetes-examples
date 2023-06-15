@@ -189,7 +189,7 @@ install() {
 			--clusterrole cluster-admin \
 			--user $(gcloud config get-value account)) >/dev/null 2>&1
 		(kubectl apply -f \
-			https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/cloud/deploy.yaml) >"${tmpFile}" 2>&1
+			https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.0/deploy/static/provider/cloud/deploy.yaml) >"${tmpFile}" 2>&1
 	elif [ "x${provider}" = "xaws" ]; then
 		(kubectl create namespace $1) >/dev/null 2>&1
 		if [ $? -gt 0 ]; then
