@@ -1,0 +1,20 @@
+apiVersion: v2
+name: dev
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.2
+dependencies:
+  - name: wscs-deployment
+    version: "0.1.0"
+    repository: "https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/wscs-deployment"
+  - name: wsnodejs-deployment
+    version: "0.1.0"
+    repository: "https://raw.githubusercontent.com/tpayne/kubernetes-examples/main/Helm/wsnodejs-deployment"
+  - alias: decision-service-a
+    name: k8s-service
+    version: "0.2.12"
+    repository: "https://helmcharts.gruntwork.io"
+  - alias: github-service 
+    name: k8s-service
+    version: "0.2.12"
+    repository: "https://helmcharts.gruntwork.io"

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-cmddemo
+  labels:
+    {{- include "probe-deployment.labels" . | nindent 4 }}
+spec:
+  containers:
+    - name: {{ .Chart.Name }}-cmddemo
+      image: "{{ .Values.image.repository_imagecmdprobe }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+      imagePullPolicy: {{ .Values.image.pullPolicy }}
+      command: {{ .Values.image.cmd }}
+      args:
+      - {{ .Files.Get "files/args.txt" | indent 16 }}
+      {{- with .Values.livenessProbeCmd }}
+      livenessProbe:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+      {{- with .Values.readinessProbeCmd }}
+      readinessProbe:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}

@@ -1,0 +1,117 @@
+#
+# This Workflow Template is used to store modules for Git and promotion based operations
+#
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: git-ops
+spec:
+  arguments:
+    parameters:
+      - name: REPO
+      - name: REVISION
+      - name: GIT_TOKEN_SECRET
+      - name: PROMOTION_TYPE
+      - name: TENANT_NAME
+      - name: ENVIRONMENT
+      - name: PROMOTE_TO
+      - name: COMMAND_OPTS
+      - name: CONTROLLED_ENVS
+      - name: xtraceOption
+        default: "+o"
+  templates:
+    # This template is the default for promotion
+    - name: update-image-tag
+      serviceAccountName: &serviceAccountName argorunner
+      script: &script
+        image: ghcr.io/tpayne/kubernetes-examples/cd-promote:latest
+        env:
+          - name: GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
+                key: token
+          - name: GITUSER
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
+                key: user
+          - name: GITEMAIL
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.GIT_TOKEN_SECRET}}"
+                key: email
+        # xtrace
+        command: ["sh", "{{inputs.parameters.xtraceOption}}", "xtrace"]
+        source: |
+          echo "=================================================="
+          echo "Promoting manifest to {{inputs.parameters.PROMOTE_TO}}..."
+          echo "- Using promotion criteria {{inputs.parameters.PROMOTION_TYPE}}"
+          echo "=================================================="
+
+          # Set variables...
+          logFile="/tmp/logfile.log"
+          echo "UNKNOWN" > ${logFile}
+
+          retStat=0
+
+          repoName="{{ inputs.parameters.REPO }}"
+          promoteType="{{ inputs.parameters.PROMOTION_TYPE }}"
+          tenantName={{ inputs.parameters.TENANT_NAME }}
+          envName={{ inputs.parameters.ENVIRONMENT }}
+          promoteName={{ inputs.parameters.PROMOTE_TO }}
+          revision={{ inputs.parameters.REVISION }}
+
+          # This can be a list like "sit,preprod,prod"...
+          pullenvs={{ inputs.parameters.CONTROLLED_ENVS }}
+
+          # Run promote...
+          /usr/local/bin/runpromote.sh \
+                   -pr "${repoName}" \
+                   -gu "${GITUSER}" \
+                   -gem "${GITEMAIL}" \
+                   -gt "${GITHUB_TOKEN}" \
+                   -env "${envName}" \
+                   -rev "${revision}" \
+                   -pmenv "${promoteName}" \
+                   --promote-type "${promoteType}" \
+                   -tenant "${tenantName}" \
+                   -pullenv "${pullenvs}" \
+                   --log-file "${logFile}" \
+                   {{ inputs.parameters.COMMAND_OPTS }}
+
+          # Save state...
+          retStat=$?
+          echo "Promote returned ${retStat}"
+
+          # Check log...
+          if [ -f "${logFile}" ]; then
+            ls -l "${logFile}"
+          fi
+
+          echo
+          echo "================================================================"
+          echo "Promotion done `date`"
+          echo "================================================================"
+          exit ${retStat}
+      inputs: &inputs
+        parameters:
+          - name: REPO
+          - name: REVISION
+          - name: GIT_TOKEN_SECRET
+          - name: PROMOTION_TYPE
+          - name: TENANT_NAME
+          - name: ENVIRONMENT
+          - name: PROMOTE_TO
+          - name: COMMAND_OPTS
+          - name: CONTROLLED_ENVS
+          - name: xtraceOption
+            default: "+o"
+      outputs: &outputs
+        parameters:
+          - name: result
+            valueFrom:
+              default: "Unknown"
+              path: /tmp/logfile.log
+            globalName: module-result

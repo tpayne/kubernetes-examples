@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: cd-build-dev-
+spec:
+  synchronization:
+    mutex:
+      name:  lockforexec-dev
+  arguments:
+    parameters:
+      - name: ARGOCD_APP
+        value: pipeline-dev
+      - name: ARGOCD_SERVER
+        value: argocd-server
+      - name: REPO
+        value: https://github.com/tpayne/kubernetes-examples.git
+      - name: REVISION
+        value: 'main'
+      - name: GIT_TOKEN_SECRET
+        value: 'github-token'
+      - name: PROMOTION_TYPE
+        value: 'environment'
+      - name: TENANT_NAME
+        value: ''
+        default: ''
+      - name: ENVIRONMENT
+        value: 'dev'
+      - name: PROMOTE_TO
+        value: 'qa'
+      - name: COMMAND_OPTS
+        value: ''
+        default: ''
+  workflowTemplateRef:
+    name: cd-promote-dev

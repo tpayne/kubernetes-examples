@@ -1,0 +1,17 @@
+# Create a service for the deployment
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.namespaces.fenamespace }}
+  name: {{ include "standard3tier-deployment.fullname" . }}-fesvr
+  labels:
+    {{- include "standard3tier-deployment.labels" . | nindent 4 }}
+spec:
+  selector:
+    app: {{ include "standard3tier-deployment.fullname" . }}-fedeploy
+  ports:
+    - name: {{ include "standard3tier-deployment.fullname" . }}-fesvr
+      port: {{ .Values.service.httpport }}
+      targetPort: {{ .Values.service.http_port }}
+      protocol: TCP
+  type: {{ .Values.service.fetype }}

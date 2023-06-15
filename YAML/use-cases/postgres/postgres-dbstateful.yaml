@@ -1,0 +1,52 @@
+# Deployment of the Postgres container for the backend DB
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-container
+  namespace: db-backend
+spec:
+  serviceName: postgres-svr
+  selector:
+    matchLabels:
+      app: postgres-container
+  template:
+    metadata:
+      labels:
+        app: postgres-container
+        env: prod
+    spec:
+      containers:
+      - name: postgres-container
+        image: postgres
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 5432
+        envFrom:
+          - configMapRef:
+              name: postgres-config
+          # - secretRef:
+          #     name: postgres-config-pwd
+        volumeMounts:
+          - name: postgres-persistent-storage
+            mountPath: /var/lib/postgresql
+        resources: # These will need much better tuning...
+          requests:
+            memory: 300Mi
+            cpu: 400m
+          limits:
+            memory: 400Mi
+            cpu: 500m
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-persistent-storage
+      spec:
+        storageClassName: localstorage
+        accessModes: ["ReadWriteMany"]
+        resources:
+         requests:
+          storage: 5Gi
+        selector:
+         matchLabels:
+          type: local

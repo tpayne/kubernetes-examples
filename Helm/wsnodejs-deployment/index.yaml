@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  wsnodejs-deployment:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-03-27T15:03:08.536761+01:00"
+    description: A Helm chart for Kubernetes
+    digest: d174664db8e232184dd5238edb8ef50b71432fea0466d49ea611909ebcedf34e
+    name: wsnodejs-deployment
+    type: application
+    urls:
+    - wsnodejs-deployment-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-03-27T15:03:08.535025+01:00"

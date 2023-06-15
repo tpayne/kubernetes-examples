@@ -1,0 +1,32 @@
+# Now let's create a deployment in that namespace that contains 2 versions of the same app...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespaces.fenamespace }}
+  name: {{ include "standard3tier-deployment.fullname" . }}-fedeploy
+  labels:
+    {{- include "standard3tier-deployment.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 # Maximum number of pods we allow above the number of replicas (i.e. 5)
+      maxUnavailable: 1  # Minimum number of pods that has to be available
+  selector:
+    matchLabels:
+      {{- include "standard3tier-deployment.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "standard3tier-deployment.selectorLabels" . | nindent 8 }}
+        env: prod
+    spec:
+      containers:
+      - name: {{ include "standard3tier-deployment.fullname" . }}-sample
+        image: "{{ .Values.image.feImage }}:{{ .Values.image.dbTag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.service.http_port }}

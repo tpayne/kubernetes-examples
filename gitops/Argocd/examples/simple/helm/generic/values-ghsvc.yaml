@@ -1,0 +1,52 @@
+github-service:
+  applicationName: github-service
+  containerImage:
+    repository: tpayne666/webrestapi
+
+  containerPorts:
+    http:
+      port: 8080
+
+  service:
+    ports:
+      app:
+        port: 80
+        targetPort: http
+
+  ingress:
+    enabled: true
+    pathType: Prefix
+    servicePort: app
+    hosts:
+      - restapi.ukwest.cloudapp.azure.com
+    annotations:
+      kubernetes.io/ingress.class: addon-http-application-routing
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+
+  shutdownDelay: 5
+
+  livenessProbe:
+    httpGet:
+      path: /api/test/version
+      port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 10
+
+  readinessProbe:
+    httpGet:
+      path: /api/test/version
+      port: 8080
+    initialDelaySeconds: 15
+    periodSeconds: 20
+
+  containerResources:
+    requests:
+      memory: 150Mi
+      cpu: 200m
+    limits:
+      memory: 300Mi
+      cpu: 400m
+
+  minAvailable: 1
+  replicaCount: 1

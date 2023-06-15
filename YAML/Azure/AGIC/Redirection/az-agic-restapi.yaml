@@ -1,0 +1,150 @@
+---
+# Lets first create an application namespace to use...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logicapp-gdev
+---
+# Now let's create a deployment in that namespace...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: logicapp-gdev
+  name: logicapp-dev-deployment-nginx
+spec:
+  selector:
+    matchLabels:
+      app: logicapp-dev-nginx
+  template:
+    metadata:
+      labels:
+        app: logicapp-dev-nginx # the label for the pods and the deployments
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:stable
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80 # the application listens to this port
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: logicapp-gdev
+  name: logicapp-dev-deployment-samples
+spec:
+  selector:
+    matchLabels:
+      app: logicapp-dev-samples
+  template:
+    metadata:
+      labels:
+        app: logicapp-dev-samples # the label for the pods and the deployments
+      annotations:
+        imagerepo: DockerHub
+    spec:
+      containers:
+      - name: samples
+        image: tpayne666/samples:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+# Create a service for the deployment
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: logicapp-gdev
+  name: logicapp-dev-service-samples
+spec:
+  selector:
+    app: logicapp-dev-samples
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: logicapp-gdev
+  name: logicapp-dev-service-nginx
+spec:
+  selector:
+    app: logicapp-dev-nginx
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: logicapp-dev-ingress-nginx
+  namespace: logicapp-gdev
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/backend-path-prefix: "/"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /svrnginx/*
+        pathType: Prefix
+        backend:
+          service:
+            name: logicapp-dev-service-nginx
+            port:
+              number: 80
+---
+# These controller definitions can be merged in the future. No reason to have 
+# two of them using the same service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: logicapp-dev-ingress-samples-usr
+  namespace: logicapp-gdev
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/backend-path-prefix: "/user/"
+    appgw.ingress.kubernetes.io/health-probe-port: "8080"
+    appgw.ingress.kubernetes.io/health-probe-path: "/user/version"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /apiuser/*
+        pathType: Prefix
+        backend:
+          service:
+            name: logicapp-dev-service-samples
+            port:
+              number: 80
+---
+# See above comments
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: logicapp-dev-ingress-samples-cmd
+  namespace: logicapp-gdev
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/backend-path-prefix: "/cmd/"
+    appgw.ingress.kubernetes.io/health-probe-port: "8080"
+    appgw.ingress.kubernetes.io/health-probe-path: "/cmd/version"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /apicmd/*
+        pathType: Prefix
+        backend:
+          service:
+            name: logicapp-dev-service-samples
+            port:
+              number: 80
+---

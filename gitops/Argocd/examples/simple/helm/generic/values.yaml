@@ -1,0 +1,10 @@
+wsnodejs-deployment:
+  image:
+    tag: "master"
+  service:
+    type: ClusterIP
+wscs-deployment:
+  image:
+    tag: "latest"
+  service:
+    type: ClusterIP

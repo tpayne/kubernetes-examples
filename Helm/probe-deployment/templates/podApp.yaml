@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-appdemo
+  labels:
+    {{- include "probe-deployment.labels" . | nindent 4 }}
+spec:
+  containers:
+    - name: {{ .Chart.Name }}-appdemo
+      image: "{{ .Values.image.repository_imageappprobe }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+      imagePullPolicy: {{ .Values.image.pullPolicy }}
+      ports:
+      - containerPort: 8080
+      {{- with .Values.livenessProbeApp }}
+      livenessProbe:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+      {{- with .Values.readinessProbeApp }}
+      readinessProbe:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}

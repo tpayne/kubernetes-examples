@@ -1,0 +1,57 @@
+apiVersion: v1
+entries:
+  database-deployment:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-03-07T10:51:37.477667Z"
+    description: A Helm chart for Kubernetes
+    digest: 8f6750df3d8fc8020e7c92c431d3d06cd07a499a0c4232e3bdf3d206902053e6
+    name: database-deployment
+    type: application
+    urls:
+    - charts/database-deployment-0.1.0.tgz
+    version: 0.1.0
+  dependencies-deployment:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-03-07T10:51:37.476311Z"
+    dependencies:
+    - name: database-deployment
+      repository: file://../database-deployment
+      version: 0.1.0
+    - name: probe-deployment
+      repository: file://../probe-deployment
+      version: 0.1.0
+    description: A Helm chart for Kubernetes
+    digest: e67259b305f6d378fe87b70c2df0ded53937cdafd9c96bc1808080783ab0fe5f
+    name: dependencies-deployment
+    type: application
+    urls:
+    - dependencies-deployment-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-03-07T10:51:37.212267Z"
+    dependencies:
+    - name: database-deployment
+      repository: file://../database-deployment
+      version: 0.1.0
+    description: A Helm chart for Kubernetes
+    digest: 25d00a36a23e494b6182bf564c527b35addbd76702c57f7ed520ca907d5c8fbd
+    name: dependencies-deployment
+    type: application
+    urls:
+    - dependencies-deployment-0.1.0.tgz
+    version: 0.1.0
+  probe-deployment:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-03-07T10:51:37.478365Z"
+    description: A Helm chart for Kubernetes
+    digest: 2fbd16d992a098ed739e640e020bcced0bc52583af57332940a1911708282f9b
+    name: probe-deployment
+    type: application
+    urls:
+    - charts/probe-deployment-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-03-07T10:51:37.208826Z"

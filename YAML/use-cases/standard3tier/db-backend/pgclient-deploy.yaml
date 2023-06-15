@@ -1,0 +1,12 @@
+# 
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: db-backend
+  name: postgres-client
+spec:
+  containers:
+  - name: pgclient
+    image: tpayne666/alpine-pgclient:latest
+    imagePullPolicy: Always

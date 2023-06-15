@@ -1,0 +1,14 @@
+# Release stack to deploy on target
+# Service SBOM for demo
+decision-service-a:
+  containerImage:
+    tag: "1.14.2"
+github-service:
+  containerImage:
+    tag: "4897c2f"
+wsnodejs-deployment:
+  containerImage:
+    tag: "latest"
+wscs-deployment:
+  containerImage:
+    tag: "latest"

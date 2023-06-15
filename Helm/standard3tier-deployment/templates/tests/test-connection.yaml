@@ -1,0 +1,18 @@
+# This does not work unless you override the value of standard3tier-deployment.fullname-fesvr with the external lb ip
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: {{ .Values.namespaces.fenamespace }}
+  name: "{{ include "standard3tier-deployment.fullname" . }}-test-connection"
+  labels:
+    {{- include "standard3tier-deployment.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      # You will need to modify this by hand to point to your external LB ip addr
+      args: ['{{ include "standard3tier-deployment.fullname" . }}-fesvr:{{ .Values.service.httpport }}/cmd/version']
+  restartPolicy: Never

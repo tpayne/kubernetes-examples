@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pipeline-dev
+  labels:
+    app: pipeline
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    # For more info, see
+    # - https://argocd-notifications.readthedocs.io/en/stable/catalog/
+    # - https://argocd-notifications.readthedocs.io/en/stable/triggers/
+    notifications.argoproj.io/subscribe.on-sync-succeeded.gmail: "contino.argobot.notifications@gmail.com"
+    notifications.argoproj.io/subscribe.on-sync-failed.gmail: "contino.argobot.notifications@gmail.com"
+    notifications.argoproj.io/subscribe.on-health-degraded.gmail: "contino.argobot.notifications@gmail.com"
+spec:
+  destination:
+    namespace: dev
+    name: in-cluster
+  project: pipeline
+  source:
+    repoURL: https://github.com/tpayne/kubernetes-examples
+    targetRevision: main
+    path: ./gitops/Argocd/examples/simple/helm/dev # Directory that contains the child apps
+    helm:
+      parameters:
+        - name: buildID
+          value: argocd
+      valueFiles:
+        - ../generic/values.yaml
+        - ../generic/values-ghsvc.yaml
+        - ../generic/values-ds.yaml
+        - values-releaseversions.yaml
+        - values-ghsvc.yaml
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jqPathExpressions:
+        - .spec.replicas
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      - RespectIgnoreDifferences=true
+#    automated:
+#      prune: true
+#      selfHeal: true

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.appName }}-deployment
+  labels:
+    {{- include "statefulset-deployment.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ .Values.appName }}-demo
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "statefulset-deployment.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "statefulset-deployment.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - containerPort: 5432
+          envFrom:
+          - configMapRef:
+              name: {{ .Values.appName }}-config
+          volumeMounts:
+          - name: {{ .Values.appName }}-persistent-storage
+            mountPath: /var/lib/postgresql
+          resources: # These will need much better tuning...
+            {{- toYaml .Values.resources | nindent 12 }}
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Values.appName }}-persistent-storage
+      spec:
+        storageClassName: localstorage
+        accessModes: ["ReadWriteMany"]
+        resources:
+         requests:
+          storage: 5Gi
+        selector:
+         matchLabels:
+          type: local

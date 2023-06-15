@@ -1,0 +1,185 @@
+#
+# This Workflow Template is used to store modules for MS Teams based processes
+#
+
+# See this for more info...
+# https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using?tabs=cURL
+# https://adaptivecards.io/explorer/Action.ShowCard.html
+# https://adaptivecards.io/
+# https://adaptivecards.io/designer
+# https://docs.microsoft.com/en-us/adaptive-cards/authoring-cards/text-features
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: msteams-notifications-template
+spec:
+  # default arguments
+  arguments:
+    parameters:
+      - name: TEAMSWEBHOOK
+      - name: JOBNAME
+      - name: JOBSTATUS
+      - name: JOBRUNDATETIME
+      - name: JOBDURATION
+      - name: JOBOUTPUT
+      - name: MODULE_RESULT
+      # Set xtrace or not (echo the command before running it). Valid options are -o (xtrace on) and +o (xtrace off). default is -o
+      - name: xtraceOption
+        value: "-o"
+
+  templates:
+    - name: failure-notification
+      serviceAccountName: &serviceAccountName argorunner
+      script: &script
+        image: ghcr.io/tpayne/kubernetes-examples/cd-promote:latest
+        env:
+          - name: MSWEBHOOK
+            valueFrom:
+              secretKeyRef:
+                name: argocd-notifications-secret
+                key: ms-teams-webhook
+        # xtrace
+        command: ["sh", "{{inputs.parameters.xtraceOption}}", "xtrace"]
+        source: |
+          echo "=================================================="
+          echo "Sending {{inputs.parameters.JOBSTATUS}} notification for {{inputs.parameters.JOBNAME}}..."
+          echo "=================================================="
+          echo ""
+
+          echo "UNKNOWN" > /tmp/app.results
+          webHook="{{ inputs.parameters.TEAMSWEBHOOK }}"
+          if [  "x${webHook}" = "xnil" ]; then
+              webHook=${MSWEBHOOK}
+          fi
+
+          msg=$(echo "{{ inputs.parameters.MODULE_RESULT }}" | awk '{printf("%s\\n\\n",$0);}')
+          msgSize=$(echo "${msg}" | wc -m)
+          dateTime="{{ inputs.parameters.JOBRUNDATETIME }}"
+
+          cat << EOF > /tmp/package.json
+            {
+              "type": "message",
+              "attachments": [
+                {
+                  "contentType": "application/vnd.microsoft.card.adaptive",
+                  "contentUrl": null,
+                  "content": {
+                    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                    "type": "AdaptiveCard",
+                    "version": "1.2",
+                    "body": [
+                      {
+                        "type": "Container",
+                        "items": [
+                          {
+                            "type": "ColumnSet",
+                            "columns": [
+                              {
+                                "type": "Column",
+                                "width": "auto",
+                                "items": [
+                                  {
+                                    "type": "Image",
+                                    "url": "https://raw.githubusercontent.com/account/github-actions/main/images/JobIcon.png",
+                                    "altText": "CD job notification",
+                                    "size": "small",
+                                    "style": "person"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "Column",
+                                "width": "stretch",
+                                "items": [
+                                  {
+                                    "type": "TextBlock",
+                                    "text": "Failed CD job notification for {{ inputs.parameters.JOBNAME }}",
+                                    "weight": "bolder",
+                                    "wrap": true
+                                  },
+                                  {
+                                    "type": "TextBlock",
+                                    "spacing": "none",
+                                    "text": "Run {{DATE($dateTime, SHORT)}} at {{TIME($dateTime)}}",
+                                    "isSubtle": true,
+                                    "wrap": true
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "FactSet",
+                        "facts": [
+                          {
+                            "title": "Job name",
+                            "value": "{{ inputs.parameters.JOBNAME }}"
+                          },
+                          {
+                            "title": "Status",
+                            "value": "{{ inputs.parameters.JOBSTATUS }}"
+                          },
+                          {
+                            "title": "Date run",
+                            "value": "{{ inputs.parameters.JOBRUNDATETIME }}"
+                          },
+                          {
+                            "title": "Job duration",
+                            "value": "{{ inputs.parameters.JOBDURATION }}"
+                          }
+                        ]
+                      }
+                    ],
+                    "actions": [
+                      {
+                        "type": "Action.ShowCard",
+                        "title": "Show job results",
+                        "card": {
+                          "type": "AdaptiveCard",
+                          "body": [
+                            {
+                              "type": "TextBlock",
+                              "text": "${msg}",
+                              "maxLines": ${msgSize},
+                              "wrap": true,
+                              "fontType": "monospace",
+                              "weight": "bolder",
+                              "color": "attention"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          EOF
+
+          # The JOBOUTPUT might not be in a suitable format for printing without parsing.
+          # Maybe do that another time. We also need to add a URL hook to allow the job to be openned?
+
+          (curl -H 'Content-Type: application/json' -d @/tmp/package.json ${webHook}) 2>&1 | \
+            tee /tmp/app.results > /dev/null
+          exit $?
+      inputs: &inputs
+        parameters:
+          - name: TEAMSWEBHOOK
+          - name: JOBNAME
+          - name: JOBSTATUS
+          - name: JOBRUNDATETIME
+          - name: JOBDURATION
+          - name: JOBOUTPUT
+          - name: MODULE_RESULT
+          # Set xtrace or not (echo the command before running it). Valid options are -o (xtrace on) and +o (xtrace off). default is -o
+          - name: xtraceOption
+            default: "+o"
+      outputs: &outputs
+        parameters:
+          - name: result
+            valueFrom:
+              default: "Unknown"
+              path: /tmp/app.results

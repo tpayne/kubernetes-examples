@@ -1,0 +1,29 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ include "database-deployment.fullname" . }}-lstore
+  namespace: {{ .Values.namespaces.benamespace }}
+  labels:
+    {{- include "database-deployment.labels" . | nindent 4 }}
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: Immediate
+reclaimPolicy: Delete
+allowVolumeExpansion: True
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ include "database-deployment.fullname" . }}-dbstorage
+  namespace: {{ .Values.namespaces.benamespace }}
+  labels:
+    type: local
+    {{- include "database-deployment.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{ include "database-deployment.fullname" . }}-lstore
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/postgres01"
+    type: DirectoryOrCreate

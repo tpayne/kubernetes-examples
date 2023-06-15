@@ -107,18 +107,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/argo-env-github:latest
           labels: ${{ steps.metae.outputs.labels }}
-
-      - name: Extract image tags and labels - pgclient15
-        uses: docker/metadata-action@v4
-        id: metaf
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pgclient15
-  
-      - name: Build and Push GitHub PGClient15 Environment Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: docker-files/
-          file: docker-files/pgclient.Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pgclient15:latest
-          labels: ${{ steps.metae.outputs.labels }}

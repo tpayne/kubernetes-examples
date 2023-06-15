@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  canary-deployment:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-12-01T21:45:52.692853Z"
+    description: A Helm chart for Kubernetes
+    digest: a17dc154ffe8720209cc0299ec7e450bbdd31fb3137993efd32bd79544bf8675
+    name: canary-deployment
+    type: application
+    urls:
+    - canary-deployment-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-12-01T21:45:52.692058Z"

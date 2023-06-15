@@ -1,0 +1,73 @@
+---
+# Lets first create an application namespace to use...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logicapp-dev
+
+---
+# Now let's create a deployment in that namespace that contains two basic apps...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: logicapp-dev
+  name: logicapp-dev-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: logicapp-dev
+  template:
+    metadata:
+      labels:
+        app: logicapp-dev # the label for the pods and the deployments
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:stable
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80 # the application listens to this port
+      - name: jenkins
+        # To get the password for Jenkins do the following...
+        # - kubectl get pods -n logicapp-dev
+        # - kubectl logs <podId> -c jenkins -n logicapp-dev
+        image: jenkins/jenkins:lts
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080 # the application listens to this port
+        # For a real installation - these may need tuning better...
+        # resources:
+        #   requests: # minimum resources required
+        #     cpu: 150m
+        #     memory: 250Mi
+        #   limits: # maximum resources allocated
+        #     cpu: 300m
+        #     memory: 500Mi
+        volumeMounts:
+        - name: jenkins-home
+          mountPath: /var/jenkins_home
+      volumes:
+      - name: jenkins-home
+        emptyDir: {}
+
+---
+# Create a service for the deployment
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: logicapp-dev
+  name: logicapp-dev-loadbalancer
+spec:
+  selector:
+    app: logicapp-dev
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  - name: http-jenkins
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer
