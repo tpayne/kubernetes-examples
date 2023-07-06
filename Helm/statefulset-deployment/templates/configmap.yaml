@@ -7,7 +7,7 @@ metadata:
   labels:
     {{- include "statefulset-deployment.labels" . | nindent 4 }}
 data:
-  POSTGRES_DB: postgresdb
+  POSTGRES_DB: {{ .Values.pgdb.dbName }}
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: password # Change this to a secret when doing for real...
   PGDATA: /var/lib/postgresql/data/
