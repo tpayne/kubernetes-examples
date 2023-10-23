@@ -34,7 +34,7 @@ RUN curl -sSLo /usr/bin/jq \
 
 # Install GO for JUNIT processing
 # hadolint ignore=DL3022
-COPY --from=golang:1.19-alpine /usr/local/go/ /usr/local/go/
+COPY --from=golang:1.21-alpine /usr/local/go/ /usr/local/go/
 
 ENV PATH="/usr/local/go/bin:${PATH}"
 ENV GOPATH /go
