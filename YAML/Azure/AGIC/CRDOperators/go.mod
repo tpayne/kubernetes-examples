@@ -3,7 +3,7 @@ module github.com/tpayne/kubernetes-examples
 go 1.19
 
 require (
-	github.com/onsi/ginkgo/v2 v2.13.0
+	github.com/onsi/ginkgo/v2 v2.13.1
 	github.com/onsi/gomega v1.30.0
 	k8s.io/apimachinery v0.28.3
 	k8s.io/client-go/v11/v12 v12.0.0
