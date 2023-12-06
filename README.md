@@ -100,6 +100,8 @@ Notes for Getting Started
 - https://learnk8s.io/validating-kubernetes-yaml
 - https://kubevious.io/blog/post/top-kubernetes-yaml-validation-tools
 - https://www.educba.com/kubernetes-yaml-validator/
+- 
+https://github.com/sudermanjr/demos/tree/main/multi-cluster-scale (see OPA Fairwinds Polaris products)
 
 Notes
 -----
