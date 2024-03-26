@@ -330,3 +330,18 @@ Notes
 - https://github.com/argoproj/argo-workflows/blob/master/examples/README.md
 - https://argoproj.github.io/argo-events/
 - https://github.com/argoproj/argo-workflows/tree/master/examples
+
+TODO
+----
+If you want to add rollback capabilities, you can use...
+
+```sh
+    # Get a previous SHA based on a comment
+    commitId=$(git log <branch> --grep "Test passed" --pretty=format:"%h")
+    # Restore the previous code based on the SHA
+    git checkout $(commitId) -- <files>
+    # Git commit/push
+    git commit -am "Rollback..." && git push
+```
+
+
