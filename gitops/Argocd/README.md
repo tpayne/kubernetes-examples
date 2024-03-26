@@ -339,7 +339,7 @@ If you want to add rollback capabilities, you can use...
     # Get a previous SHA based on a comment
     commitId=$(git log <branch> --grep "Test passed" --pretty=format:"%h")
     # Restore the previous code based on the SHA
-    git checkout $(commitId) -- <files>
+    git checkout ${commitId} -- <files>
     # Git commit/push
     git commit -am "Rollback..." && git push
 ```
