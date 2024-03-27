@@ -3,6 +3,8 @@ template:
   identifier: stage_template
   versionLabel: 1.0.0
   type: Stage
+  projectIdentifier: default_project
+  orgIdentifier: default
   tags: {}
   spec:
     type: Custom
