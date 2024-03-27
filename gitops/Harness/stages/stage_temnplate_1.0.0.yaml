@@ -33,3 +33,9 @@ template:
             - AllErrors
           action:
             type: Abort
+    variables:
+      - name: test
+        type: String
+        description: ""
+        required: false
+        value: test
