@@ -1,0 +1,33 @@
+template:
+  name: stage_template
+  identifier: stage_template
+  versionLabel: 1.0.0
+  type: Stage
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - stepGroup:
+              name: steprunner
+              identifier: steprunner
+              template:
+                templateRef: sample_stepgroup
+                versionLabel: 1.0.0
+                templateInputs:
+                  steps:
+                    - step:
+                        identifier: Clone_Code
+                        type: ShellScript
+                        spec:
+                          outputVariables:
+                            - name: status
+                              type: String
+                              value: <+input>
+    failureStrategies:
+      - onFailure:
+          errors:
+            - AllErrors
+          action:
+            type: Abort
