@@ -1,14 +1,14 @@
 trigger:
-  name: tester
-  identifier: tester
+  name: github_trigger
+  identifier: github_trigger
   enabled: true
-  encryptedWebhookSecretIdentifier: ""
-  description: ""
+  encryptedWebhookSecretIdentifier: PATTOKEN
+  description: Execute trigger based on GH
   tags: {}
   orgIdentifier: default
   stagesToExecute: []
   projectIdentifier: default_project
-  pipelineIdentifier: tester
+  pipelineIdentifier: sample_pipeline
   source:
     type: Webhook
     spec:
@@ -17,14 +17,37 @@ trigger:
         type: Push
         spec:
           connectorRef: githubconnector
-          autoAbortPreviousExecutions: false
+          autoAbortPreviousExecutions: true
           payloadConditions:
             - key: changedFiles
-              operator: In
-              value: "{Folder1,Folder2}/*.yaml"
+              operator: Contains
+              value: gitops/Argocd/examples/simple/helm/dev/
             - key: targetBranch
-              operator: Equals
+              operator: In
               value: main
           headerConditions: []
-          repoName: github-actions
+          repoName: https://github.com/tpayne/kubernetes-examples.git
           actions: []
+  inputYaml: |
+    pipeline:
+      identifier: sample_pipeline
+      stages:
+        - stage:
+            identifier: sample_stage
+            type: Custom
+            spec:
+              execution:
+                steps:
+                  - stepGroup:
+                      identifier: use_step_group
+                      template:
+                        templateInputs:
+                          steps:
+                            - step:
+                                identifier: Clone_Code
+                                type: ShellScript
+                                spec:
+                                  outputVariables:
+                                    - name: status
+                                      type: String
+                                      value: ""
