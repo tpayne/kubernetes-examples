@@ -1,0 +1,52 @@
+template:
+  name: sample_stepgroup
+  identifier: sample_stepgroup
+  versionLabel: 1.0.0
+  type: StepGroup
+  projectIdentifier: default_project
+  orgIdentifier: default
+  description: Sample template stepgroup
+  tags: {}
+  spec:
+    stageType: Custom
+    steps:
+      - step:
+          type: ShellScript
+          name: Clone Code
+          identifier: Clone_Code
+          spec:
+            shell: Bash
+            executionTarget: {}
+            source:
+              type: Inline
+              spec:
+                script: git clone <+stepGroup.steps.Clone_Code.spec.environmentVariables.repoName>
+            environmentVariables:
+              - name: repoName
+                type: String
+                value: https://github.com/tpayne/kubernetes-examples.git
+              - name: token
+                type: Secret
+                value: PATTOKEN
+            outputVariables:
+              - name: status
+                type: String
+                value: <+input>
+          timeout: 10m
+      - step:
+          type: ShellScript
+          name: ShellScript_2
+          identifier: ShellScript_2
+          spec:
+            shell: Bash
+            executionTarget: {}
+            source:
+              type: Inline
+              spec:
+                script: ls -l
+            environmentVariables: []
+            outputVariables: []
+          timeout: 10m
+    stepGroupInfra:
+      type: KubernetesDirect
+      spec: {}

@@ -1,0 +1,32 @@
+pipeline:
+  name: sample_pipeline
+  identifier: sample_pipeline
+  projectIdentifier: default_project
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: sample_stage
+        identifier: sample_stage
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - stepGroup:
+                  name: use_step_group
+                  identifier: use_step_group
+                  template:
+                    templateRef: sample_stepgroup
+                    versionLabel: 1.0.0
+                    templateInputs:
+                      steps:
+                        - step:
+                            identifier: Clone_Code
+                            type: ShellScript
+                            spec:
+                              outputVariables:
+                                - name: status
+                                  type: String
+                                  value: <+input>
+        tags: {}

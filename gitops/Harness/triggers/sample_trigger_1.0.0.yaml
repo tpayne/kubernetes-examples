@@ -1,0 +1,30 @@
+trigger:
+  name: tester
+  identifier: tester
+  enabled: true
+  encryptedWebhookSecretIdentifier: ""
+  description: ""
+  tags: {}
+  orgIdentifier: default
+  stagesToExecute: []
+  projectIdentifier: default_project
+  pipelineIdentifier: tester
+  source:
+    type: Webhook
+    spec:
+      type: Github
+      spec:
+        type: Push
+        spec:
+          connectorRef: githubconnector
+          autoAbortPreviousExecutions: false
+          payloadConditions:
+            - key: changedFiles
+              operator: In
+              value: "{Folder1,Folder2}/*.yaml"
+            - key: targetBranch
+              operator: Equals
+              value: main
+          headerConditions: []
+          repoName: github-actions
+          actions: []
