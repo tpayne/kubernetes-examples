@@ -47,6 +47,9 @@ template:
             environmentVariables: []
             outputVariables: []
           timeout: 10m
-    stepGroupInfra:
-      type: KubernetesDirect
-      spec: {}
+    failureStrategies:
+      - onFailure:
+          errors:
+            - AllErrors
+          action:
+            type: Abort
