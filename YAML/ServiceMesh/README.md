@@ -220,6 +220,7 @@ To clean up the installation, do the following...
 
 References
 ----------
+- https://medium.com/google-developer-experts/getting-started-with-anthos-service-mesh-for-gke-3774f1c62d76
 - https://istio.io/latest/docs/concepts/what-is-istio/
 - https://istio.io/latest/docs/reference/config/networking/virtual-service/
 - https://istio.io/latest/docs/reference/config/networking/destination-rule/
