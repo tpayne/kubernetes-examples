@@ -14,3 +14,4 @@ kubectl get svc argocd-server -n ${namespace} -o jsonpath='{.status.loadBalancer
 kubectl create secret generic github-token \
 		--from-literal=token=${gitToken} --dry-run=client \
 		--save-config -o yaml | kubectl apply -f - -n ${namespace}
+kubectl config view --flatten
