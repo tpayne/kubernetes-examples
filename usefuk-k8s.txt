@@ -1,0 +1,16 @@
+# Usefule commands
+kubectl config set-context --current --namespace=kube-system
+kubectl api-resources
+kubectl api-resources --namespaced=true
+kubectl get events
+kubectl logs pods/kube-proxy-qhxls
+kubectl get pod/kube-proxy-qhxls -o jsonpath="{.spec.containers[*].name}"
+kubectl apply -n argocd -f argocd/prod/app.pipeline.yaml --dry-run=server
+kubectl get all -n preprod
+kubectl get events -n argo --watch
+kubectl port-forward -n argocd svc/argocd-server 8080:80
+kubectl get secret argocd-initial-admin-secret -n argo -o jsonpath="{.data.password}" | base64 -d
+kubectl get svc argocd-server -n ${namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+kubectl create secret generic github-token \
+		--from-literal=token=${gitToken} --dry-run=client \
+		--save-config -o yaml | kubectl apply -f - -n ${namespace}
