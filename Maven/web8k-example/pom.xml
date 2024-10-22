@@ -111,7 +111,7 @@
       <plugin>
         <groupId>org.eclipse.jkube</groupId>
         <artifactId>openshift-maven-plugin</artifactId>
-        <version>1.15.0</version>
+        <version>1.17.0</version>
       </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
