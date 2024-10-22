@@ -40,7 +40,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/test-runtime-environment
 
       - name: Build and Push testenv image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: docker-files/
           file: docker-files/test-runtime-env.Dockerfile
@@ -55,7 +55,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/terraform-kubectl-env
 
       - name: Build and Push terraform and k8s Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: docker-files/
           file: docker-files/terraform-kubectl-env.Dockerfile
@@ -70,7 +70,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/cd-promote
 
       - name: Build and Push CD Promote Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: docker-files/
           file: docker-files/cd-promote.Dockerfile
@@ -85,7 +85,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/argo-env
 
       - name: Build and Push Argo Environment Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: docker-files/
           file: docker-files/argo-env.Dockerfile
@@ -100,7 +100,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/argo-env-github
 
       - name: Build and Push GitHub Argo Environment Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: docker-files/
           file: docker-files/argo-env-github.Dockerfile
@@ -115,7 +115,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/pgclient15
   
       - name: Build and Push GitHub PGClient15 Environment Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: docker-files/
           file: docker-files/pgclient.Dockerfile
