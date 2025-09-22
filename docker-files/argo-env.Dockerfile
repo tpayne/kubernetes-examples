@@ -23,7 +23,7 @@ RUN curl -sSLo /usr/bin/jq \
 
 WORKDIR /tmp/
 
-ENV ARGO_VERSION="v3.3.6"
+ENV ARGO_VERSION="v3.7.2"
 RUN curl -sSLo ./argo-linux-amd64.gz \
         "https://github.com/argoproj/argo-workflows/releases/download/${ARGO_VERSION}/argo-linux-amd64.gz" \
 		&& gunzip ./argo-linux-amd64.gz \
